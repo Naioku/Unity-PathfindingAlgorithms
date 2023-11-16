@@ -8,7 +8,7 @@ public class BreadthFirstSearch : MonoBehaviour
     [SerializeField] private Vector2Int destinationCoords = new Vector2Int(1, 1);
     [SerializeField] private float waitTimeBetweenIterations = 0.5f;
 
-    private readonly List<Vector2Int> _directions = new List<Vector2Int>
+    /*private readonly List<Vector2Int> _directions = new List<Vector2Int>
     { 
         Vector2Int.up, 
         Vector2Int.down,
@@ -112,5 +112,5 @@ public class BreadthFirstSearch : MonoBehaviour
             path.Pop().ChangeTileType(TileType.Path);
             yield return new WaitForSecondsRealtime(waitTimeBetweenIterations);
         }
-    }
+    }*/
 }

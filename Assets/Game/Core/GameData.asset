@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ff8ed3c019e9049a3ebfc51ef8aac5, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  size: {x: 10, y: 10}
+  tileLength: 1
+  tileHeight: 0.5
+  tileMaterials:
+    tileDefaultMaterial: {fileID: 2100000, guid: e316e10dc50ed914f897d81376482405, type: 2}
+    tileBlockedMaterial: {fileID: 2100000, guid: e96eeb906e8fcae469a1a163cd531a69, type: 2}
+    tileReadyToCheckMaterial: {fileID: 2100000, guid: 891d715d27d9ae44999b1c29a0b6b957, type: 2}
+    tileCheckedMaterial: {fileID: 2100000, guid: f66a2985c591f824ea7a33e1f9a388d9, type: 2}
+    tilePathMaterial: {fileID: 2100000, guid: be9346c10c056f044b61deea3b52afa5, type: 2}
+    tileStartMaterial: {fileID: 2100000, guid: a8bd3d576043e7b4cbd19bac6c3a4644, type: 2}
+    tileDestinationMaterial: {fileID: 2100000, guid: 90aa711640980514a91693aa616799f0, type: 2}

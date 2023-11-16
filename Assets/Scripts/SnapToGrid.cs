@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Todo: Should be not used. Delete at the end of refactoring.
 public class SnapToGrid : MonoBehaviour
 {
     private void OnDrawGizmos()

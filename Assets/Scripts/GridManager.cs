@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Todo: Should be not used. Delete at the end of refactoring.
 public class GridManager : MonoBehaviour
 {
     public readonly Vector3 Grid = new Vector3(10f, 0.5f, 10f);
@@ -10,16 +11,16 @@ public class GridManager : MonoBehaviour
 
     private void Awake()
     {
-        foreach (Transform child in gridGameObj.transform)
-        {
-            var node = child.GetComponent<Tile>().Node;
-            _tileGrid.Add(node.Coordinates, node);
-        }
+        // foreach (Transform child in gridGameObj.transform)
+        // {
+        //     var node = child.GetComponent<Tile>().Node;
+        //     _tileGrid.Add(node.Coordinates, node);
+        // }
     }
 
     public Node GetNodeFromCoordinates(Vector2Int coordinates)
     {
-        return _tileGrid.ContainsKey(coordinates) ? _tileGrid[coordinates] : null;
+        return _tileGrid.TryGetValue(coordinates, out var value) ? value : null;
     }
 
     public Vector2Int GetCoordinatesFromPosition(Vector3 position)
