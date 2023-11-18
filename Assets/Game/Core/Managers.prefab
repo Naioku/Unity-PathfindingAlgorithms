@@ -88,15 +88,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GameManager>k__BackingField:
+    gameDataSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
     cameraController:
       speed: 20
       keyModeMovementSpeed: 0.05
       screenBorderThickness: 10
       screenXLimits: {x: -5, y: 15}
       screenZLimits: {x: -5, y: 15}
+    interactionController:
+      interactionRange: 99
   <UtilsSpawner>k__BackingField:
     spawnableItems:
     - {fileID: 11400000, guid: 8e614657912d6e24580b5356ea0b88cd, type: 2}
+    - {fileID: 11400000, guid: a573cd4ccf93b5b4c9374a5946269469, type: 2}
   <SceneManager>k__BackingField:
     scenes:
     - <SceneName>k__BackingField: 0

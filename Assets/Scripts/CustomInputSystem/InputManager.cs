@@ -84,6 +84,7 @@ namespace CustomInputSystem
         private void BuildActionMapLookup()
         {
             permanentActionMapLookup.Add(Enums.ActionMap.Global, controls.Global.Get());
+            actionMapLookup.Add(Enums.ActionMap.MazeModification, controls.MazeModification.Get());
         }
         
         private void BuildInputActionLookup()
@@ -95,6 +96,18 @@ namespace CustomInputSystem
                 {
                     { Enums.InputAction.ClickInteraction, controls.Global.ClickInteraction },
                     { Enums.InputAction.CameraMovement, controls.Global.CameraMovement }
+                }
+            );
+            
+            inputActionLookup.Add
+            (
+                Enums.ActionMap.MazeModification, 
+                new Dictionary<Enums.InputAction, InputAction>
+                {
+                    { Enums.InputAction.SetDefaultNode, controls.MazeModification.SetDefaultNode },
+                    { Enums.InputAction.SetStartNode, controls.MazeModification.SetStartNode },
+                    { Enums.InputAction.SetDestinationNode, controls.MazeModification.SetDestinationNode },
+                    { Enums.InputAction.SetBlockedNode, controls.MazeModification.SetBlockedNode }
                 }
             );
         }

@@ -6,29 +6,46 @@ using UnityEngine;
 
 public class Maze : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameDataSO gameDataSO;
-
+    private GameDataSO gameDataSO;
     private Transform tilesParent;
-    private List<Tile> tileInstances = new List<Tile>();
+    private readonly List<Tile> tileInstances = new List<Tile>();
     private Interaction cursorInteraction;
-    
+    // private Enums.TileType currentTileTypeToSet;
+
     public event Action<Vector2Int> OnHoverEnterInteraction;
     public event Action<Vector2Int> OnHoverTick;
     public event Action OnHoverExitInteraction;
         
-    public event Action OnClickExit;
+    public event Action OnClickExitType;
     
+    private void Start()
+    {
+        gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
+
+        CreateGameBoard();
+        InitializeInteractions();
+    }
+
     public void Interact(Interaction.InteractionDataSystem interactionDataSystem, Interaction.InteractionDataArgs interactionDataArgs)
     {
         cursorInteraction.Interact(interactionDataSystem, interactionDataArgs);
     }
 
-    private void Start()
+    public void SelectTile(Vector2Int coords)
     {
-        CreateGameBoard();
-        InitializeInteractions();
+        GetTile(coords).Select();
+    }
+    
+    public void DeselectTile(Vector2Int coords)
+    {
+        GetTile(coords).Deselect();
     }
 
+    public void SetTileType(Vector2Int coords, Enums.TileType type)
+    {
+        GetTile(coords).TileType = type;
+    }
+    
     private void CreateGameBoard()
     {
         CreateTilesParent();
@@ -50,7 +67,7 @@ public class Maze : MonoBehaviour, IInteractable
             {
                 Vector3 position = tilesParent.position + new Vector3(j, 0.5f * gameDataSO.TileHeight, i);
                 Tile instance = AllManagers.Instance.UtilsSpawner.CreateObject<Tile>(Enums.Utils.Tile, tilesParent, position);
-                instance.Initialize(new Vector2Int(i, j));
+                instance.Initialize(new Vector2Int(j, i));
                 tileInstances.Add(instance);
             }
         }
@@ -73,31 +90,41 @@ public class Maze : MonoBehaviour, IInteractable
         cursorInteraction.SetAction(Enums.InteractionType.Hover, Enums.InteractionState.Tick, HandleHoverTick);
         cursorInteraction.SetAction(Enums.InteractionType.Hover, Enums.InteractionState.ExitInteraction, HandleHoverExitInteraction);
             
-        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.ExitType, HandleClickExit);
+        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.ExitType, HandleClickExitType);
     }
 
     private void HandleHoverEnterInteraction(Interaction.InteractionDataArgs interactionDataArgs)
     {
+        // OnHoverEnterInteraction?.Invoke();
         Debug.Log("HandleHoverEnterInteraction");
-        // OnHoverEnterInteraction?.Invoke(CalculateCoords(interactionDataArgs.HitInfo.point));
     }
         
     private void HandleHoverTick(Interaction.InteractionDataArgs interactionDataArgs)
     {
-        Debug.Log("HandleHoverTick");
-        // OnHoverTick?.Invoke(CalculateCoords(interactionDataArgs.HitInfo.point));
+        Vector2Int hitCoords = CalculateCoords(interactionDataArgs.HitInfo.point);
+        Debug.Log($"HitPoint: {interactionDataArgs.HitInfo.point}");
+        Debug.Log($"HitCoords: {hitCoords}");
+        Debug.Log($"TileName: {GetTile(hitCoords).name}");
+        
+        OnHoverTick?.Invoke(hitCoords);
     }
 
     private void HandleHoverExitInteraction(Interaction.InteractionDataArgs interactionDataArgs)
     {
         Debug.Log("HandleHoverExitInteraction");
-        // OnHoverExitInteraction?.Invoke();
+        OnHoverExitInteraction?.Invoke();
     }
-        
-    private void HandleClickExit(Interaction.InteractionDataArgs interactionDataArgs)
+    
+    private void HandleClickExitType(Interaction.InteractionDataArgs interactionDataArgs)
     {
         Debug.Log("HandleClickExit");
-        // OnClickExit?.Invoke();
+        OnClickExitType?.Invoke();
+    }
+    
+    private Tile GetTile(Vector2Int coords)
+    {
+        int index = coords.y * gameDataSO.Size.x + coords.x;
+        return tileInstances[index];
     }
     
     private Vector2Int CalculateCoords(Vector3 hitPoint)

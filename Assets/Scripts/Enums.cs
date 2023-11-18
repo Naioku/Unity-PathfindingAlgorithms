@@ -1,4 +1,6 @@
-﻿public static class Enums
+﻿using System;
+
+public static class Enums
 {
     public enum TileType
     {
@@ -39,17 +41,28 @@
 
     public enum ActionMap
     {
-        Global
+        Global, MazeModification
     }
     
     public enum InputAction
     {
         CameraMovement,
-        ClickInteraction
+        ClickInteraction,
+        SetStartNode,
+        SetDestinationNode,
+        SetBlockedNode,
+        SetDefaultNode
     }
 
     public enum CameraMovementMode
     {
         Border, Key
+    }
+    
+    [Flags]
+    public enum TileViewUpdateParam
+    {
+        Material = 1 << 0,
+        Highlight = 1 << 1
     }
 }

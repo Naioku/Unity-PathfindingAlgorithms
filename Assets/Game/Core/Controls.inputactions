@@ -48,6 +48,94 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "MazeModification",
+            "id": "c23f94ba-1c90-44b6-bf5e-4fb2650735ae",
+            "actions": [
+                {
+                    "name": "SetDefaultNode",
+                    "type": "Button",
+                    "id": "52638b61-d100-4dec-93b9-4e6dda2ee41e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetStartNode",
+                    "type": "Button",
+                    "id": "9c93bb33-3c91-443c-8775-175cac470b99",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetDestinationNode",
+                    "type": "Button",
+                    "id": "b02d61aa-438b-456e-8b8d-d280bca0cc9a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SetBlockedNode",
+                    "type": "Button",
+                    "id": "d6ed8379-0573-4b4e-8eac-bc1ef9967af1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e681bda9-1fe1-4c9d-a8ea-63e710380c6a",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SetDefaultNode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea261d96-21eb-4beb-a5b3-e0da1f96efb8",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SetStartNode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de104dd1-3299-433e-b15f-f11bac5c55f7",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SetDestinationNode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9e2dacf1-5f80-4d50-898e-09c5a48906f9",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SetBlockedNode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -4,14 +4,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameData", menuName = "Game Data/Create new", order = 0)]
 public class GameDataSO : ScriptableObject
 {
+    [Header("Tile")]
     [SerializeField] private Vector2Int size;
     [SerializeField] private float tileLength = 1;
     [SerializeField] private float tileHeight = 0.5f;
+    [SerializeField] private float tileHighlightValue = 0.2f;
     [SerializeField] private TileMaterials tileMaterials;
 
     public Vector2Int Size => size;
     public float TileLength => tileLength;
     public float TileHeight => tileHeight;
+    public float TileHighlightValue => tileHighlightValue;
 
     public Material GetTileMaterial(Enums.TileType tileType)
     {
