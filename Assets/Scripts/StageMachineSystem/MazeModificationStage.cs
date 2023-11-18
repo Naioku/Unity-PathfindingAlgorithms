@@ -1,4 +1,5 @@
-﻿using CustomInputSystem;
+﻿using System.Linq;
+using CustomInputSystem;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,7 +36,9 @@ namespace StageMachineSystem
             RemoveInteractions();
             RemoveInput();
         }
-        
+
+        #region Input
+
         private void InitInput()
         {
             inputManager.SetOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetDefaultNode, StartSettingNodeDefault);
@@ -58,6 +61,8 @@ namespace StageMachineSystem
         private void StartSettingNodeDestination(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Destination;
         private void StartSettingNodeBlocked(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Blocked;
 
+        #endregion
+
         #region Interactions
 
         private void InitInteractions()
@@ -78,22 +83,28 @@ namespace StageMachineSystem
             maze.OnClickExitInteraction -= HandleClickExitInteraction;
         }
 
-        private void HandleHoverTick(Vector2Int coords) => ManageTileSelection(coords);
+        private void HandleHoverTick(Vector2Int coords)
+        {
+            if (HaveCoordinatesChanged(coords)) return;
+            ManageTileSelection(coords);
+        }
         private void HandleHoverExitInteraction() => ExitInteraction();
         private void HandleClickEnterType() => ManageTileTypeChanging();
-
         private void HandleClickTick(Vector2Int coords)
         {
+            if (HaveCoordinatesChanged(coords)) return;
             ManageTileSelection(coords);
             ManageTileTypeChanging();
         }
-
         private void HandleClickExitInteraction() => ExitInteraction();
 
+        private bool HaveCoordinatesChanged(Vector2Int coords)
+        {
+            return currentCoords.HasValue && currentCoords.Value == coords;
+        }
+        
         private void ManageTileSelection(Vector2Int coords)
         {
-            if (currentCoords.HasValue && currentCoords.Value == coords) return;
-
             if (currentCoords != null)
             {
                 maze.DeselectTile(currentCoords.Value);
@@ -105,7 +116,36 @@ namespace StageMachineSystem
 
         private void ManageTileTypeChanging()
         {
+            ManageUniqueTileTypesData();
             maze.SetTileType(currentCoords.Value, currentTileTypeToSet);
+            return;
+
+            void ManageUniqueTileTypesData()
+            {
+                Enums.TileType[] keys = uniqueTilesCoordsLookup.Keys.ToArray();
+                foreach (var key in keys)
+                {
+                    ManageUniqueOneTileTypeData(key);
+                }
+            }
+
+            void ManageUniqueOneTileTypeData(Enums.TileType tileType)
+            {
+                Vector2Int? coords = uniqueTilesCoordsLookup[tileType];
+                if (currentTileTypeToSet == tileType)
+                {
+                    if (coords.HasValue)
+                    {
+                        maze.SetTileType(coords.Value, Enums.TileType.Default);
+                    }
+                
+                    uniqueTilesCoordsLookup[tileType] = currentCoords;
+                }
+                else if (coords.HasValue && coords.Value == currentCoords.Value)
+                {
+                    uniqueTilesCoordsLookup[tileType] = null;
+                }
+            }
         }
 
         private void ExitInteraction()

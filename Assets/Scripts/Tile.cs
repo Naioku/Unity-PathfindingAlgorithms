@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private bool isBlocked;
     private Vector2Int coordinates;
     private Enums.TileType tileType = Enums.TileType.Default;
-    private bool highlight;
+    private bool highlighted;
     // private Node previousNode;
 
     private GameDataSO gameDataSO;
@@ -19,15 +19,18 @@ public class Tile : MonoBehaviour
         set
         {
             tileType = value;
-            UpdateView(Enums.TileViewUpdateParam.Material | Enums.TileViewUpdateParam.Highlight);
+            
+            Enums.TileViewUpdateParam material = Enums.TileViewUpdateParam.Material;
+            Enums.TileViewUpdateParam materialAndHighlight = Enums.TileViewUpdateParam.Material | Enums.TileViewUpdateParam.Highlight;
+            UpdateView(highlighted ? materialAndHighlight : material);
         }
     }
 
-    private bool Highlight
+    private bool Highlighted
     {
         set
         {
-            highlight = value;
+            highlighted = value;
             UpdateView(Enums.TileViewUpdateParam.Highlight);
         }
     }
@@ -44,8 +47,8 @@ public class Tile : MonoBehaviour
         meshRenderer = transform.Find("Mesh").GetComponent<MeshRenderer>();
     }
 
-    public void Select() => Highlight = true;
-    public void Deselect() => Highlight = false;
+    public void Select() => Highlighted = true;
+    public void Deselect() => Highlighted = false;
 
     // public Vector2Int Coordinates => coordinates;
     //
@@ -71,7 +74,7 @@ public class Tile : MonoBehaviour
             Color color = meshRenderer.material.color;
             float highlightValue = gameDataSO.TileHighlightValue;
 
-            if (highlight)
+            if (highlighted)
             {
                 color += new Color(highlightValue, highlightValue, highlightValue);
             }
