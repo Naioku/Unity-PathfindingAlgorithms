@@ -16,7 +16,9 @@ public class Maze : MonoBehaviour, IInteractable
     public event Action<Vector2Int> OnHoverTick;
     public event Action OnHoverExitInteraction;
         
-    public event Action OnClickExitType;
+    public event Action OnClickEnterType;
+    public event Action<Vector2Int> OnClickTick;
+    public event Action OnClickExitInteraction;
     
     private void Start()
     {
@@ -90,7 +92,9 @@ public class Maze : MonoBehaviour, IInteractable
         cursorInteraction.SetAction(Enums.InteractionType.Hover, Enums.InteractionState.Tick, HandleHoverTick);
         cursorInteraction.SetAction(Enums.InteractionType.Hover, Enums.InteractionState.ExitInteraction, HandleHoverExitInteraction);
             
-        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.ExitType, HandleClickExitType);
+        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.EnterType, HandleClickEnterType);
+        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.Tick, HandleClickTick);
+        cursorInteraction.SetAction(Enums.InteractionType.Click, Enums.InteractionState.ExitInteraction, HandleClickExitInteraction);
     }
 
     private void HandleHoverEnterInteraction(Interaction.InteractionDataArgs interactionDataArgs)
@@ -102,6 +106,8 @@ public class Maze : MonoBehaviour, IInteractable
     private void HandleHoverTick(Interaction.InteractionDataArgs interactionDataArgs)
     {
         Vector2Int hitCoords = CalculateCoords(interactionDataArgs.HitInfo.point);
+        
+        Debug.Log("HandleHoverTick");
         Debug.Log($"HitPoint: {interactionDataArgs.HitInfo.point}");
         Debug.Log($"HitCoords: {hitCoords}");
         Debug.Log($"TileName: {GetTile(hitCoords).name}");
@@ -115,10 +121,28 @@ public class Maze : MonoBehaviour, IInteractable
         OnHoverExitInteraction?.Invoke();
     }
     
-    private void HandleClickExitType(Interaction.InteractionDataArgs interactionDataArgs)
+    private void HandleClickEnterType(Interaction.InteractionDataArgs interactionDataArgs)
     {
-        Debug.Log("HandleClickExit");
-        OnClickExitType?.Invoke();
+        Debug.Log("HandleClickEnterType");
+        OnClickEnterType?.Invoke();
+    }
+    
+    private void HandleClickTick(Interaction.InteractionDataArgs interactionDataArgs)
+    {
+        Vector2Int hitCoords = CalculateCoords(interactionDataArgs.HitInfo.point);
+        
+        Debug.Log("HandleClickTick");
+        Debug.Log($"HitPoint: {interactionDataArgs.HitInfo.point}");
+        Debug.Log($"HitCoords: {hitCoords}");
+        Debug.Log($"TileName: {GetTile(hitCoords).name}");
+        
+        OnClickTick?.Invoke(hitCoords);
+    }
+    
+    private void HandleClickExitInteraction(Interaction.InteractionDataArgs interactionDataArgs)
+    {
+        Debug.Log("HandleClickExitInteraction");
+        OnClickExitInteraction?.Invoke();
     }
     
     private Tile GetTile(Vector2Int coords)

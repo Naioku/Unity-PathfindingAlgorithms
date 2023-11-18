@@ -2,6 +2,8 @@
 
 public static class Enums
 {
+    #region Tiles
+
     public enum TileType
     {
         Blocked,
@@ -12,6 +14,17 @@ public static class Enums
         Start,
         Destination
     }
+    
+    [Flags]
+    public enum TileViewUpdateParam
+    {
+        Material = 1 << 0,
+        Highlight = 1 << 1
+    }
+
+    #endregion
+
+    #region InteractionSystem
 
     public enum InteractionType
     {
@@ -27,17 +40,25 @@ public static class Enums
         ExitInteraction
     }
 
+    #endregion
+
     public enum Scene
     {
         Menu, BFS, AStar
     }
-    
+
+    #region SpawningSystem
+
     public enum EmptyEnum {}
 
     public enum Utils
     {
         Tile, Maze
     }
+
+    #endregion
+
+    #region InputSystem
 
     public enum ActionMap
     {
@@ -54,15 +75,10 @@ public static class Enums
         SetDefaultNode
     }
 
+    #endregion
+
     public enum CameraMovementMode
     {
         Border, Key
-    }
-    
-    [Flags]
-    public enum TileViewUpdateParam
-    {
-        Material = 1 << 0,
-        Highlight = 1 << 1
     }
 }

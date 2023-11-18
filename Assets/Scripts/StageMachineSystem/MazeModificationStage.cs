@@ -58,21 +58,39 @@ namespace StageMachineSystem
         private void StartSettingNodeDestination(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Destination;
         private void StartSettingNodeBlocked(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Blocked;
 
+        #region Interactions
+
         private void InitInteractions()
         {
             maze.OnHoverTick += HandleHoverTick;
             maze.OnHoverExitInteraction += HandleHoverExitInteraction;
-            maze.OnClickExitType += HandleClickExitType;
+            maze.OnClickEnterType += HandleClickEnterType;
+            maze.OnClickTick += HandleClickTick;
+            maze.OnClickExitInteraction += HandleClickExitInteraction;
         }
 
         private void RemoveInteractions()
         {
             maze.OnHoverTick -= HandleHoverTick;
             maze.OnHoverExitInteraction -= HandleHoverExitInteraction;
-            maze.OnClickExitType -= HandleClickExitType;
+            maze.OnClickEnterType -= HandleClickEnterType;
+            maze.OnClickTick -= HandleClickTick;
+            maze.OnClickExitInteraction -= HandleClickExitInteraction;
         }
 
-        private void HandleHoverTick(Vector2Int coords)
+        private void HandleHoverTick(Vector2Int coords) => ManageTileSelection(coords);
+        private void HandleHoverExitInteraction() => ExitInteraction();
+        private void HandleClickEnterType() => ManageTileTypeChanging();
+
+        private void HandleClickTick(Vector2Int coords)
+        {
+            ManageTileSelection(coords);
+            ManageTileTypeChanging();
+        }
+
+        private void HandleClickExitInteraction() => ExitInteraction();
+
+        private void ManageTileSelection(Vector2Int coords)
         {
             if (currentCoords.HasValue && currentCoords.Value == coords) return;
 
@@ -85,15 +103,17 @@ namespace StageMachineSystem
             maze.SelectTile(currentCoords.Value);
         }
 
-        private void HandleHoverExitInteraction()
+        private void ManageTileTypeChanging()
+        {
+            maze.SetTileType(currentCoords.Value, currentTileTypeToSet);
+        }
+
+        private void ExitInteraction()
         {
             maze.DeselectTile(currentCoords.Value);
             currentCoords = null;
         }
 
-        private void HandleClickExitType()
-        {
-            maze.SetTileType(currentCoords.Value, currentTileTypeToSet); // Todo: Check click and hold on interaction, get outside, release.
-        }
+        #endregion
     }
 }
