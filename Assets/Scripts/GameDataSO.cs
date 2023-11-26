@@ -9,37 +9,56 @@ public class GameDataSO : ScriptableObject
     [SerializeField] private float tileLength = 1;
     [SerializeField] private float tileHeight = 0.5f;
     [SerializeField] private float tileHighlightValue = 0.2f;
-    [SerializeField] private TileMaterials tileMaterials;
+    [SerializeField] private TileColors tileColors;
+    [SerializeField] private MarkerColors markerColors;
+    [SerializeField] private float markerColorAlpha = 0.6f;
 
     public Vector2Int Size => size;
     public float TileLength => tileLength;
     public float TileHeight => tileHeight;
     public float TileHighlightValue => tileHighlightValue;
+    public float MarkerColorAlpha => markerColorAlpha;
 
-    public Material GetTileMaterial(Enums.TileType tileType)
+    public Color GetPermanentColor(Enums.TileType tileType)
     {
         return tileType switch
         {
-            Enums.TileType.Blocked => tileMaterials.tileBlockedMaterial,
-            Enums.TileType.ReadyToCheck => tileMaterials.tileReadyToCheckMaterial,
-            Enums.TileType.Checked => tileMaterials.tileCheckedMaterial,
-            Enums.TileType.Path => tileMaterials.tilePathMaterial,
-            Enums.TileType.Default => tileMaterials.tileDefaultMaterial,
-            Enums.TileType.Start => tileMaterials.tileStartMaterial,
-            Enums.TileType.Destination => tileMaterials.tileDestinationMaterial,
-            _ => throw new ArgumentOutOfRangeException()
+            Enums.TileType.Default => tileColors.Default,
+            Enums.TileType.Blocked => tileColors.Blocked,
+            Enums.TileType.Start => tileColors.Start,
+            Enums.TileType.Destination => tileColors.Destination,
+            _ => throw new ArgumentOutOfRangeException(nameof(tileType), tileType, null)
         };
     }
-}
+    
+    public Color GetMarkerColor(Enums.MarkerType markerType)
+    {
+        return markerType switch
+        {
+            Enums.MarkerType.None => markerColors.None,
+            Enums.MarkerType.ReadyToCheck => markerColors.ReadyToCheck,
+            Enums.MarkerType.Checked => markerColors.Checked,
+            Enums.MarkerType.Path => markerColors.Path,
+            
+            _ => throw new ArgumentOutOfRangeException(nameof(markerType), markerType, null)
+        };
+    }
+    
+    [Serializable]
+    private struct TileColors
+    {
+        public Color Default;
+        public Color Start;
+        public Color Destination;
+        public Color Blocked;
+    }
 
-[Serializable]
-public struct TileMaterials
-{
-    public Material tileDefaultMaterial;
-    public Material tileBlockedMaterial;
-    public Material tileReadyToCheckMaterial;
-    public Material tileCheckedMaterial;
-    public Material tilePathMaterial;
-    public Material tileStartMaterial;
-    public Material tileDestinationMaterial;
+    [Serializable]
+    private struct MarkerColors
+    {
+        public Color None;
+        public Color ReadyToCheck;
+        public Color Checked;
+        public Color Path;
+    }
 }

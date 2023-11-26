@@ -6,11 +6,16 @@ namespace StageMachineSystem
 {
     public class StageMachine
     {
-        private BaseStage currentStage;
-        private CoroutineManager coroutineManager;
-        private CoroutineManager.CoroutineCaller coroutineCaller;
+        private readonly CoroutineManager.CoroutineCaller coroutineCaller;
         private Guid tickCoroutineId;
+        private BaseStage currentStage;
+        private SharedData SharedData { get; set; } = new SharedData();
 
+        public StageMachine()
+        {
+            coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
+        }
+        
         public StageMachine(BaseStage initialStage)
         {
             coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
@@ -28,6 +33,7 @@ namespace StageMachineSystem
             }
             else
             {
+                currentStage.Initialize(SharedData);
                 currentStage.Enter();
                 tickCoroutineId = coroutineCaller.StartCoroutine(Tick);
             }

@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-namespace StageMachineSystem
+﻿namespace StageMachineSystem
 {
     public abstract class BaseStage
     {
-        protected Maze maze;
-        protected Dictionary<Enums.TileType, Vector2Int?> uniqueTilesCoordsLookup = new Dictionary<Enums.TileType, Vector2Int?>
-        {
-            { Enums.TileType.Start, null },
-            { Enums.TileType.Destination, null }
-        };
+        protected readonly Maze maze;
+        protected SharedData sharedData;
 
         protected BaseStage(Maze maze)
         {
             this.maze = maze;
+        }
+
+        public void Initialize(SharedData sharedData)
+        {
+            this.sharedData = sharedData;
         }
 
         public virtual void Enter() {}

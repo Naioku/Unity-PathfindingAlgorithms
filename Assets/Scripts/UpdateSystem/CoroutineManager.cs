@@ -8,8 +8,9 @@ namespace UpdateSystem
     public class CoroutineManager : IUpdatable
     {
         private UpdateManager updateManager;
-        private readonly Dictionary<object, CoroutinesItem> coroutinesItemsLookup = new Dictionary<object, CoroutinesItem>();
+        private readonly Dictionary<CoroutineCaller, CoroutinesItem> coroutinesItemsLookup = new Dictionary<CoroutineCaller, CoroutinesItem>();
         private readonly List<CoroutinesItem> coroutinesItems = new List<CoroutinesItem>();
+        private readonly List<StopCoroutineData> coroutinesToRemove = new List<StopCoroutineData>();
 
         public CoroutineCaller GenerateCoroutineCaller() => new CoroutineCaller(this);
         
@@ -24,7 +25,7 @@ namespace UpdateSystem
             updateManager.Unregister(this);
         }
 
-        private Guid StartCoroutine(object caller, Action action, int actionPriority = 0)
+        private Guid StartCoroutine(CoroutineCaller caller, Action action, int actionPriority = 0)
         {
             Guid coroutineId;
             if (coroutinesItemsLookup.TryGetValue(caller, out CoroutinesItem item))
@@ -33,30 +34,36 @@ namespace UpdateSystem
             }
             else
             {
-                CoroutinesItem coroutinesItem = new CoroutinesItem(action, actionPriority, out coroutineId);
-                coroutinesItemsLookup.Add(caller, coroutinesItem);
-                coroutinesItems.Add(coroutinesItem);
-                coroutinesItems.Sort();
+                coroutineId = CreateNewCoroutinesItem(caller, action, actionPriority);
             }
 
             return coroutineId;
         }
 
+        private Guid CreateNewCoroutinesItem(CoroutineCaller caller, Action action, int actionPriority)
+        {
+            CoroutinesItem coroutinesItem = new CoroutinesItem(action, actionPriority, out Guid coroutineId);
+            coroutinesItemsLookup.Add(caller, coroutinesItem);
+            coroutinesItems.Add(coroutinesItem);
+            coroutinesItems.Sort();
+            return coroutineId;
+        }
+
         private void StopCoroutine(CoroutineCaller caller, Guid coroutineId)
         {
-            if (!coroutinesItemsLookup.TryGetValue(caller, out CoroutinesItem item))
+            if (!coroutinesItemsLookup.TryGetValue(caller, out CoroutinesItem coroutinesItem))
             {
                 Debug.LogError("This object has no coroutine started.");
                 return;
             }
             
-            item.RemoveCoroutine(coroutineId);
-            if (!item.HasAnyCoroutine())
+            if (!coroutinesItem.DeactivateCoroutine(coroutineId)) return;
+            
+            coroutinesToRemove.Add(new StopCoroutineData
             {
-                coroutinesItems.Remove(item);
-                coroutinesItems.Sort();
-                coroutinesItemsLookup.Remove(caller);
-            }
+                Caller = caller,
+                Id = coroutineId
+            });
         }
 
         private void SetCallerPriority(CoroutineCaller caller, int priority)
@@ -78,8 +85,41 @@ namespace UpdateSystem
             {
                 data.PerformAllCoroutines();
             }
+
+            // Because obviously You can't modify collection while iterating on it is still performing.
+            StopCoroutinesInternal();
         }
-        
+
+        private void StopCoroutinesInternal()
+        {
+            if (coroutinesToRemove.Count > 0) return;
+            
+            foreach (StopCoroutineData data in coroutinesToRemove)
+            {
+                StopCoroutineInternal(data);
+            }
+
+            coroutinesToRemove.Clear();
+        }
+
+        private void StopCoroutineInternal(StopCoroutineData data)
+        {
+            CoroutinesItem item = coroutinesItemsLookup[data.Caller];
+            
+            item.RemoveCoroutine(data.Id);
+            if (!item.HasAnyCoroutine())
+            {
+                RemoveCoroutinesItem(data, item);
+            }
+        }
+
+        private void RemoveCoroutinesItem(StopCoroutineData data, CoroutinesItem item)
+        {
+            coroutinesItems.Remove(item);
+            coroutinesItems.Sort();
+            coroutinesItemsLookup.Remove(data.Caller);
+        }
+
         private class CoroutinesItem : IComparable<CoroutinesItem>
         {
             private readonly Dictionary<Guid, CoroutineData> coroutinesLookup = new Dictionary<Guid, CoroutineData>();
@@ -104,15 +144,23 @@ namespace UpdateSystem
 
             public void RemoveCoroutine(Guid id)
             {
-                if (!coroutinesLookup.TryGetValue(id, out CoroutineData coroutineData))
-                {
-                    Debug.LogError("You are trying to stop the coroutine, which doesn't exist.");
-                    return;
-                }
+                CoroutineData coroutineData = coroutinesLookup[id];
                 
                 coroutines.Remove(coroutineData);
                 coroutines.Sort();
                 coroutinesLookup.Remove(id);
+            }
+
+            public bool DeactivateCoroutine(Guid id)
+            {
+                if (!coroutinesLookup.TryGetValue(id, out CoroutineData coroutineData))
+                {
+                    Debug.LogError("You are trying to stop the coroutine, which doesn't exist.");
+                    return false;
+                }
+
+                coroutineData.IsActive = false;
+                return true;
             }
             
             public bool HasAnyCoroutine()
@@ -124,6 +172,7 @@ namespace UpdateSystem
             {
                 foreach (CoroutineData coroutine in coroutines)
                 {
+                    if (!coroutine.IsActive) continue;
                     coroutine.Action.Invoke();
                 }
             }
@@ -134,21 +183,29 @@ namespace UpdateSystem
             }
         }
         
-        private readonly struct CoroutineData : IComparable<CoroutineData>
+        private class CoroutineData : IComparable<CoroutineData>
         {
             private readonly int priority;
+            public bool IsActive { get; set; }
             public Action Action { get; }
 
             public CoroutineData(Action action, int priority)
             {
                 this.priority = priority;
                 Action = action;
+                IsActive = true;
             }
 
             public int CompareTo(CoroutineData other)
             {
                 return priority.CompareTo(other.priority);
             }
+        }
+        
+        private struct StopCoroutineData
+        {
+            public CoroutineCaller Caller { get; set; }
+            public Guid Id { get; set; }
         }
         
         public class CoroutineCaller

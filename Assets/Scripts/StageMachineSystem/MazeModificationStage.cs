@@ -10,7 +10,7 @@ namespace StageMachineSystem
     {
         private InputManager inputManager = AllManagers.Instance.InputManager;
         private Enums.TileType temp;
-        private Enums.TileType currentTileTypeToSet
+        private Enums.TileType CurrentTileTypeToSet
         {
             get => temp;
             set
@@ -26,6 +26,7 @@ namespace StageMachineSystem
         
         public override void Enter()
         {
+            base.Enter();
             inputManager = AllManagers.Instance.InputManager;
             InitInput();
             InitInteractions();
@@ -33,6 +34,7 @@ namespace StageMachineSystem
 
         public override void Exit()
         {
+            base.Exit();
             RemoveInteractions();
             RemoveInput();
         }
@@ -56,10 +58,10 @@ namespace StageMachineSystem
             inputManager.RemoveOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetBlockedNode, StartSettingNodeBlocked);
         }
 
-        private void StartSettingNodeDefault(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Default;
-        private void StartSettingNodeStart(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Start;
-        private void StartSettingNodeDestination(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Destination;
-        private void StartSettingNodeBlocked(InputAction.CallbackContext obj) => currentTileTypeToSet = Enums.TileType.Blocked;
+        private void StartSettingNodeDefault(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Default;
+        private void StartSettingNodeStart(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Start;
+        private void StartSettingNodeDestination(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Destination;
+        private void StartSettingNodeBlocked(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Blocked;
 
         #endregion
 
@@ -117,12 +119,12 @@ namespace StageMachineSystem
         private void ManageTileTypeChanging()
         {
             ManageUniqueTileTypesData();
-            maze.SetTileType(currentCoords.Value, currentTileTypeToSet);
+            maze.SetTileType(currentCoords.Value, CurrentTileTypeToSet);
             return;
 
             void ManageUniqueTileTypesData()
             {
-                Enums.TileType[] keys = uniqueTilesCoordsLookup.Keys.ToArray();
+                Enums.TileType[] keys = sharedData.UniqueTilesCoordsLookup.Keys.ToArray();
                 foreach (var key in keys)
                 {
                     ManageUniqueOneTileTypeData(key);
@@ -131,19 +133,19 @@ namespace StageMachineSystem
 
             void ManageUniqueOneTileTypeData(Enums.TileType tileType)
             {
-                Vector2Int? coords = uniqueTilesCoordsLookup[tileType];
-                if (currentTileTypeToSet == tileType)
+                Vector2Int? coords = sharedData.UniqueTilesCoordsLookup[tileType];
+                if (CurrentTileTypeToSet == tileType)
                 {
                     if (coords.HasValue)
                     {
                         maze.SetTileType(coords.Value, Enums.TileType.Default);
                     }
                 
-                    uniqueTilesCoordsLookup[tileType] = currentCoords;
+                    sharedData.UniqueTilesCoordsLookup[tileType] = currentCoords;
                 }
                 else if (coords.HasValue && coords.Value == currentCoords.Value)
                 {
-                    uniqueTilesCoordsLookup[tileType] = null;
+                    sharedData.UniqueTilesCoordsLookup[tileType] = null;
                 }
             }
         }

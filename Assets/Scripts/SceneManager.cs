@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DefaultNamespace
 {
     [Serializable]
-    public class SceneManager
+    public class SceneManager // Todo: Not needed - delete.
     {
         [SerializeField] private List<SceneItem> scenes;
 

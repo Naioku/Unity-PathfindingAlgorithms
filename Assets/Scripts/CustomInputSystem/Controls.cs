@@ -46,6 +46,15 @@ namespace CustomInputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExitStage"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd179ee1-f408-4171-b203-92fb7c4105d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,85 @@ namespace CustomInputSystem
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""CameraMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad9b2710-d272-4396-b5a5-fd70144af0c4"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ExitStage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""StageSelection"",
+            ""id"": ""ddee2105-5b18-4b65-99e5-7942a24b838f"",
+            ""actions"": [
+                {
+                    ""name"": ""MazeModification"",
+                    ""type"": ""Button"",
+                    ""id"": ""888444ae-8b80-4d45-96a9-ae33bebf4945"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BFS"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c97ffda-092f-44f4-b5fb-598079b94eca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AStar"",
+                    ""type"": ""Button"",
+                    ""id"": ""471032e5-62c3-4879-9711-0319c0ccee0b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c6b8bab7-8411-4b7c-bcf8-c3b32fd88f4a"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MazeModification"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e25eb64-ee82-406a-b0f2-371daf9a84f2"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""BFS"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16e58c4d-eb7a-4cc7-8634-372b45e8785e"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AStar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -118,7 +206,7 @@ namespace CustomInputSystem
                 {
                     ""name"": """",
                     ""id"": ""e681bda9-1fe1-4c9d-a8ea-63e710380c6a"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -129,7 +217,7 @@ namespace CustomInputSystem
                 {
                     ""name"": """",
                     ""id"": ""ea261d96-21eb-4beb-a5b3-e0da1f96efb8"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -140,7 +228,7 @@ namespace CustomInputSystem
                 {
                     ""name"": """",
                     ""id"": ""de104dd1-3299-433e-b15f-f11bac5c55f7"",
-                    ""path"": ""<Keyboard>/3"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -151,11 +239,119 @@ namespace CustomInputSystem
                 {
                     ""name"": """",
                     ""id"": ""9e2dacf1-5f80-4d50-898e-09c5a48906f9"",
-                    ""path"": ""<Keyboard>/4"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SetBlockedNode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Algorithm"",
+            ""id"": ""aea854b9-c22e-467f-9790-b71b45ccaac3"",
+            ""actions"": [
+                {
+                    ""name"": ""Play"",
+                    ""type"": ""Button"",
+                    ""id"": ""49551d10-18d7-4b67-be85-f4d8530cff89"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""93fe8ad3-fc46-45e3-b601-9e96933bb6cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Step"",
+                    ""type"": ""Button"",
+                    ""id"": ""3db0c2c5-76cb-45ee-8e24-aa0937449e51"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Refresh"",
+                    ""type"": ""Button"",
+                    ""id"": ""8dc4c020-ae02-491d-b6ae-be4c187427ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Stop"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd298785-1973-4679-a849-627e089a8960"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8a6a38f4-c4ad-421d-98d9-e06c0ce37c44"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Play"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e697d12-2dd8-41e8-bd37-0b4a9ddab1ed"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71af2d27-509f-4490-aa70-216d1055164e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Step"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6a3f0fa-0759-4c6c-baa8-115d1a29cef0"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Refresh"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1dcdc9f5-666b-400a-bc6c-3d54d95785d3"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Stop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -185,12 +381,25 @@ namespace CustomInputSystem
             m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
             m_Global_ClickInteraction = m_Global.FindAction("ClickInteraction", throwIfNotFound: true);
             m_Global_CameraMovement = m_Global.FindAction("CameraMovement", throwIfNotFound: true);
+            m_Global_ExitStage = m_Global.FindAction("ExitStage", throwIfNotFound: true);
+            // StageSelection
+            m_StageSelection = asset.FindActionMap("StageSelection", throwIfNotFound: true);
+            m_StageSelection_MazeModification = m_StageSelection.FindAction("MazeModification", throwIfNotFound: true);
+            m_StageSelection_BFS = m_StageSelection.FindAction("BFS", throwIfNotFound: true);
+            m_StageSelection_AStar = m_StageSelection.FindAction("AStar", throwIfNotFound: true);
             // MazeModification
             m_MazeModification = asset.FindActionMap("MazeModification", throwIfNotFound: true);
             m_MazeModification_SetDefaultNode = m_MazeModification.FindAction("SetDefaultNode", throwIfNotFound: true);
             m_MazeModification_SetStartNode = m_MazeModification.FindAction("SetStartNode", throwIfNotFound: true);
             m_MazeModification_SetDestinationNode = m_MazeModification.FindAction("SetDestinationNode", throwIfNotFound: true);
             m_MazeModification_SetBlockedNode = m_MazeModification.FindAction("SetBlockedNode", throwIfNotFound: true);
+            // Algorithm
+            m_Algorithm = asset.FindActionMap("Algorithm", throwIfNotFound: true);
+            m_Algorithm_Play = m_Algorithm.FindAction("Play", throwIfNotFound: true);
+            m_Algorithm_Pause = m_Algorithm.FindAction("Pause", throwIfNotFound: true);
+            m_Algorithm_Step = m_Algorithm.FindAction("Step", throwIfNotFound: true);
+            m_Algorithm_Refresh = m_Algorithm.FindAction("Refresh", throwIfNotFound: true);
+            m_Algorithm_Stop = m_Algorithm.FindAction("Stop", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -252,12 +461,14 @@ namespace CustomInputSystem
         private IGlobalActions m_GlobalActionsCallbackInterface;
         private readonly InputAction m_Global_ClickInteraction;
         private readonly InputAction m_Global_CameraMovement;
+        private readonly InputAction m_Global_ExitStage;
         public struct GlobalActions
         {
             private @Controls m_Wrapper;
             public GlobalActions(@Controls wrapper) { m_Wrapper = wrapper; }
             public InputAction @ClickInteraction => m_Wrapper.m_Global_ClickInteraction;
             public InputAction @CameraMovement => m_Wrapper.m_Global_CameraMovement;
+            public InputAction @ExitStage => m_Wrapper.m_Global_ExitStage;
             public InputActionMap Get() { return m_Wrapper.m_Global; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -273,6 +484,9 @@ namespace CustomInputSystem
                     @CameraMovement.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
                     @CameraMovement.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
                     @CameraMovement.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
+                    @ExitStage.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
+                    @ExitStage.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
+                    @ExitStage.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
                 }
                 m_Wrapper.m_GlobalActionsCallbackInterface = instance;
                 if (instance != null)
@@ -283,10 +497,62 @@ namespace CustomInputSystem
                     @CameraMovement.started += instance.OnCameraMovement;
                     @CameraMovement.performed += instance.OnCameraMovement;
                     @CameraMovement.canceled += instance.OnCameraMovement;
+                    @ExitStage.started += instance.OnExitStage;
+                    @ExitStage.performed += instance.OnExitStage;
+                    @ExitStage.canceled += instance.OnExitStage;
                 }
             }
         }
         public GlobalActions @Global => new GlobalActions(this);
+
+        // StageSelection
+        private readonly InputActionMap m_StageSelection;
+        private IStageSelectionActions m_StageSelectionActionsCallbackInterface;
+        private readonly InputAction m_StageSelection_MazeModification;
+        private readonly InputAction m_StageSelection_BFS;
+        private readonly InputAction m_StageSelection_AStar;
+        public struct StageSelectionActions
+        {
+            private @Controls m_Wrapper;
+            public StageSelectionActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @MazeModification => m_Wrapper.m_StageSelection_MazeModification;
+            public InputAction @BFS => m_Wrapper.m_StageSelection_BFS;
+            public InputAction @AStar => m_Wrapper.m_StageSelection_AStar;
+            public InputActionMap Get() { return m_Wrapper.m_StageSelection; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(StageSelectionActions set) { return set.Get(); }
+            public void SetCallbacks(IStageSelectionActions instance)
+            {
+                if (m_Wrapper.m_StageSelectionActionsCallbackInterface != null)
+                {
+                    @MazeModification.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
+                    @MazeModification.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
+                    @MazeModification.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
+                    @BFS.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
+                    @BFS.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
+                    @BFS.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
+                    @AStar.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
+                    @AStar.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
+                    @AStar.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
+                }
+                m_Wrapper.m_StageSelectionActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @MazeModification.started += instance.OnMazeModification;
+                    @MazeModification.performed += instance.OnMazeModification;
+                    @MazeModification.canceled += instance.OnMazeModification;
+                    @BFS.started += instance.OnBFS;
+                    @BFS.performed += instance.OnBFS;
+                    @BFS.canceled += instance.OnBFS;
+                    @AStar.started += instance.OnAStar;
+                    @AStar.performed += instance.OnAStar;
+                    @AStar.canceled += instance.OnAStar;
+                }
+            }
+        }
+        public StageSelectionActions @StageSelection => new StageSelectionActions(this);
 
         // MazeModification
         private readonly InputActionMap m_MazeModification;
@@ -344,6 +610,71 @@ namespace CustomInputSystem
             }
         }
         public MazeModificationActions @MazeModification => new MazeModificationActions(this);
+
+        // Algorithm
+        private readonly InputActionMap m_Algorithm;
+        private IAlgorithmActions m_AlgorithmActionsCallbackInterface;
+        private readonly InputAction m_Algorithm_Play;
+        private readonly InputAction m_Algorithm_Pause;
+        private readonly InputAction m_Algorithm_Step;
+        private readonly InputAction m_Algorithm_Refresh;
+        private readonly InputAction m_Algorithm_Stop;
+        public struct AlgorithmActions
+        {
+            private @Controls m_Wrapper;
+            public AlgorithmActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Play => m_Wrapper.m_Algorithm_Play;
+            public InputAction @Pause => m_Wrapper.m_Algorithm_Pause;
+            public InputAction @Step => m_Wrapper.m_Algorithm_Step;
+            public InputAction @Refresh => m_Wrapper.m_Algorithm_Refresh;
+            public InputAction @Stop => m_Wrapper.m_Algorithm_Stop;
+            public InputActionMap Get() { return m_Wrapper.m_Algorithm; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(AlgorithmActions set) { return set.Get(); }
+            public void SetCallbacks(IAlgorithmActions instance)
+            {
+                if (m_Wrapper.m_AlgorithmActionsCallbackInterface != null)
+                {
+                    @Play.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPlay;
+                    @Play.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPlay;
+                    @Play.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPlay;
+                    @Pause.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnPause;
+                    @Step.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
+                    @Step.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
+                    @Step.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
+                    @Refresh.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
+                    @Refresh.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
+                    @Refresh.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
+                    @Stop.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
+                    @Stop.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
+                    @Stop.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
+                }
+                m_Wrapper.m_AlgorithmActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Play.started += instance.OnPlay;
+                    @Play.performed += instance.OnPlay;
+                    @Play.canceled += instance.OnPlay;
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
+                    @Step.started += instance.OnStep;
+                    @Step.performed += instance.OnStep;
+                    @Step.canceled += instance.OnStep;
+                    @Refresh.started += instance.OnRefresh;
+                    @Refresh.performed += instance.OnRefresh;
+                    @Refresh.canceled += instance.OnRefresh;
+                    @Stop.started += instance.OnStop;
+                    @Stop.performed += instance.OnStop;
+                    @Stop.canceled += instance.OnStop;
+                }
+            }
+        }
+        public AlgorithmActions @Algorithm => new AlgorithmActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -357,6 +688,13 @@ namespace CustomInputSystem
         {
             void OnClickInteraction(InputAction.CallbackContext context);
             void OnCameraMovement(InputAction.CallbackContext context);
+            void OnExitStage(InputAction.CallbackContext context);
+        }
+        public interface IStageSelectionActions
+        {
+            void OnMazeModification(InputAction.CallbackContext context);
+            void OnBFS(InputAction.CallbackContext context);
+            void OnAStar(InputAction.CallbackContext context);
         }
         public interface IMazeModificationActions
         {
@@ -364,6 +702,14 @@ namespace CustomInputSystem
             void OnSetStartNode(InputAction.CallbackContext context);
             void OnSetDestinationNode(InputAction.CallbackContext context);
             void OnSetBlockedNode(InputAction.CallbackContext context);
+        }
+        public interface IAlgorithmActions
+        {
+            void OnPlay(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
+            void OnStep(InputAction.CallbackContext context);
+            void OnRefresh(InputAction.CallbackContext context);
+            void OnStop(InputAction.CallbackContext context);
         }
     }
 }

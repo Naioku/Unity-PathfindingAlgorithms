@@ -84,7 +84,9 @@ namespace CustomInputSystem
         private void BuildActionMapLookup()
         {
             permanentActionMapLookup.Add(Enums.ActionMap.Global, controls.Global.Get());
+            actionMapLookup.Add(Enums.ActionMap.StageSelection, controls.StageSelection.Get());
             actionMapLookup.Add(Enums.ActionMap.MazeModification, controls.MazeModification.Get());
+            actionMapLookup.Add(Enums.ActionMap.Algorithm, controls.Algorithm.Get());
         }
         
         private void BuildInputActionLookup()
@@ -95,19 +97,44 @@ namespace CustomInputSystem
                 new Dictionary<Enums.InputAction, InputAction>
                 {
                     { Enums.InputAction.ClickInteraction, controls.Global.ClickInteraction },
-                    { Enums.InputAction.CameraMovement, controls.Global.CameraMovement }
+                    { Enums.InputAction.CameraMovement, controls.Global.CameraMovement },
+                    { Enums.InputAction.ExitStage, controls.Global.ExitStage }
                 }
             );
             
             inputActionLookup.Add
             (
-                Enums.ActionMap.MazeModification, 
+                Enums.ActionMap.StageSelection, 
+                new Dictionary<Enums.InputAction, InputAction>
+                {
+                    { Enums.InputAction.MazeModification, controls.StageSelection.MazeModification },
+                    { Enums.InputAction.BFS, controls.StageSelection.BFS },
+                    { Enums.InputAction.AStar, controls.StageSelection.AStar }
+                }
+            );
+            
+            inputActionLookup.Add
+            (
+                Enums.ActionMap.MazeModification,
                 new Dictionary<Enums.InputAction, InputAction>
                 {
                     { Enums.InputAction.SetDefaultNode, controls.MazeModification.SetDefaultNode },
                     { Enums.InputAction.SetStartNode, controls.MazeModification.SetStartNode },
                     { Enums.InputAction.SetDestinationNode, controls.MazeModification.SetDestinationNode },
                     { Enums.InputAction.SetBlockedNode, controls.MazeModification.SetBlockedNode }
+                }
+            );
+            
+            inputActionLookup.Add
+            (
+                Enums.ActionMap.Algorithm, 
+                new Dictionary<Enums.InputAction, InputAction>
+                {
+                    { Enums.InputAction.Play, controls.Algorithm.Play },
+                    { Enums.InputAction.Pause, controls.Algorithm.Pause },
+                    { Enums.InputAction.Step, controls.Algorithm.Step },
+                    { Enums.InputAction.Refresh, controls.Algorithm.Refresh },
+                    { Enums.InputAction.Stop, controls.Algorithm.Stop }
                 }
             );
         }

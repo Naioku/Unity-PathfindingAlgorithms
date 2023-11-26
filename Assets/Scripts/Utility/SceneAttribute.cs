@@ -7,5 +7,5 @@ namespace DefaultNamespace
     /// <summary>
     /// Converts a string property into a Scene property in the inspector
     /// </summary>
-    public class SceneAttribute : PropertyAttribute {}
+    public class SceneAttribute : PropertyAttribute {} // Todo: Not needed - delete.
 }

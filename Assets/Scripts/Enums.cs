@@ -6,13 +6,18 @@ public static class Enums
 
     public enum TileType
     {
+        Default,
         Blocked,
+        Start,
+        Destination
+    }
+    
+    public enum MarkerType
+    {
+        None,
         ReadyToCheck,
         Checked,
         Path,
-        Default,
-        Start,
-        Destination
     }
     
     [Flags]
@@ -42,7 +47,7 @@ public static class Enums
 
     #endregion
 
-    public enum Scene
+    public enum Scene // Todo: Not needed - delete it.
     {
         Menu, BFS, AStar
     }
@@ -62,17 +67,26 @@ public static class Enums
 
     public enum ActionMap
     {
-        Global, MazeModification
+        Global, StageSelection, MazeModification, Algorithm
     }
     
     public enum InputAction
     {
         CameraMovement,
         ClickInteraction,
+        ExitStage,
+        MazeModification,
+        BFS,
+        AStar,
         SetStartNode,
         SetDestinationNode,
         SetBlockedNode,
-        SetDefaultNode
+        SetDefaultNode,
+        Play,
+        Pause,
+        Step,
+        Refresh,
+        Stop
     }
 
     #endregion

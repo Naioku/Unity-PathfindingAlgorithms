@@ -15,6 +15,7 @@ MonoBehaviour:
   size: {x: 10, y: 10}
   tileLength: 1
   tileHeight: 0.5
+  tileHighlightValue: 0.2
   tileMaterials:
     tileDefaultMaterial: {fileID: 2100000, guid: e316e10dc50ed914f897d81376482405, type: 2}
     tileBlockedMaterial: {fileID: 2100000, guid: e96eeb906e8fcae469a1a163cd531a69, type: 2}
@@ -23,3 +24,14 @@ MonoBehaviour:
     tilePathMaterial: {fileID: 2100000, guid: be9346c10c056f044b61deea3b52afa5, type: 2}
     tileStartMaterial: {fileID: 2100000, guid: a8bd3d576043e7b4cbd19bac6c3a4644, type: 2}
     tileDestinationMaterial: {fileID: 2100000, guid: 90aa711640980514a91693aa616799f0, type: 2}
+  tileColors:
+    Default: {r: 0.56078434, g: 0.81960785, b: 0.65882355, a: 1}
+    Start: {r: 0.8117647, g: 0.29411766, b: 0.6745098, a: 1}
+    Destination: {r: 0.28235295, g: 0.7921569, b: 0.22745098, a: 1}
+    Blocked: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+  markerColors:
+    None: {r: 1, g: 1, b: 1, a: 0}
+    ReadyToCheck: {r: 0.9137255, g: 0.8627451, b: 0.5568628, a: 1}
+    Checked: {r: 0.6509804, g: 0.90588236, b: 0.3372549, a: 1}
+    Path: {r: 0.2901961, g: 0.39215687, b: 0.6784314, a: 1}
+  markerColorAlpha: 0.5

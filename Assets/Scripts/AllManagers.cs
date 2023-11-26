@@ -1,4 +1,5 @@
-﻿using CustomInputSystem;
+﻿using System;
+using CustomInputSystem;
 using SpawningSystem;
 using UnityEngine;
 using UpdateSystem;
@@ -35,15 +36,22 @@ namespace DefaultNamespace
             UtilsSpawner.Initialize();
             SceneManager.Initialize();
             InputManager.Initialize();
+            GameManager.Initialize();
+        }
+
+        private void Start()
+        {
+            GameManager.StartGame();
         }
 
         private void OnDestroy()
         {
             InputManager.Destroy();
             CoroutineManager.Destroy();
+            GameManager.Destroy();
         }
 
-        [ContextMenu("Start Game")]
-        private void StartGame() => GameManager.StartGame();
+        // [ContextMenu("Start Game")]
+        // private void StartGame() => GameManager.StartGame();
     }
 }

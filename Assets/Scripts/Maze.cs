@@ -33,19 +33,49 @@ public class Maze : MonoBehaviour, IInteractable
         cursorInteraction.Interact(interactionDataSystem, interactionDataArgs);
     }
 
-    public void SelectTile(Vector2Int coords)
-    {
-        GetTile(coords).Select();
-    }
-    
-    public void DeselectTile(Vector2Int coords)
-    {
-        GetTile(coords).Deselect();
-    }
+    public void SelectTile(Vector2Int coords) => GetTile(coords).Select();
+    public void DeselectTile(Vector2Int coords) => GetTile(coords).Deselect();
 
     public void SetTileType(Vector2Int coords, Enums.TileType type)
     {
-        GetTile(coords).TileType = type;
+        if (!TryGetTile(coords, out Tile tile)) return;
+        tile.TileType = type;
+    }
+    
+    public void SetMarkerType(Vector2Int coords, Enums.MarkerType type)
+    {
+        if (!TryGetTile(coords, out Tile tile)) return;
+        tile.MarkerType = type;
+    }
+
+    /// <summary>
+    /// Checks if tile with provided coordinates has the same tile type as provided.
+    /// </summary>
+    /// <param name="coords">Coordinates of tile You want to check.</param>
+    /// <param name="type">Tile type You want to check.</param>
+    /// <returns>True if tile with provided coordinates has the same tile type as provided.</returns>
+    public bool CheckTileType(Vector2Int coords, Enums.TileType type)
+    {
+        return TryGetTileType(coords, out Enums.TileType currentNodeTileType) && currentNodeTileType == type;
+    }
+    
+    /// <summary>
+    /// Checks if tile with provided coordinates has the same marker type as provided.
+    /// </summary>
+    /// <param name="coords">Coordinates of tile You want to check.</param>
+    /// <param name="type">Marker type You want to check.</param>
+    /// <returns>True if tile with provided coordinates has the same marker type as provided.</returns>
+    public bool CheckMarkerType(Vector2Int coords, Enums.MarkerType type)
+    {
+        return TryGetMarkerType(coords, out Enums.MarkerType currentNodeMarkerType) && currentNodeMarkerType == type;
+    }
+    
+    public void Refresh()
+    {
+        foreach (Tile tile in tileInstances)
+        {
+            tile.MarkerType = Enums.MarkerType.None;
+        }
     }
     
     private void CreateGameBoard()
@@ -147,8 +177,42 @@ public class Maze : MonoBehaviour, IInteractable
     
     private Tile GetTile(Vector2Int coords)
     {
+        if (coords.x < 0 || coords.x >= gameDataSO.Size.x)
+        {
+            // Debug.LogError($"X:{coords.x} value is out of range.");
+            return null;
+        }
+
+        if (coords.y < 0 || coords.y >= gameDataSO.Size.y)
+        {
+            // Debug.LogError($"Y:{coords.y} value is out of range.");
+            return null;
+        }
+
         int index = coords.y * gameDataSO.Size.x + coords.x;
         return tileInstances[index];
+    }
+    
+    private bool TryGetTile(Vector2Int coords, out Tile result)
+    {
+        result = GetTile(coords);
+        return result;
+    }
+    
+    private bool TryGetTileType(Vector2Int coords, out Enums.TileType result)
+    {
+        result = default;
+        if (!TryGetTile(coords, out Tile tile)) return false;
+        result = tile.TileType;
+        return true;
+    }
+    
+    private bool TryGetMarkerType(Vector2Int coords, out Enums.MarkerType result)
+    {
+        result = default;
+        if (!TryGetTile(coords, out Tile tile)) return false;
+        result = tile.MarkerType;
+        return true;
     }
     
     private Vector2Int CalculateCoords(Vector3 hitPoint)
