@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using UpdateSystem;
+using UpdateSystem.CoroutineSystem;
 
 namespace StageMachineSystem
 {
@@ -35,13 +37,17 @@ namespace StageMachineSystem
             {
                 currentStage.Initialize(SharedData);
                 currentStage.Enter();
-                tickCoroutineId = coroutineCaller.StartCoroutine(Tick);
+                tickCoroutineId = coroutineCaller.StartCoroutine(Tick());
             }
         }
 
-        private void Tick()
+        private IEnumerator<IWait> Tick()
         {
-            currentStage.Tick();
+            while (true)
+            {
+                currentStage.Tick();
+                yield return null;
+            }
         }
     }
 }

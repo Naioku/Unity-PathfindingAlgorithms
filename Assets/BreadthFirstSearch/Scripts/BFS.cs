@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 using UpdateSystem;
+using UpdateSystem.CoroutineSystem;
 
 namespace BreadthFirstSearch.Scripts
 {
@@ -47,7 +48,7 @@ namespace BreadthFirstSearch.Scripts
         
         public void Play()
         {
-            processCoroutineId = coroutineCaller.StartCoroutine(ProcessCoroutine);
+            processCoroutineId = coroutineCaller.StartCoroutine(ProcessCoroutine());
         }
 
         public void Pause()
@@ -72,14 +73,14 @@ namespace BreadthFirstSearch.Scripts
             Refresh();
         }
         
-        private void ProcessCoroutine()
+        private IEnumerator<IWait> ProcessCoroutine()
         {
-            if (!CheckNode())
+            while (!CheckNode())
             {
-                if (ContinueSearching()) return;
+                if (ContinueSearching()) yield return null;
                 
                 coroutineCaller.StopCoroutine(ref processCoroutineId);
-                return;
+                yield return null;
             }
          
             DrawPath();

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UpdateSystem;
+using UpdateSystem.CoroutineSystem;
 
 [Serializable]
 public class CameraController
@@ -74,7 +75,7 @@ public class CameraController
 
     private void StartMovement()
     {
-        movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement);
+        movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement());
     }
 
     private void StopMovement()
@@ -82,28 +83,33 @@ public class CameraController
         coroutineCaller.StopCoroutine(ref movementCoroutineId);
     }
 
-    private void PerformMovement()
+    private IEnumerator<IWait> PerformMovement()
     {
-        if (!Application.isFocused) return;
-
-        Vector3 movementVector = Vector3.zero;
-                
-        switch (movementMode)
+        while (true)
         {
-            case Enums.CameraMovementMode.Border:
-                movementVector = CalculateMovementVectorBorderMode();
-                break;
-                    
-            case Enums.CameraMovementMode.Key:
-                movementVector = CalculateMovementVectorKeyMode();
-                break;
-        }
+            if (!Application.isFocused) yield return null;
+
+            Vector3 movementVector = Vector3.zero;
                 
-        Vector3 position = mainCamera.transform.position;
-        position += movementVector;
-        position.x = Mathf.Clamp(position.x, screenXLimits.x, screenXLimits.y);
-        position.z = Mathf.Clamp(position.z, screenZLimits.x, screenZLimits.y);
-        mainCamera.transform.position = position;
+            switch (movementMode)
+            {
+                case Enums.CameraMovementMode.Border:
+                    movementVector = CalculateMovementVectorBorderMode();
+                    break;
+                    
+                case Enums.CameraMovementMode.Key:
+                    movementVector = CalculateMovementVectorKeyMode();
+                    break;
+            }
+                
+            Vector3 position = mainCamera.transform.position;
+            position += movementVector;
+            position.x = Mathf.Clamp(position.x, screenXLimits.x, screenXLimits.y);
+            position.z = Mathf.Clamp(position.z, screenZLimits.x, screenZLimits.y);
+            mainCamera.transform.position = position;
+            
+            yield return null;
+        }
     }
 
     private Vector3 CalculateMovementVectorBorderMode()

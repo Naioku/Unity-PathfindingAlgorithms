@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
 
-namespace UpdateSystem
+namespace UpdateSystem.CoroutineSystem
 {
     public class CoroutineManager : IUpdatable
     {
@@ -24,8 +24,21 @@ namespace UpdateSystem
         {
             updateManager.Unregister(this);
         }
+        
+        public void PerformUpdate()
+        {
+            foreach (CoroutinesItem data in coroutinesItems)
+            {
+                data.PerformAllCoroutines();
+            }
+            
+            // Perform WaitFor timer.
 
-        private Guid StartCoroutine(CoroutineCaller caller, Action action, int actionPriority = 0)
+            // Because obviously You can't modify collection while iterating on it is still performing.
+            StopCoroutinesInternal();
+        }
+
+        private Guid StartCoroutine(CoroutineCaller caller, IEnumerator<IWait> action, int actionPriority = 0)
         {
             Guid coroutineId;
             if (coroutinesItemsLookup.TryGetValue(caller, out CoroutinesItem item))
@@ -40,7 +53,7 @@ namespace UpdateSystem
             return coroutineId;
         }
 
-        private Guid CreateNewCoroutinesItem(CoroutineCaller caller, Action action, int actionPriority)
+        private Guid CreateNewCoroutinesItem(CoroutineCaller caller, IEnumerator<IWait> action, int actionPriority)
         {
             CoroutinesItem coroutinesItem = new CoroutinesItem(action, actionPriority, out Guid coroutineId);
             coroutinesItemsLookup.Add(caller, coroutinesItem);
@@ -57,7 +70,7 @@ namespace UpdateSystem
                 return;
             }
             
-            if (!coroutinesItem.DeactivateCoroutine(coroutineId)) return;
+            if (!coroutinesItem.MarkCoroutineForDestruction(coroutineId)) return;
             
             coroutinesToRemove.Add(new StopCoroutineData
             {
@@ -79,20 +92,9 @@ namespace UpdateSystem
             }
         }
 
-        public void PerformUpdate()
-        {
-            foreach (CoroutinesItem data in coroutinesItems)
-            {
-                data.PerformAllCoroutines();
-            }
-
-            // Because obviously You can't modify collection while iterating on it is still performing.
-            StopCoroutinesInternal();
-        }
-
         private void StopCoroutinesInternal()
         {
-            if (coroutinesToRemove.Count > 0) return;
+            if (coroutinesToRemove.Count == 0) return;
             
             foreach (StopCoroutineData data in coroutinesToRemove)
             {
@@ -119,7 +121,7 @@ namespace UpdateSystem
             coroutinesItems.Sort();
             coroutinesItemsLookup.Remove(data.Caller);
         }
-
+        
         private class CoroutinesItem : IComparable<CoroutinesItem>
         {
             private readonly Dictionary<Guid, CoroutineData> coroutinesLookup = new Dictionary<Guid, CoroutineData>();
@@ -127,12 +129,12 @@ namespace UpdateSystem
             
             public int Priority { get; set; }
             
-            public CoroutinesItem(Action action, int actionPriority, out Guid id)
+            public CoroutinesItem(IEnumerator<IWait> action, int actionPriority, out Guid id)
             {
                 id = AddCoroutine(action, actionPriority);
             }
 
-            public Guid AddCoroutine(Action action, int actionPriority)
+            public Guid AddCoroutine(IEnumerator<IWait> action, int actionPriority)
             {
                 Guid currentId = Guid.NewGuid();
                 CoroutineData newCoroutineData = new CoroutineData(action, actionPriority);
@@ -151,7 +153,7 @@ namespace UpdateSystem
                 coroutinesLookup.Remove(id);
             }
 
-            public bool DeactivateCoroutine(Guid id)
+            public bool MarkCoroutineForDestruction(Guid id)
             {
                 if (!coroutinesLookup.TryGetValue(id, out CoroutineData coroutineData))
                 {
@@ -159,7 +161,7 @@ namespace UpdateSystem
                     return false;
                 }
 
-                coroutineData.IsActive = false;
+                coroutineData.MarkForDestruction();
                 return true;
             }
             
@@ -172,8 +174,7 @@ namespace UpdateSystem
             {
                 foreach (CoroutineData coroutine in coroutines)
                 {
-                    if (!coroutine.IsActive) continue;
-                    coroutine.Action.Invoke();
+                    coroutine.Perform();
                 }
             }
             
@@ -186,20 +187,34 @@ namespace UpdateSystem
         private class CoroutineData : IComparable<CoroutineData>
         {
             private readonly int priority;
-            public bool IsActive { get; set; }
-            public Action Action { get; }
+            private readonly IEnumerator<IWait> action;
+            private bool markedForDestruction;
 
-            public CoroutineData(Action action, int priority)
+            public CoroutineData(IEnumerator<IWait> action, int priority)
             {
                 this.priority = priority;
-                Action = action;
-                IsActive = true;
+                this.action = action;
+            }
+            
+            public void MarkForDestruction() => markedForDestruction = true;
+
+            public void Perform()
+            {
+                if (markedForDestruction) return;
+                
+                IWait response = action.Current;
+                if (response == null)
+                {
+                    action.MoveNext();
+                }
+                else
+                {
+                    if (!response.CanPerform()) return;
+                    action.MoveNext();
+                }
             }
 
-            public int CompareTo(CoroutineData other)
-            {
-                return priority.CompareTo(other.priority);
-            }
+            public int CompareTo(CoroutineData other) => priority.CompareTo(other.priority);
         }
         
         private struct StopCoroutineData
@@ -217,7 +232,7 @@ namespace UpdateSystem
                 this.coroutineManager = coroutineManager;
             }
 
-            public Guid StartCoroutine(Action action, int priority = 0)
+            public Guid StartCoroutine(IEnumerator<IWait> action, int priority = 0)
             {
                 return coroutineManager.StartCoroutine(this, action, priority);
             }

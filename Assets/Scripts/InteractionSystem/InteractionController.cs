@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using CustomInputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UpdateSystem;
+using UpdateSystem.CoroutineSystem;
 
 namespace InteractionSystem
 {
@@ -39,7 +41,7 @@ namespace InteractionSystem
 
         private void StartInteracting()
         {
-            performInteractionId = coroutineCaller.StartCoroutine(PerformInteraction);
+            performInteractionId = coroutineCaller.StartCoroutine(PerformInteraction());
         }
 
         private void StopInteracting()
@@ -57,18 +59,22 @@ namespace InteractionSystem
         private void StartClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(Enums.InteractionType.Click);
         private void StopClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(DefaultInteractionType);
 
-        private void PerformInteraction()
+        private IEnumerator<IWait> PerformInteraction()
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            var currentlyCheckedInteraction =
-                !Physics.Raycast(ray, out currentHitInfo, interactionRange) ? null : currentHitInfo.transform.parent.GetComponent<IInteractable>();
-            
-            if (currentlyCheckedInteraction != currentInteraction)
+            while (true)
             {
-                SwitchInteraction(currentlyCheckedInteraction);
-            }
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                var currentlyCheckedInteraction =
+                    !Physics.Raycast(ray, out currentHitInfo, interactionRange) ? null : currentHitInfo.transform.parent.GetComponent<IInteractable>();
             
-            Interact(Enums.InteractionState.Tick);
+                if (currentlyCheckedInteraction != currentInteraction)
+                {
+                    SwitchInteraction(currentlyCheckedInteraction);
+                }
+            
+                Interact(Enums.InteractionState.Tick);
+                yield return null;
+            }
         }
 
         private void SwitchInteraction(IInteractable currentlyCheckedInteraction)

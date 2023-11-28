@@ -1,8 +1,8 @@
-﻿using System;
-using CustomInputSystem;
+﻿using CustomInputSystem;
 using SpawningSystem;
 using UnityEngine;
 using UpdateSystem;
+using UpdateSystem.CoroutineSystem;
 
 namespace DefaultNamespace
 {
@@ -50,8 +50,5 @@ namespace DefaultNamespace
             CoroutineManager.Destroy();
             GameManager.Destroy();
         }
-
-        // [ContextMenu("Start Game")]
-        // private void StartGame() => GameManager.StartGame();
     }
 }
