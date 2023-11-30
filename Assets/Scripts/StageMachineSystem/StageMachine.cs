@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using DefaultNamespace;
-using UpdateSystem;
 using UpdateSystem.CoroutineSystem;
 
 namespace StageMachineSystem
@@ -41,7 +40,7 @@ namespace StageMachineSystem
             }
         }
 
-        private IEnumerator<IWait> Tick()
+        private IEnumerator Tick()
         {
             while (true)
             {

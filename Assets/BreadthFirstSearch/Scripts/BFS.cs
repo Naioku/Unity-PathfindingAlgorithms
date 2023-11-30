@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
-using UpdateSystem;
 using UpdateSystem.CoroutineSystem;
+using WaitForSeconds = UpdateSystem.CoroutineSystem.WaitForSeconds;
 
 namespace BreadthFirstSearch.Scripts
 {
@@ -26,7 +27,7 @@ namespace BreadthFirstSearch.Scripts
         private Maze maze;
         private Vector2Int startCoords;
         private Vector2Int destinationCoords;
-        // private float waitTimeBetweenIterations = 0.5f;
+        private GameDataSO gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
 
         #endregion
 
@@ -34,9 +35,29 @@ namespace BreadthFirstSearch.Scripts
 
         private readonly Queue<Node> nodesToCheck = new Queue<Node>();
         private Node currentNode;
+        private Vector2Int? cursorPosition;
         private Guid processCoroutineId;
 
         #endregion
+
+        private Vector2Int? CursorPosition
+        {
+            set
+            {
+                if (cursorPosition.HasValue) maze.DeselectTile(cursorPosition.Value);
+                cursorPosition = value;
+                if (cursorPosition.HasValue) maze.SelectTile(cursorPosition.Value);
+            }
+
+            get
+            {
+                if (!cursorPosition.HasValue)
+                {
+                    throw new NullReferenceException("Cursor position have to be set before getting access.");
+                }
+                return cursorPosition.Value;
+            }
+        }
 
         public void Initialize(Maze maze, Vector2Int startCoords, Vector2Int destinationCoords)
         {
@@ -49,6 +70,8 @@ namespace BreadthFirstSearch.Scripts
         public void Play()
         {
             processCoroutineId = coroutineCaller.StartCoroutine(ProcessCoroutine());
+            currentNode = new Node(startCoords, null);
+            CursorPosition = startCoords;
         }
 
         public void Pause()
@@ -63,7 +86,8 @@ namespace BreadthFirstSearch.Scripts
 
         public void Refresh()
         {
-            currentNode = new Node(startCoords, null);
+            currentNode = null;
+            CursorPosition = null;
             maze.Refresh();
             nodesToCheck.Clear();
         }
@@ -73,49 +97,40 @@ namespace BreadthFirstSearch.Scripts
             Refresh();
         }
         
-        private IEnumerator<IWait> ProcessCoroutine()
+        private IEnumerator ProcessCoroutine()
         {
             while (!CheckNode())
             {
-                if (ContinueSearching()) yield return null;
-                
-                coroutineCaller.StopCoroutine(ref processCoroutineId);
-                yield return null;
+                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterNodeChecking);
+                yield return EnqueueNeighbors();
+
+                if (!ReloadNode())
+                {
+                    Debug.Log("Path cannot be found!");
+                    coroutineCaller.StopCoroutine(ref processCoroutineId);
+                }
+                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterCursorPositionChange);
             }
          
-            DrawPath();
+            yield return DrawPath();
             coroutineCaller.StopCoroutine(ref processCoroutineId);
             Debug.Log("Done!");
         }
 
-        /// <summary>
-        /// Enqueues next part of nodes and reloads current node.
-        /// </summary>
-        /// <returns><b>False</b> if there is no node left to check.</returns>
-        private bool ContinueSearching()
-        {
-            EnqueueNeighbors();
-            // yield return new WaitForSecondsRealtime(waitTimeBetweenIterations);
-
-            if (ReloadNode()) return true;
-            
-            Debug.Log("Path cannot be found!");
-            return false;
-
-        }
-
-        private void EnqueueNeighbors()
+        private IEnumerator EnqueueNeighbors()
         {
             foreach (var direction in directions)
             {
-                Vector2Int neighborCoords = currentNode.Coords + direction;
+                CursorPosition = currentNode.Coords + direction;
+                Vector2Int position = CursorPosition.Value;
+
+                if (!maze.CheckTileType(position, Enums.TileType.Default, Enums.TileType.Destination)) continue;
+                if (!maze.CheckMarkerType(position, Enums.MarkerType.None)) continue;
+                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterCursorPositionChange);
                 
-                if (!maze.CheckTileType(neighborCoords, Enums.TileType.Default) && 
-                    !maze.CheckTileType(neighborCoords, Enums.TileType.Destination)) continue;
-                if (!maze.CheckMarkerType(neighborCoords, Enums.MarkerType.None)) continue;
-                
-                maze.SetMarkerType(neighborCoords, Enums.MarkerType.ReadyToCheck);
-                nodesToCheck.Enqueue(new Node(neighborCoords, currentNode));
+                maze.SetMarkerType(position, Enums.MarkerType.ReadyToCheck);
+                nodesToCheck.Enqueue(new Node(position, currentNode));
+                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterNewNodeEnqueuing);
             }
         }
 
@@ -138,10 +153,11 @@ namespace BreadthFirstSearch.Scripts
             if (nodesToCheck.Count == 0) return false;
             
             currentNode = nodesToCheck.Dequeue();
+            CursorPosition = currentNode.Coords;
             return true;
         }
         
-        private void DrawPath()
+        private IEnumerator DrawPath()
         {
             var path = new Stack<Node>();
             while (!maze.CheckTileType(currentNode.Coords, Enums.TileType.Start))
@@ -155,7 +171,7 @@ namespace BreadthFirstSearch.Scripts
             while (path.Count > 0)
             {
                 maze.SetMarkerType(path.Pop().Coords, Enums.MarkerType.Path);
-                // yield return new WaitForSecondsRealtime(waitTimeBetweenIterations);
+                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterPathNodeSetting);
             }
         }
 

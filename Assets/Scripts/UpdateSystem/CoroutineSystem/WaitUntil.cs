@@ -11,7 +11,7 @@
             this.condition = condition;
         }
 
-        public bool CanPerform()
+        public bool CanPerformNow()
         {
             return condition.Invoke();
         }

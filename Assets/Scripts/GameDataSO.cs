@@ -12,12 +12,14 @@ public class GameDataSO : ScriptableObject
     [SerializeField] private TileColors tileColors;
     [SerializeField] private MarkerColors markerColors;
     [SerializeField] private float markerColorAlpha = 0.6f;
+    [SerializeField] private WaitingTimeData waitingTimeData;
 
     public Vector2Int Size => size;
     public float TileLength => tileLength;
     public float TileHeight => tileHeight;
     public float TileHighlightValue => tileHighlightValue;
     public float MarkerColorAlpha => markerColorAlpha;
+    public WaitingTimeData WaitingTimeData => waitingTimeData;
 
     public Color GetPermanentColor(Enums.TileType tileType)
     {
@@ -39,7 +41,6 @@ public class GameDataSO : ScriptableObject
             Enums.MarkerType.ReadyToCheck => markerColors.ReadyToCheck,
             Enums.MarkerType.Checked => markerColors.Checked,
             Enums.MarkerType.Path => markerColors.Path,
-            
             _ => throw new ArgumentOutOfRangeException(nameof(markerType), markerType, null)
         };
     }
@@ -61,4 +62,13 @@ public class GameDataSO : ScriptableObject
         public Color Checked;
         public Color Path;
     }
+}
+
+[Serializable]
+public struct WaitingTimeData
+{
+    [field: SerializeField] public float AfterNewNodeEnqueuing { get; private set; }
+    [field: SerializeField] public float AfterNodeChecking { get; private set; }
+    [field: SerializeField] public float AfterCursorPositionChange { get; private set; }
+    [field: SerializeField] public float AfterPathNodeSetting { get; private set; }
 }

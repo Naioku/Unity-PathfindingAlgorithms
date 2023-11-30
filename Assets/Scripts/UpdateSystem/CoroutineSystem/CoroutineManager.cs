@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
@@ -38,7 +39,7 @@ namespace UpdateSystem.CoroutineSystem
             StopCoroutinesInternal();
         }
 
-        private Guid StartCoroutine(CoroutineCaller caller, IEnumerator<IWait> action, int actionPriority = 0)
+        private Guid StartCoroutine(CoroutineCaller caller, IEnumerator action, int actionPriority = 0)
         {
             Guid coroutineId;
             if (coroutinesItemsLookup.TryGetValue(caller, out CoroutinesItem item))
@@ -53,7 +54,7 @@ namespace UpdateSystem.CoroutineSystem
             return coroutineId;
         }
 
-        private Guid CreateNewCoroutinesItem(CoroutineCaller caller, IEnumerator<IWait> action, int actionPriority)
+        private Guid CreateNewCoroutinesItem(CoroutineCaller caller, IEnumerator action, int actionPriority)
         {
             CoroutinesItem coroutinesItem = new CoroutinesItem(action, actionPriority, out Guid coroutineId);
             coroutinesItemsLookup.Add(caller, coroutinesItem);
@@ -129,12 +130,12 @@ namespace UpdateSystem.CoroutineSystem
             
             public int Priority { get; set; }
             
-            public CoroutinesItem(IEnumerator<IWait> action, int actionPriority, out Guid id)
+            public CoroutinesItem(IEnumerator action, int actionPriority, out Guid id)
             {
                 id = AddCoroutine(action, actionPriority);
             }
 
-            public Guid AddCoroutine(IEnumerator<IWait> action, int actionPriority)
+            public Guid AddCoroutine(IEnumerator action, int actionPriority)
             {
                 Guid currentId = Guid.NewGuid();
                 CoroutineData newCoroutineData = new CoroutineData(action, actionPriority);
@@ -187,10 +188,10 @@ namespace UpdateSystem.CoroutineSystem
         private class CoroutineData : IComparable<CoroutineData>
         {
             private readonly int priority;
-            private readonly IEnumerator<IWait> action;
+            private readonly IEnumerator action;
             private bool markedForDestruction;
 
-            public CoroutineData(IEnumerator<IWait> action, int priority)
+            public CoroutineData(IEnumerator action, int priority)
             {
                 this.priority = priority;
                 this.action = action;
@@ -201,16 +202,30 @@ namespace UpdateSystem.CoroutineSystem
             public void Perform()
             {
                 if (markedForDestruction) return;
-                
-                IWait response = action.Current;
-                if (response == null)
+                if (!PerformInternal(action)) MarkForDestruction();
+            }
+            
+            /// <summary>
+            /// Performs an action as a coroutine.
+            /// </summary>
+            /// <param name="action">Action to perform.</param>
+            /// <returns>True - action can be continued. False - action is exhausted (passed the last yield return statement and reach the end of the action).</returns>
+            private bool PerformInternal(IEnumerator action)
+            {
+                object response = action.Current;
+
+                switch (response)
                 {
-                    action.MoveNext();
-                }
-                else
-                {
-                    if (!response.CanPerform()) return;
-                    action.MoveNext();
+                    case IWait wait:
+                        if (!wait.CanPerformNow()) return true;
+                        return action.MoveNext();
+                    
+                    case IEnumerator subAction:
+                        if (PerformInternal(subAction)) return true;
+                        return action.MoveNext();
+
+                    default:
+                        return action.MoveNext();
                 }
             }
 
@@ -232,7 +247,7 @@ namespace UpdateSystem.CoroutineSystem
                 this.coroutineManager = coroutineManager;
             }
 
-            public Guid StartCoroutine(IEnumerator<IWait> action, int priority = 0)
+            public Guid StartCoroutine(IEnumerator action, int priority = 0)
             {
                 return coroutineManager.StartCoroutine(this, action, priority);
             }

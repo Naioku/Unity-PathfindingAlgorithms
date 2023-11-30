@@ -17,7 +17,7 @@ public static class Enums
         None,
         ReadyToCheck,
         Checked,
-        Path,
+        Path
     }
     
     [Flags]

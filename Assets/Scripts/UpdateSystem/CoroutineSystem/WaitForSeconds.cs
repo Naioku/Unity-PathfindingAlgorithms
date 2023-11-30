@@ -11,7 +11,7 @@ namespace UpdateSystem.CoroutineSystem
             timer = seconds;
         }
             
-        public bool CanPerform()
+        public bool CanPerformNow()
         {
             timer -= Time.deltaTime;
             return timer <= 0;

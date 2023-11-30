@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -83,7 +83,7 @@ public class CameraController
         coroutineCaller.StopCoroutine(ref movementCoroutineId);
     }
 
-    private IEnumerator<IWait> PerformMovement()
+    private IEnumerator PerformMovement()
     {
         while (true)
         {

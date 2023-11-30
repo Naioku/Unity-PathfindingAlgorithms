@@ -2,6 +2,6 @@
 {
     public interface IWait
     {
-        bool CanPerform();
+        bool CanPerformNow();
     }
 }

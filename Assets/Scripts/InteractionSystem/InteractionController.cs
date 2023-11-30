@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using DefaultNamespace;
 using CustomInputSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UpdateSystem;
 using UpdateSystem.CoroutineSystem;
 
 namespace InteractionSystem
@@ -59,7 +58,7 @@ namespace InteractionSystem
         private void StartClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(Enums.InteractionType.Click);
         private void StopClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(DefaultInteractionType);
 
-        private IEnumerator<IWait> PerformInteraction()
+        private IEnumerator PerformInteraction()
         {
             while (true)
             {

@@ -33,8 +33,17 @@ public class Maze : MonoBehaviour, IInteractable
         cursorInteraction.Interact(interactionDataSystem, interactionDataArgs);
     }
 
-    public void SelectTile(Vector2Int coords) => GetTile(coords).Select();
-    public void DeselectTile(Vector2Int coords) => GetTile(coords).Deselect();
+    public void SelectTile(Vector2Int coords)
+    {
+        if (!TryGetTile(coords, out Tile tile)) return;
+        tile.Select();
+    }
+
+    public void DeselectTile(Vector2Int coords)
+    {
+        if (!TryGetTile(coords, out Tile tile)) return;
+        tile.Deselect();
+    }
 
     public void SetTileType(Vector2Int coords, Enums.TileType type)
     {
@@ -52,11 +61,17 @@ public class Maze : MonoBehaviour, IInteractable
     /// Checks if tile with provided coordinates has the same tile type as provided.
     /// </summary>
     /// <param name="coords">Coordinates of tile You want to check.</param>
-    /// <param name="type">Tile type You want to check.</param>
-    /// <returns>True if tile with provided coordinates has the same tile type as provided.</returns>
-    public bool CheckTileType(Vector2Int coords, Enums.TileType type)
+    /// <param name="types">Tile types You want to check.</param>
+    /// <returns>True if type of the tile with provided coordinates matches one of provided tile types.</returns>
+    public bool CheckTileType(Vector2Int coords, params Enums.TileType[] types)
     {
-        return TryGetTileType(coords, out Enums.TileType currentNodeTileType) && currentNodeTileType == type;
+        if (!TryGetTileType(coords, out Enums.TileType currentNodeTileType)) return false;
+        foreach (Enums.TileType type in types)
+        {
+            if (currentNodeTileType == type) return true;
+        }
+        
+        return false;
     }
     
     /// <summary>
@@ -177,17 +192,8 @@ public class Maze : MonoBehaviour, IInteractable
     
     private Tile GetTile(Vector2Int coords)
     {
-        if (coords.x < 0 || coords.x >= gameDataSO.Size.x)
-        {
-            // Debug.LogError($"X:{coords.x} value is out of range.");
-            return null;
-        }
-
-        if (coords.y < 0 || coords.y >= gameDataSO.Size.y)
-        {
-            // Debug.LogError($"Y:{coords.y} value is out of range.");
-            return null;
-        }
+        if (coords.x < 0 || coords.x >= gameDataSO.Size.x) return null;
+        if (coords.y < 0 || coords.y >= gameDataSO.Size.y) return null;
 
         int index = coords.y * gameDataSO.Size.x + coords.x;
         return tileInstances[index];
@@ -199,6 +205,7 @@ public class Maze : MonoBehaviour, IInteractable
         return result;
     }
     
+    // Todo: These two methods below can be merged. They have difference only at 3rd line "result = tile.TileType/MarkerType;".
     private bool TryGetTileType(Vector2Int coords, out Enums.TileType result)
     {
         result = default;
