@@ -10,7 +10,6 @@ namespace DefaultNamespace
     {
         [field: SerializeField] public GameManager GameManager { get; private set; }
         [field: SerializeField] public SpawnManager<Enums.Utils> UtilsSpawner { get; private set; }
-        [field: SerializeField] public SceneManager SceneManager { get; private set; }
         [field: SerializeField] public UpdateManager UpdateManager { get; private set; }
         public CoroutineManager CoroutineManager { get; private set; }
         public InputManager InputManager { get; private set; }
@@ -34,7 +33,6 @@ namespace DefaultNamespace
 
             CoroutineManager.Initialize();
             UtilsSpawner.Initialize();
-            SceneManager.Initialize();
             InputManager.Initialize();
             GameManager.Initialize();
         }

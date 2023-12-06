@@ -133,7 +133,6 @@ namespace CustomInputSystem
                     { Enums.InputAction.Play, controls.Algorithm.Play },
                     { Enums.InputAction.Pause, controls.Algorithm.Pause },
                     { Enums.InputAction.Step, controls.Algorithm.Step },
-                    { Enums.InputAction.Refresh, controls.Algorithm.Refresh },
                     { Enums.InputAction.Stop, controls.Algorithm.Stop }
                 }
             );

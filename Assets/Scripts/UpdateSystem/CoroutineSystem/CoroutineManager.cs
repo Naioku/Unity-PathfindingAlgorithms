@@ -32,8 +32,6 @@ namespace UpdateSystem.CoroutineSystem
             {
                 data.PerformAllCoroutines();
             }
-            
-            // Perform WaitFor timer.
 
             // Because obviously You can't modify collection while iterating on it is still performing.
             StopCoroutinesInternal();

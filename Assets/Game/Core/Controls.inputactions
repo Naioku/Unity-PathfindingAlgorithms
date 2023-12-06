@@ -257,15 +257,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Refresh",
-                    "type": "Button",
-                    "id": "8dc4c020-ae02-491d-b6ae-be4c187427ee",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Stop",
                     "type": "Button",
                     "id": "bd298785-1973-4679-a849-627e089a8960",
@@ -311,19 +302,8 @@
                 },
                 {
                     "name": "",
-                    "id": "f6a3f0fa-0759-4c6c-baa8-115d1a29cef0",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Refresh",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1dcdc9f5-666b-400a-bc6c-3d54d95785d3",
-                    "path": "<Keyboard>/t",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

@@ -4,6 +4,7 @@ using CustomInputSystem;
 using DefaultNamespace;
 using InteractionSystem;
 using StageMachineSystem;
+using StageMachineSystem.Algorithm;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

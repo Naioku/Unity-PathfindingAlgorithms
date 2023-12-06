@@ -281,15 +281,6 @@ namespace CustomInputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Refresh"",
-                    ""type"": ""Button"",
-                    ""id"": ""8dc4c020-ae02-491d-b6ae-be4c187427ee"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Stop"",
                     ""type"": ""Button"",
                     ""id"": ""bd298785-1973-4679-a849-627e089a8960"",
@@ -335,19 +326,8 @@ namespace CustomInputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f6a3f0fa-0759-4c6c-baa8-115d1a29cef0"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Refresh"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""1dcdc9f5-666b-400a-bc6c-3d54d95785d3"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -398,7 +378,6 @@ namespace CustomInputSystem
             m_Algorithm_Play = m_Algorithm.FindAction("Play", throwIfNotFound: true);
             m_Algorithm_Pause = m_Algorithm.FindAction("Pause", throwIfNotFound: true);
             m_Algorithm_Step = m_Algorithm.FindAction("Step", throwIfNotFound: true);
-            m_Algorithm_Refresh = m_Algorithm.FindAction("Refresh", throwIfNotFound: true);
             m_Algorithm_Stop = m_Algorithm.FindAction("Stop", throwIfNotFound: true);
         }
 
@@ -617,7 +596,6 @@ namespace CustomInputSystem
         private readonly InputAction m_Algorithm_Play;
         private readonly InputAction m_Algorithm_Pause;
         private readonly InputAction m_Algorithm_Step;
-        private readonly InputAction m_Algorithm_Refresh;
         private readonly InputAction m_Algorithm_Stop;
         public struct AlgorithmActions
         {
@@ -626,7 +604,6 @@ namespace CustomInputSystem
             public InputAction @Play => m_Wrapper.m_Algorithm_Play;
             public InputAction @Pause => m_Wrapper.m_Algorithm_Pause;
             public InputAction @Step => m_Wrapper.m_Algorithm_Step;
-            public InputAction @Refresh => m_Wrapper.m_Algorithm_Refresh;
             public InputAction @Stop => m_Wrapper.m_Algorithm_Stop;
             public InputActionMap Get() { return m_Wrapper.m_Algorithm; }
             public void Enable() { Get().Enable(); }
@@ -646,9 +623,6 @@ namespace CustomInputSystem
                     @Step.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
                     @Step.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
                     @Step.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStep;
-                    @Refresh.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
-                    @Refresh.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
-                    @Refresh.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnRefresh;
                     @Stop.started -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
                     @Stop.performed -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
                     @Stop.canceled -= m_Wrapper.m_AlgorithmActionsCallbackInterface.OnStop;
@@ -665,9 +639,6 @@ namespace CustomInputSystem
                     @Step.started += instance.OnStep;
                     @Step.performed += instance.OnStep;
                     @Step.canceled += instance.OnStep;
-                    @Refresh.started += instance.OnRefresh;
-                    @Refresh.performed += instance.OnRefresh;
-                    @Refresh.canceled += instance.OnRefresh;
                     @Stop.started += instance.OnStop;
                     @Stop.performed += instance.OnStop;
                     @Stop.canceled += instance.OnStop;
@@ -708,7 +679,6 @@ namespace CustomInputSystem
             void OnPlay(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnStep(InputAction.CallbackContext context);
-            void OnRefresh(InputAction.CallbackContext context);
             void OnStop(InputAction.CallbackContext context);
         }
     }

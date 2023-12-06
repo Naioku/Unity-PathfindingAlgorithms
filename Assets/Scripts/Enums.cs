@@ -47,10 +47,7 @@ public static class Enums
 
     #endregion
 
-    public enum Scene // Todo: Not needed - delete it.
-    {
-        Menu, BFS, AStar
-    }
+    public enum Scene {} // Todo: Not needed - delete it.
 
     #region SpawningSystem
 
@@ -94,5 +91,25 @@ public static class Enums
     public enum CameraMovementMode
     {
         Border, Key
+    }
+
+    public enum WaitingTime
+    {
+        AfterNewNodeEnqueuing,
+        AfterNodeChecking,
+        AfterCursorPositionChange,
+        AfterPathNodeSetting
+    }
+    
+    public enum PermittedDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        UpRight,
+        DownRight,
+        DownLeft,
+        UpLeft
     }
 }

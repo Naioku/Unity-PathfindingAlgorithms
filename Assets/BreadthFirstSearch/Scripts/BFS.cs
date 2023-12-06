@@ -1,120 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace;
+﻿using System.Collections;
+using StageMachineSystem.Algorithm;
 using UnityEngine;
-using UpdateSystem.CoroutineSystem;
-using WaitForSeconds = UpdateSystem.CoroutineSystem.WaitForSeconds;
 
 namespace BreadthFirstSearch.Scripts
 {
-    public class BFS : IAlgorithm
+    public class BFS : Algorithm
     {
-        #region StaticValues
-
-        private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-        private readonly List<Vector2Int> directions = new List<Vector2Int>
-        { 
-            Vector2Int.up, 
-            Vector2Int.down,
-            Vector2Int.left,
-            Vector2Int.right,
-            new Vector2Int(1, 1),
-            new Vector2Int(1, -1),
-            new Vector2Int(-1, -1),
-            new Vector2Int(-1, 1)
-        };
-        private Maze maze;
-        private Vector2Int startCoords;
-        private Vector2Int destinationCoords;
-        private GameDataSO gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
-
-        #endregion
-
-        #region VariableValues
-
-        private readonly Queue<Node> nodesToCheck = new Queue<Node>();
-        private Node currentNode;
-        private Vector2Int? cursorPosition;
-        private Guid processCoroutineId;
-
-        #endregion
-
-        private Vector2Int? CursorPosition
-        {
-            set
-            {
-                if (cursorPosition.HasValue) maze.DeselectTile(cursorPosition.Value);
-                cursorPosition = value;
-                if (cursorPosition.HasValue) maze.SelectTile(cursorPosition.Value);
-            }
-
-            get
-            {
-                if (!cursorPosition.HasValue)
-                {
-                    throw new NullReferenceException("Cursor position have to be set before getting access.");
-                }
-                return cursorPosition.Value;
-            }
-        }
-
-        public void Initialize(Maze maze, Vector2Int startCoords, Vector2Int destinationCoords)
-        {
-            this.maze = maze;
-            this.startCoords = startCoords;
-            this.destinationCoords = destinationCoords;
-            Refresh();
-        }
-        
-        public void Play()
-        {
-            processCoroutineId = coroutineCaller.StartCoroutine(ProcessCoroutine());
-            currentNode = new Node(startCoords, null);
-            CursorPosition = startCoords;
-        }
-
-        public void Pause()
-        {
-            
-        }
-
-        public void Step()
-        {
-            
-        }
-
-        public void Refresh()
-        {
-            currentNode = null;
-            CursorPosition = null;
-            maze.Refresh();
-            nodesToCheck.Clear();
-        }
-
-        public void Stop()
-        {
-            Refresh();
-        }
-        
-        private IEnumerator ProcessCoroutine()
+        protected override IEnumerator ProcessCoroutine()
         {
             while (!CheckNode())
             {
-                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterNodeChecking);
+                yield return GetWaitObject(Enums.WaitingTime.AfterNodeChecking);
                 yield return EnqueueNeighbors();
 
                 if (!ReloadNode())
                 {
                     Debug.Log("Path cannot be found!");
-                    coroutineCaller.StopCoroutine(ref processCoroutineId);
+                    Stop();
                 }
-                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterCursorPositionChange);
+                yield return GetWaitObject(Enums.WaitingTime.AfterCursorPositionChange);
             }
          
             yield return DrawPath();
-            coroutineCaller.StopCoroutine(ref processCoroutineId);
             Debug.Log("Done!");
+            Stop();
+            onFinish?.Invoke();
         }
 
         private IEnumerator EnqueueNeighbors()
@@ -126,64 +36,11 @@ namespace BreadthFirstSearch.Scripts
 
                 if (!maze.CheckTileType(position, Enums.TileType.Default, Enums.TileType.Destination)) continue;
                 if (!maze.CheckMarkerType(position, Enums.MarkerType.None)) continue;
-                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterCursorPositionChange);
+                yield return GetWaitObject(Enums.WaitingTime.AfterCursorPositionChange);
                 
                 maze.SetMarkerType(position, Enums.MarkerType.ReadyToCheck);
                 nodesToCheck.Enqueue(new Node(position, currentNode));
-                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterNewNodeEnqueuing);
-            }
-        }
-
-        /// <summary>
-        /// Checking current node.
-        /// </summary>
-        /// <returns><b>True</b> if current node is the destination node.</returns>
-        private bool CheckNode()
-        {
-            maze.SetMarkerType(currentNode.Coords, Enums.MarkerType.Checked);
-            return currentNode.Coords == destinationCoords;
-        }
-
-        /// <summary>
-        /// Reloads current node.
-        /// </summary>
-        /// <returns><b>False</b> if there is no node left to check.</returns>
-        private bool ReloadNode()
-        {
-            if (nodesToCheck.Count == 0) return false;
-            
-            currentNode = nodesToCheck.Dequeue();
-            CursorPosition = currentNode.Coords;
-            return true;
-        }
-        
-        private IEnumerator DrawPath()
-        {
-            var path = new Stack<Node>();
-            while (!maze.CheckTileType(currentNode.Coords, Enums.TileType.Start))
-            {
-                path.Push(currentNode);
-                currentNode = currentNode.PreviousNode;
-            }
-            
-            path.Push(currentNode);
-        
-            while (path.Count > 0)
-            {
-                maze.SetMarkerType(path.Pop().Coords, Enums.MarkerType.Path);
-                yield return new WaitForSeconds(gameDataSO.WaitingTimeData.AfterPathNodeSetting);
-            }
-        }
-
-        private class Node
-        {
-            public Vector2Int Coords { get; private set; }
-            public Node PreviousNode { get; private set; }
-
-            public Node(Vector2Int coords, Node previousNode)
-            {
-                Coords = coords;
-                PreviousNode = previousNode;
+                yield return GetWaitObject(Enums.WaitingTime.AfterNewNodeEnqueuing);
             }
         }
     }
