@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UpdateSystem.CoroutineSystem;

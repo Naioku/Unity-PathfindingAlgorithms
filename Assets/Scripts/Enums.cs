@@ -47,8 +47,6 @@ public static class Enums
 
     #endregion
 
-    public enum Scene {} // Todo: Not needed - delete it.
-
     #region SpawningSystem
 
     public enum EmptyEnum {}

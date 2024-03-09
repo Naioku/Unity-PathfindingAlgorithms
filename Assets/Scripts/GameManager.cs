@@ -1,7 +1,6 @@
 ﻿using System;
 using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
-using DefaultNamespace;
 using InteractionSystem;
 using StageMachineSystem;
 using StageMachineSystem.Algorithm;

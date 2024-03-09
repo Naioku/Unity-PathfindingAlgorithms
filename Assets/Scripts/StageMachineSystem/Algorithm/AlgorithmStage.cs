@@ -1,5 +1,4 @@
 ﻿using CustomInputSystem;
-using DefaultNamespace;
 using UnityEngine.InputSystem;
 
 namespace StageMachineSystem.Algorithm

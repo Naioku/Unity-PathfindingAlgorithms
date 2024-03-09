@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using CustomInputSystem;
-using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,14 +8,14 @@ namespace StageMachineSystem
     public class MazeModificationStage : BaseStage
     {
         private InputManager inputManager = AllManagers.Instance.InputManager;
-        private Enums.TileType temp;
+        private Enums.TileType currentTileTypeToSet;
         private Enums.TileType CurrentTileTypeToSet
         {
-            get => temp;
+            get => currentTileTypeToSet;
             set
             {
-                temp = value;
-                Debug.Log("CurrentTileType: " + temp);
+                currentTileTypeToSet = value;
+                Debug.Log("CurrentTileType: " + currentTileTypeToSet); // Todo: Show it in the UI.
             }
         }
 
