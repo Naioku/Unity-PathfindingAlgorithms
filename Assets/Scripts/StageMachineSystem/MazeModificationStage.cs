@@ -37,6 +37,10 @@ namespace StageMachineSystem
             base.Exit();
             RemoveInteractions();
             RemoveInput();
+            if (currentCoords != null)
+            {
+                maze.DeselectTile(currentCoords.Value);
+            }
         }
 
         #region Input
