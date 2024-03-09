@@ -2,11 +2,10 @@
 using CustomInputSystem.ActionMaps;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UpdateSystem;
 
 namespace CustomInputSystem
 {
-    public class InputManager : IUpdatable
+    public class InputManager
     {
         private readonly Controls controls = new Controls();
         private readonly List<ActionMap> mapsList = new List<ActionMap>();
@@ -20,8 +19,7 @@ namespace CustomInputSystem
         
         public void Initialize()
         {
-            // Managers.Instance.UpdateManager.RegisterOnUpdate(UpdateCursorPosition);
-            AllManagers.Instance.UpdateManager.Register(this);
+            AllManagers.Instance.UpdateManager.RegisterOnUpdate(UpdateCursorPosition);
             InitializeMaps();
             BuildMapsList();
             UIMap.Enable();
@@ -37,8 +35,7 @@ namespace CustomInputSystem
 
         public void Destroy()
         {
-            // Managers.Instance.UpdateManager.UnregisterFromUpdate(UpdateCursorPosition);
-            AllManagers.Instance.UpdateManager.Unregister(this);
+            AllManagers.Instance.UpdateManager.UnregisterFromUpdate(UpdateCursorPosition);
         }
 
         public void UpdateCursorPosition()

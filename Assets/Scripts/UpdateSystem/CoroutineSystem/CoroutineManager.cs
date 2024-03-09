@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UpdateSystem.CoroutineSystem
 {
-    public class CoroutineManager : IUpdatable
+    public class CoroutineManager
     {
         private UpdateManager updateManager;
         private readonly Dictionary<CoroutineCaller, CoroutinesItem> coroutinesItemsLookup = new Dictionary<CoroutineCaller, CoroutinesItem>();
@@ -17,12 +17,12 @@ namespace UpdateSystem.CoroutineSystem
         public void Initialize()
         {
             updateManager = AllManagers.Instance.UpdateManager;
-            updateManager.Register(this);
+            updateManager.RegisterOnUpdate(PerformUpdate);
         }
 
         public void Destroy()
         {
-            updateManager.Unregister(this);
+            updateManager.UnregisterFromUpdate(PerformUpdate);
         }
         
         public void PerformUpdate()
