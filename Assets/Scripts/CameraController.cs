@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
+using CustomInputSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UpdateSystem.CoroutineSystem;
 
 [Serializable]
@@ -22,51 +22,29 @@ public class CameraController
     public void Initialize(Camera camera)
     {
         coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
+        InputManager inputManager = AllManagers.Instance.InputManager;
         mainCamera = camera;
-            
-        AllManagers.Instance.InputManager.SetOnPerformed
-        (
-            Enums.ActionMap.Global,
-            Enums.InputAction.CameraMovement,
-            StartKeyModeMovement
-        );
-            
-        AllManagers.Instance.InputManager.SetOnCanceled
-        (
-            Enums.ActionMap.Global,
-            Enums.InputAction.CameraMovement,
-            StopKeyModeMovement
-        );
-            
+
+        inputManager.GlobalMap.OnCameraMovementData.Performed += StartKeyModeMovement;
+        inputManager.GlobalMap.OnCameraMovementData.Canceled += StopKeyModeMovement;
         StartMovement();
     }
 
     public void Destroy()
     {
-        AllManagers.Instance.InputManager.RemoveOnStarted
-        (
-            Enums.ActionMap.Global,
-            Enums.InputAction.CameraMovement,
-            StartKeyModeMovement
-        );
-            
-        AllManagers.Instance.InputManager.RemoveOnCanceled
-        (
-            Enums.ActionMap.Global,
-            Enums.InputAction.CameraMovement,
-            StopKeyModeMovement
-        );
-            
+        InputManager inputManager = AllManagers.Instance.InputManager;
+        inputManager.GlobalMap.OnCameraMovementData.Performed -= StartKeyModeMovement;
+        inputManager.GlobalMap.OnCameraMovementData.Canceled -= StopKeyModeMovement;
         StopMovement();
     }
 
-    private void StartKeyModeMovement(InputAction.CallbackContext context)
+    private void StartKeyModeMovement()
     {
         keyModeMovementCursorLockPosition = AllManagers.Instance.InputManager.CursorPosition;
         movementMode = Enums.CameraMovementMode.Key;
     }
 
-    private void StopKeyModeMovement(InputAction.CallbackContext context)
+    private void StopKeyModeMovement()
     {
         keyModeMovementCursorLockPosition = Vector2.zero;
         movementMode = Enums.CameraMovementMode.Border;

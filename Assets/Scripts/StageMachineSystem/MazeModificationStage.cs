@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using CustomInputSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace StageMachineSystem
 {
@@ -46,25 +45,26 @@ namespace StageMachineSystem
 
         private void InitInput()
         {
-            inputManager.SetOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetDefaultNode, StartSettingNodeDefault);
-            inputManager.SetOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetStartNode, StartSettingNodeStart);
-            inputManager.SetOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetDestinationNode, StartSettingNodeDestination);
-            inputManager.SetOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetBlockedNode, StartSettingNodeBlocked);
-            inputManager.SetActionMap(Enums.ActionMap.MazeModification);
+            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed += StartSettingNodeDefault;
+            inputManager.MazeModificationMap.OnSetStartNodeData.Performed += StartSettingNodeStart;
+            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed += StartSettingNodeDestination;
+            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed += StartSettingNodeBlocked;
+
+            inputManager.MazeModificationMap.Enable();
         }
 
         private void RemoveInput()
         {
-            inputManager.RemoveOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetDefaultNode, StartSettingNodeDefault);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetStartNode, StartSettingNodeStart);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetDestinationNode, StartSettingNodeDestination);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.MazeModification, Enums.InputAction.SetBlockedNode, StartSettingNodeBlocked);
+            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed -= StartSettingNodeDefault;
+            inputManager.MazeModificationMap.OnSetStartNodeData.Performed -= StartSettingNodeStart;
+            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed -= StartSettingNodeDestination;
+            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed -= StartSettingNodeBlocked;
         }
 
-        private void StartSettingNodeDefault(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Default;
-        private void StartSettingNodeStart(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Start;
-        private void StartSettingNodeDestination(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Destination;
-        private void StartSettingNodeBlocked(InputAction.CallbackContext obj) => CurrentTileTypeToSet = Enums.TileType.Blocked;
+        private void StartSettingNodeDefault() => CurrentTileTypeToSet = Enums.TileType.Default;
+        private void StartSettingNodeStart() => CurrentTileTypeToSet = Enums.TileType.Start;
+        private void StartSettingNodeDestination() => CurrentTileTypeToSet = Enums.TileType.Destination;
+        private void StartSettingNodeBlocked() => CurrentTileTypeToSet = Enums.TileType.Blocked;
 
         #endregion
 

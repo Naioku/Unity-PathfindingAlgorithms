@@ -2,7 +2,6 @@
 using System.Collections;
 using CustomInputSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UpdateSystem.CoroutineSystem;
 
 namespace InteractionSystem
@@ -28,13 +27,14 @@ namespace InteractionSystem
         {
             mainCamera = camera;
             coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-            InitializeInput();
+            AddInput();
             StartInteracting();
         }
 
         public void Destroy()
         {
             StopInteracting();
+            RemoveInput();
         }
 
         private void StartInteracting()
@@ -47,15 +47,22 @@ namespace InteractionSystem
             coroutineCaller.StopCoroutine(ref performInteractionId);
         }
 
-        private void InitializeInput()
+        private void AddInput()
         {
             InputManager inputManager = AllManagers.Instance.InputManager;
-            inputManager.SetOnPerformed(Enums.ActionMap.Global, Enums.InputAction.ClickInteraction, StartClickInteraction);
-            inputManager.SetOnCanceled(Enums.ActionMap.Global, Enums.InputAction.ClickInteraction, StopClickInteraction);
+            inputManager.GlobalMap.OnClickInteractionData.Performed += StartClickInteraction;
+            inputManager.GlobalMap.OnClickInteractionData.Canceled += StopClickInteraction;
+        }
+        
+        private void RemoveInput()
+        {
+            InputManager inputManager = AllManagers.Instance.InputManager;
+            inputManager.GlobalMap.OnClickInteractionData.Performed -= StartClickInteraction;
+            inputManager.GlobalMap.OnClickInteractionData.Canceled -= StopClickInteraction;
         }
 
-        private void StartClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(Enums.InteractionType.Click);
-        private void StopClickInteraction(InputAction.CallbackContext obj) => SwitchInteractionType(DefaultInteractionType);
+        private void StartClickInteraction() => SwitchInteractionType(Enums.InteractionType.Click);
+        private void StopClickInteraction() => SwitchInteractionType(DefaultInteractionType);
 
         private IEnumerator PerformInteraction()
         {

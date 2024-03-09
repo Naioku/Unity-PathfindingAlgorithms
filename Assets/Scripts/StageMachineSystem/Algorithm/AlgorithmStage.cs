@@ -1,5 +1,4 @@
 ﻿using CustomInputSystem;
-using UnityEngine.InputSystem;
 
 namespace StageMachineSystem.Algorithm
 {
@@ -39,22 +38,25 @@ namespace StageMachineSystem.Algorithm
         
         private void InitInput()
         {
-            inputManager.SetOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Play, Play);
-            inputManager.SetOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Pause, Pause);
-            inputManager.SetOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Step, Step);
-            inputManager.SetOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Stop, Stop);
-            inputManager.SetActionMap(Enums.ActionMap.Algorithm);
+            inputManager.AlgorithmMap.OnPlayData.Performed += Play;
+            inputManager.AlgorithmMap.OnPauseData.Performed += Pause;
+            inputManager.AlgorithmMap.OnStepData.Performed += Step;
+            inputManager.AlgorithmMap.OnStopData.Performed += Stop;
+
+            inputManager.AlgorithmMap.Enable();
         }
 
         private void RemoveInput()
         {
-            inputManager.RemoveOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Play, Play);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Pause, Pause);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Step, Step);
-            inputManager.RemoveOnPerformed(Enums.ActionMap.Algorithm, Enums.InputAction.Stop, Stop);
+            inputManager.AlgorithmMap.Disable();
+
+            inputManager.AlgorithmMap.OnPlayData.Performed -= Play;
+            inputManager.AlgorithmMap.OnPauseData.Performed -= Pause;
+            inputManager.AlgorithmMap.OnStepData.Performed -= Step;
+            inputManager.AlgorithmMap.OnStopData.Performed -= Stop;
         }
         
-        private void Play(InputAction.CallbackContext obj)
+        private void Play()
         {
             if (algorithmState.Play())
             {
@@ -63,7 +65,7 @@ namespace StageMachineSystem.Algorithm
         }
 
 
-        private void Pause(InputAction.CallbackContext obj)
+        private void Pause()
         {
             if (algorithmState.Pause())
             {
@@ -71,7 +73,7 @@ namespace StageMachineSystem.Algorithm
             }
         }
 
-        private void Step(InputAction.CallbackContext obj)
+        private void Step()
         {
             if (algorithmState.Step())
             {
@@ -79,7 +81,7 @@ namespace StageMachineSystem.Algorithm
             }
         }
 
-        private void Stop(InputAction.CallbackContext obj)
+        private void Stop()
         {
             if (algorithmState.Stop())
             {
