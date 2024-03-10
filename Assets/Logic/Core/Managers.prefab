@@ -94,17 +94,11 @@ MonoBehaviour:
       keyModeMovementSpeed: 0.05
       screenBorderThickness: 10
       screenXLimits: {x: -5, y: 15}
-      screenZLimits: {x: -5, y: 15}
+      screenZLimits: {x: -5, y: 5}
     interactionController:
       interactionRange: 99
   <UtilsSpawner>k__BackingField:
     spawnableItems:
     - {fileID: 11400000, guid: 8e614657912d6e24580b5356ea0b88cd, type: 2}
     - {fileID: 11400000, guid: a573cd4ccf93b5b4c9374a5946269469, type: 2}
-  <SceneManager>k__BackingField:
-    scenes:
-    - <SceneName>k__BackingField: 0
-      <SceneObject>k__BackingField: Assets/Scenes/Menu.unity
-    - <SceneName>k__BackingField: 1
-      <SceneObject>k__BackingField: Assets/BreadthFirstSearch/Scenes/BFS.unity
   <UpdateManager>k__BackingField: {fileID: 3928309026115602704}
