@@ -4,15 +4,19 @@ using CustomInputSystem;
 using InteractionSystem;
 using StageMachineSystem;
 using StageMachineSystem.Algorithm;
+using UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 [Serializable]
 public class GameManager
 {
+    [SerializeField] private UIMenuController uiMenuControllerPrefab;
     [SerializeField] private GameDataSO gameDataSO;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
+    private UIMenuController uiMenuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
     private Maze maze;
@@ -21,6 +25,12 @@ public class GameManager
 
     public void Initialize()
     {
+        uiMenuController = Object.Instantiate(uiMenuControllerPrefab);
+        uiMenuController.Initialize(
+            StartMazeModification,
+            StartBFS,
+            StartAStar,
+            Quit);
         inputManager = AllManagers.Instance.InputManager;
         InitInput();
     }
@@ -28,6 +38,7 @@ public class GameManager
     public void Destroy()
     {
         RemoveInput();
+        cameraController.Destroy();
     }
 
     private void InitInput()
@@ -52,13 +63,36 @@ public class GameManager
 
     private void ExitStage()
     {
-        stageMachine.SetStage(null);
+        if (!stageMachine.SetStage(null)) return;
+        
+        uiMenuController.Open();
+        cameraController.StopMovement();
+        interactionController.StopInteracting();
         inputManager.StageSelectionMap.Enable();
     }
+    
+    private void EnterStage(BaseStage stage)
+    {
+        if (!stageMachine.SetStage(stage)) return;
 
-    private void StartMazeModification() => stageMachine.SetStage(new MazeModificationStage(maze));
-    private void StartBFS() => stageMachine.SetStage(new AlgorithmStage(maze, new BFS()));
+        cameraController.StartMovement();
+        interactionController.StartInteracting();
+        uiMenuController.Close();
+    }
+
+    private void StartMazeModification() => EnterStage(new MazeModificationStage(maze));
+
+    private void StartBFS() => EnterStage(new AlgorithmStage(maze, new BFS()));
+
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
+    private void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 
     public void StartGame()
     {

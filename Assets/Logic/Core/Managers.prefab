@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GameManager>k__BackingField:
+    uiMenuControllerPrefab: {fileID: 8391452431305063952, guid: c144a059c81ab94469e892955661e61f, type: 3}
     gameDataSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
     cameraController:
       speed: 20

@@ -28,7 +28,6 @@ namespace InteractionSystem
             mainCamera = camera;
             coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
             AddInput();
-            StartInteracting();
         }
 
         public void Destroy()
@@ -37,12 +36,12 @@ namespace InteractionSystem
             RemoveInput();
         }
 
-        private void StartInteracting()
+        public void StartInteracting()
         {
             performInteractionId = coroutineCaller.StartCoroutine(PerformInteraction());
         }
 
-        private void StopInteracting()
+        public void StopInteracting()
         {
             coroutineCaller.StopCoroutine(ref performInteractionId);
         }

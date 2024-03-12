@@ -13,9 +13,14 @@ namespace StageMachineSystem
         private BaseStage currentStage;
         private SharedData SharedData { get; set; } = new SharedData();
 
-        public void SetStage(BaseStage newStage)
+        /// <summary>
+        /// Sets stage as current.
+        /// </summary>
+        /// <param name="newStage">New stage object to set.</param>
+        /// <returns>True if stage has been correctly set.</returns>
+        public bool SetStage(BaseStage newStage)
         {
-            if (!SanityCheck(newStage)) return;
+            if (!SanityCheck(newStage)) return false;
             
             AllManagers.Instance.InputManager.StageSelectionMap.Disable();
             currentStage?.Exit();
@@ -29,8 +34,13 @@ namespace StageMachineSystem
             {
                 currentStage.Initialize(SharedData);
                 currentStage.Enter();
-                tickCoroutineId = coroutineCaller.StartCoroutine(Tick());
+                if (tickCoroutineId == Guid.Empty)
+                {
+                    tickCoroutineId = coroutineCaller.StartCoroutine(Tick());
+                }
             }
+
+            return true;
         }
 
         private bool SanityCheck(BaseStage newStage)
