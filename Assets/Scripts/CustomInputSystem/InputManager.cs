@@ -13,7 +13,7 @@ namespace CustomInputSystem
         public GlobalMap GlobalMap { get; private set; }
         public StageSelectionMap StageSelectionMap { get; private set; }
         public MazeModificationMap MazeModificationMap { get; private set; }
-        public AlgorithmMap AlgorithmMap{ get; private set; }
+        public AlgorithmMap AlgorithmMap { get; private set; }
         public UIMap UIMap { get; private set; }
         public Vector2 CursorPosition { get; private set; }
         

@@ -1,16 +1,20 @@
 ﻿using CustomInputSystem;
+using StageMachineSystem.Algorithm;
+using UI.HUDPanels;
 
-namespace StageMachineSystem.Algorithm
+namespace StageMachineSystem
 {
     public class AlgorithmStage : BaseStage
     {
-        private Algorithm algorithm;
+        private readonly Algorithm.Algorithm algorithm;
+        private readonly HUDControllerAlgorithm hudControllerAlgorithm;
         private AlgorithmStateBase algorithmState;
         private InputManager inputManager;
 
-        public AlgorithmStage(Maze maze, Algorithm algorithm) : base(maze)
+        public AlgorithmStage(HUDControllerAlgorithm hudControllerAlgorithm, Algorithm.Algorithm algorithm)
         {
             this.algorithm = algorithm;
+            this.hudControllerAlgorithm = hudControllerAlgorithm;
         }
 
         public override void Enter()
@@ -19,23 +23,38 @@ namespace StageMachineSystem.Algorithm
             inputManager = AllManagers.Instance.InputManager;
             InitInput();
             algorithm.Initialize(
-                maze,
+                sharedData.Maze,
                 sharedData.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
                 sharedData.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
                 () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
             
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
+            hudControllerAlgorithm.Initialize
+            (
+                Play,
+                Pause,
+                Step,
+                Stop,
+                sharedData.OnBack
+            );
+            hudControllerAlgorithm.Show();
         }
 
         public override void Exit()
         {
             base.Exit();
+            hudControllerAlgorithm.Hide();
+            hudControllerAlgorithm.Deinitialize();
             RemoveInput();
             algorithmState.Stop();
         }
         
-        private void SwitchAlgorithmState(AlgorithmStateBase newState) => algorithmState = newState;
-        
+        private void SwitchAlgorithmState(AlgorithmStateBase newState)
+        {
+            algorithmState = newState;
+            hudControllerAlgorithm.UpdateCurrentStateLabel(algorithmState.Name);
+        }
+
         private void InitInput()
         {
             inputManager.AlgorithmMap.OnPlayData.Performed += Play;

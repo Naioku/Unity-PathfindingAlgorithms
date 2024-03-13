@@ -3,34 +3,39 @@ using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
 using InteractionSystem;
 using StageMachineSystem;
-using StageMachineSystem.Algorithm;
 using UI;
+using UI.HUDPanels;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 [Serializable]
 public class GameManager
 {
-    [SerializeField] private UIMenuController uiMenuControllerPrefab;
+    [SerializeField] private MenuController menuPrefab;
+    [SerializeField] private HUDControllerMazeModification hudMazeModificationPrefab;
+    [SerializeField] private HUDControllerAlgorithm hudAlgorithmPrefab;
     [SerializeField] private GameDataSO gameDataSO;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
-    private UIMenuController uiMenuController;
+    private MenuController menuController;
+    private HUDControllerMazeModification hudControllerMazeModification;
+    private HUDControllerAlgorithm hudControllerAlgorithm;
     private InputManager inputManager;
     private StageMachine stageMachine;
-    private Maze maze;
     
     public GameDataSO GameDataSO => gameDataSO;
 
     public void Initialize()
     {
-        uiMenuController = Object.Instantiate(uiMenuControllerPrefab);
-        uiMenuController.Initialize(
+        menuController = Object.Instantiate(menuPrefab);
+        menuController.Initialize(
             StartMazeModification,
             StartBFS,
             StartAStar,
             Quit);
+        hudControllerMazeModification = Object.Instantiate(hudMazeModificationPrefab);
+        hudControllerAlgorithm = Object.Instantiate(hudAlgorithmPrefab);
         inputManager = AllManagers.Instance.InputManager;
         InitInput();
     }
@@ -39,6 +44,15 @@ public class GameManager
     {
         RemoveInput();
         cameraController.Destroy();
+    }
+    
+    public void StartGame()
+    {
+        inputManager.GlobalMap.Enable();
+        cameraController.Initialize(Camera.main);
+        interactionController.Initialize(Camera.main);
+        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.Utils.Maze);
+        stageMachine = new StageMachine(maze, ExitStage);
     }
 
     private void InitInput()
@@ -61,30 +75,29 @@ public class GameManager
         inputManager.StageSelectionMap.OnAStarData.Performed -= StartAStar;
     }
 
-    private void ExitStage()
-    {
-        if (!stageMachine.SetStage(null)) return;
-        
-        uiMenuController.Open();
-        cameraController.StopMovement();
-        interactionController.StopInteracting();
-        inputManager.StageSelectionMap.Enable();
-    }
-    
     private void EnterStage(BaseStage stage)
     {
         if (!stageMachine.SetStage(stage)) return;
 
         cameraController.StartMovement();
         interactionController.StartInteracting();
-        uiMenuController.Close();
+        menuController.Close();
     }
 
-    private void StartMazeModification() => EnterStage(new MazeModificationStage(maze));
+    private void ExitStage()
+    {
+        if (!stageMachine.SetStage(null)) return;
+        
+        menuController.Open();
+        cameraController.StopMovement();
+        interactionController.StopInteracting();
+        inputManager.StageSelectionMap.Enable();
+    }
 
-    private void StartBFS() => EnterStage(new AlgorithmStage(maze, new BFS()));
-
+    private void StartMazeModification() => EnterStage(new MazeModificationStage(hudControllerMazeModification));
+    private void StartBFS() => EnterStage(new AlgorithmStage(hudControllerAlgorithm, new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
+    
     private void Quit()
     {
 #if UNITY_EDITOR
@@ -92,14 +105,5 @@ public class GameManager
 #else
         Application.Quit();
 #endif
-    }
-
-    public void StartGame()
-    {
-        inputManager.GlobalMap.Enable();
-        cameraController.Initialize(Camera.main);
-        interactionController.Initialize(Camera.main);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.Utils.Maze);
-        stageMachine = new StageMachine();
     }
 }

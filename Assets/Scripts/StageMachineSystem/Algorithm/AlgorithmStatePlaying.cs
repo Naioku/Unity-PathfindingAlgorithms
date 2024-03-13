@@ -2,6 +2,8 @@
 {
     public class AlgorithmStatePlaying : AlgorithmStateBase
     {
+        public override Enums.AlgorithmState Name => Enums.AlgorithmState.Playing;
+        
         public AlgorithmStatePlaying(Algorithm algorithm) : base(algorithm) {}
 
         public override bool Pause()

@@ -16,6 +16,11 @@ namespace UI.MenuPanels
         {
             base.Awake();
             AddActions();
+        }
+
+        public override void Show()
+        {
+            base.Show();
             mazeModificationButton.Select();
         }
 

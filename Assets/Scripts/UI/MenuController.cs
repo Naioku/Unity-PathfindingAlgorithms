@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UIMenuController : MonoBehaviour
+    public class MenuController : MonoBehaviour
     {
         [SerializeField] private MainPanel mainPanel;
         // [SerializeField] private SettingsPanel settingsPanel;
@@ -19,7 +19,7 @@ namespace UI
         {
             InitializePanels(mazeModificationAction, bfsAction, aStarAction);
             this.onExit = onExit;
-            OpenPanel(mainPanel);
+            SwitchPanel(mainPanel);
         }
 
         private void InitializePanels(Action mazeModificationAction, Action bfsAction, Action aStarAction)
@@ -41,11 +41,16 @@ namespace UI
             // helpPanel.Initialize(initData);
         }
 
-        public void Open() => gameObject.SetActive(true);
+        public void Open()
+        {
+            gameObject.SetActive(true);
+            Back();
+        }
 
         public void Close()
         {
             gameObject.SetActive(false);
+            OpenPanel(null);
         }
 
         private void Back()
@@ -62,8 +67,8 @@ namespace UI
 
         private void OpenPanel(BasePanel panel)
         {
-            SwitchPanel(panel);
             openedPanelsHistory.Push(currentPanel);
+            SwitchPanel(panel);
         }
 
         private void SwitchPanel(BasePanel panel)
@@ -72,6 +77,7 @@ namespace UI
             {
                 currentPanel.Close();
             }
+            
             currentPanel = panel;
             
             if (currentPanel != null)

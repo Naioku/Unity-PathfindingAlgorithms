@@ -2,6 +2,8 @@
 {
     public class AlgorithmStateInitial : AlgorithmStateBase
     {
+        public override Enums.AlgorithmState Name => Enums.AlgorithmState.Initial;
+        
         public AlgorithmStateInitial(Algorithm algorithm) : base(algorithm) {}
 
         public override bool Play()

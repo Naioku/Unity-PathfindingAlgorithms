@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using StageMachineSystem.Algorithm;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 
@@ -11,8 +10,14 @@ namespace StageMachineSystem
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         private Guid tickCoroutineId;
         private BaseStage currentStage;
-        private SharedData SharedData { get; set; } = new SharedData();
+        private SharedData SharedData { get; } = new SharedData();
 
+        public StageMachine(Maze maze, Action onBack)
+        {
+            SharedData.Maze = maze;
+            SharedData.OnBack = onBack;
+        }
+        
         /// <summary>
         /// Sets stage as current.
         /// </summary>
@@ -32,7 +37,7 @@ namespace StageMachineSystem
             }
             else
             {
-                currentStage.Initialize(SharedData);
+                currentStage.SharedData = SharedData;
                 currentStage.Enter();
                 if (tickCoroutineId == Guid.Empty)
                 {

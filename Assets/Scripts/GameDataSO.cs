@@ -17,6 +17,7 @@ public class GameDataSO : ScriptableObject
     [Header("Miscellaneous")]
     [SerializeField] private WaitingTimeData waitingTimeData;
     [SerializeField] private Enums.PermittedDirection[] permittedDirections;
+    
     private readonly Dictionary<Enums.PermittedDirection, Vector2Int> permittedDirectionsLookup = new Dictionary<Enums.PermittedDirection, Vector2Int>
     {
         {Enums.PermittedDirection.Up, Vector2Int.up}, 

@@ -86,6 +86,15 @@ public static class Enums
 
     #endregion
 
+    #region UI
+
+    public enum AlgorithmState
+    {
+        Initial, Playing, Paused, Finished
+    }
+
+    #endregion
+    
     public enum CameraMovementMode
     {
         Border, Key

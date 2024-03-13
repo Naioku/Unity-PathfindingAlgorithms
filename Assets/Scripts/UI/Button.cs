@@ -13,6 +13,14 @@ namespace UI
         public event Action OnSubmitAction;
         public event Action OnPressAction;
 
+        public void ResetObj()
+        {
+            OnSelectAction = null;
+            OnClickAction = null;
+            OnSubmitAction = null;
+            OnPressAction = null;
+        }
+        
         public virtual void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left)

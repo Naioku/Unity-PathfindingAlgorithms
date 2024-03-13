@@ -1,12 +1,16 @@
 ﻿using System.Linq;
 using CustomInputSystem;
+using UI.HUDPanels;
 using UnityEngine;
 
 namespace StageMachineSystem
 {
     public class MazeModificationStage : BaseStage
     {
-        private InputManager inputManager = AllManagers.Instance.InputManager;
+        private InputManager inputManager;
+        private Maze maze;
+        private readonly HUDControllerMazeModification hudControllerMazeModification;
+        
         private Enums.TileType currentTileTypeToSet;
         private Enums.TileType CurrentTileTypeToSet
         {
@@ -14,25 +18,40 @@ namespace StageMachineSystem
             set
             {
                 currentTileTypeToSet = value;
-                Debug.Log("CurrentTileType: " + currentTileTypeToSet); // Todo: Show it in the UI.
+                hudControllerMazeModification.UpdateCurrentNodeLabel(value);
             }
         }
 
         private Vector2Int? currentCoords;
 
-        public MazeModificationStage(Maze maze) : base(maze) {}
+        public MazeModificationStage(HUDControllerMazeModification hudControllerMazeModification)
+        {
+            this.hudControllerMazeModification = hudControllerMazeModification;
+        }
         
         public override void Enter()
         {
             base.Enter();
             inputManager = AllManagers.Instance.InputManager;
+            maze = sharedData.Maze;
             InitInput();
             InitInteractions();
+            hudControllerMazeModification.Initialize
+            (
+                StartSettingNodeDefault,
+                StartSettingNodeStart,
+                StartSettingNodeDestination,
+                StartSettingNodeBlocked,
+                sharedData.OnBack
+            );
+            hudControllerMazeModification.Show();
         }
 
         public override void Exit()
         {
             base.Exit();
+            hudControllerMazeModification.Hide();
+            hudControllerMazeModification.Deinitialize();
             RemoveInteractions();
             RemoveInput();
             if (currentCoords != null)

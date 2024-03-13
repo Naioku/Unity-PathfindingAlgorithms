@@ -1,13 +1,16 @@
-﻿namespace StageMachineSystem
+﻿using System;
+using UI;
+
+namespace StageMachineSystem
 {
+    [Serializable]
     public abstract class BaseStage
     {
-        protected readonly Maze maze;
         protected SharedData sharedData;
 
-        protected BaseStage(Maze maze)
+        public SharedData SharedData
         {
-            this.maze = maze;
+            set => sharedData = value;
         }
 
         public void Initialize(SharedData sharedData)
