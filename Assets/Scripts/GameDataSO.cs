@@ -36,6 +36,7 @@ public class GameDataSO : ScriptableObject
     public float TileHighlightValue => tileHighlightValue;
     public float MarkerColorAlpha => markerColorAlpha;
     
+    // Todo: Shouldn't it be called GetTileColor?
     public Color GetPermanentColor(Enums.TileType tileType)
     {
         return tileType switch
