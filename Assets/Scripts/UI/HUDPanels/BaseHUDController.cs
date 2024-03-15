@@ -55,11 +55,13 @@ namespace UI.HUDPanels
         public virtual void Show()
         {
             gameObject.SetActive(true);
-            buttons[0].Select();
+            SelectButton(0);
         }
 
         public void Hide() => gameObject.SetActive(false);
-        
+
+        public void SelectButton(int buttonIndex) => buttons[buttonIndex].Select();
+
         public struct ButtonData
         {
             public Action Action;

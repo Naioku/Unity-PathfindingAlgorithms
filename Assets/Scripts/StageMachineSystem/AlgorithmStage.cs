@@ -73,10 +73,10 @@ namespace StageMachineSystem
 
         private void AddInput()
         {
-            inputOnPlayData.Performed += Play;
-            inputOnPauseData.Performed += Pause;
-            inputOnStepData.Performed += Step;
-            inputOnStopData.Performed += Stop;
+            inputOnPlayData.Performed += InputPlay;
+            inputOnPauseData.Performed += InputPause;
+            inputOnStepData.Performed += InputStep;
+            inputOnStopData.Performed += InputStop;
 
             inputManager.AlgorithmMap.Enable();
         }
@@ -85,10 +85,34 @@ namespace StageMachineSystem
         {
             inputManager.AlgorithmMap.Disable();
 
-            inputOnPlayData.Performed -= Play;
-            inputOnPauseData.Performed -= Pause;
-            inputOnStepData.Performed -= Step;
-            inputOnStopData.Performed -= Stop;
+            inputOnPlayData.Performed -= InputPlay;
+            inputOnPauseData.Performed -= InputPause;
+            inputOnStepData.Performed -= InputStep;
+            inputOnStopData.Performed -= InputStop;
+        }
+        
+        private void InputPlay()
+        {
+            Play();
+            hudController.SelectButton(0);
+        }
+        
+        private void InputPause()
+        {
+            Pause();
+            hudController.SelectButton(1);
+        }
+        
+        private void InputStep()
+        {
+            Step();
+            hudController.SelectButton(2);
+        }
+        
+        private void InputStop()
+        {
+            Stop();
+            hudController.SelectButton(3);
         }
         
         private void Play()
