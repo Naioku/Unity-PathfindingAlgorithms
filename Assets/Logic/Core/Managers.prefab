@@ -89,8 +89,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GameManager>k__BackingField:
     menuPrefab: {fileID: 8391452431305063952, guid: c144a059c81ab94469e892955661e61f, type: 3}
-    hudMazeModificationPrefab: {fileID: 6686175936323424900, guid: b6b2d03a471d3de48acde819fc1c5fce, type: 3}
-    hudAlgorithmPrefab: {fileID: 8360593091318187310, guid: a12d89a3d72c97a41b6ace971fb0273c, type: 3}
+    hudPrefabMazeModification: {fileID: 3974532890081794258, guid: b6b2d03a471d3de48acde819fc1c5fce, type: 3}
+    hudPrefabAlgorithm: {fileID: 8360593091318187310, guid: a12d89a3d72c97a41b6ace971fb0273c, type: 3}
     gameDataSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
     cameraController:
       speed: 20

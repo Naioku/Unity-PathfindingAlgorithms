@@ -1,4 +1,6 @@
-﻿using CustomInputSystem;
+﻿using System.Collections.Generic;
+using CustomInputSystem;
+using CustomInputSystem.ActionMaps;
 using StageMachineSystem.Algorithm;
 using UI.HUDPanels;
 
@@ -7,21 +9,25 @@ namespace StageMachineSystem
     public class AlgorithmStage : BaseStage
     {
         private readonly Algorithm.Algorithm algorithm;
-        private readonly HUDControllerAlgorithm hudControllerAlgorithm;
+        private readonly HUDControllerAlgorithm hudController;
         private AlgorithmStateBase algorithmState;
         private InputManager inputManager;
+        private ActionMap.ActionData inputOnPlayData;
+        private ActionMap.ActionData inputOnPauseData;
+        private ActionMap.ActionData inputOnStepData;
+        private ActionMap.ActionData inputOnStopData;
 
-        public AlgorithmStage(HUDControllerAlgorithm hudControllerAlgorithm, Algorithm.Algorithm algorithm)
+        public AlgorithmStage(HUDControllerAlgorithm hudController, Algorithm.Algorithm algorithm)
         {
             this.algorithm = algorithm;
-            this.hudControllerAlgorithm = hudControllerAlgorithm;
+            this.hudController = hudController;
         }
 
         public override void Enter()
         {
             base.Enter();
-            inputManager = AllManagers.Instance.InputManager;
             InitInput();
+            AddInput();
             algorithm.Initialize(
                 sharedData.Maze,
                 sharedData.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
@@ -29,38 +35,48 @@ namespace StageMachineSystem
                 () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
             
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
-            hudControllerAlgorithm.Initialize
-            (
-                Play,
-                Pause,
-                Step,
-                Stop,
-                sharedData.OnBack
-            );
-            hudControllerAlgorithm.Show();
+            hudController.Initialize(new List<BaseHUDController.ButtonData>
+            {
+                new BaseHUDController.ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = Pause, Label = $"Pause ({inputOnPauseData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = Step, Label = $"Step ({inputOnStepData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = Stop, Label = $"Stop ({inputOnStopData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})"}
+            });
+            hudController.Show();
         }
 
         public override void Exit()
         {
             base.Exit();
-            hudControllerAlgorithm.Hide();
-            hudControllerAlgorithm.Deinitialize();
+            hudController.Hide();
+            hudController.Deinitialize();
             RemoveInput();
             algorithmState.Stop();
         }
-        
+
         private void SwitchAlgorithmState(AlgorithmStateBase newState)
         {
             algorithmState = newState;
-            hudControllerAlgorithm.UpdateCurrentStateLabel(algorithmState.Name);
+            hudController.UpdateCurrentStateLabel(algorithmState.Name);
         }
 
         private void InitInput()
         {
-            inputManager.AlgorithmMap.OnPlayData.Performed += Play;
-            inputManager.AlgorithmMap.OnPauseData.Performed += Pause;
-            inputManager.AlgorithmMap.OnStepData.Performed += Step;
-            inputManager.AlgorithmMap.OnStopData.Performed += Stop;
+            inputManager = AllManagers.Instance.InputManager;
+
+            inputOnPlayData = inputManager.AlgorithmMap.OnPlayData;
+            inputOnPauseData = inputManager.AlgorithmMap.OnPauseData;
+            inputOnStepData = inputManager.AlgorithmMap.OnStepData;
+            inputOnStopData = inputManager.AlgorithmMap.OnStopData;
+        }
+
+        private void AddInput()
+        {
+            inputOnPlayData.Performed += Play;
+            inputOnPauseData.Performed += Pause;
+            inputOnStepData.Performed += Step;
+            inputOnStopData.Performed += Stop;
 
             inputManager.AlgorithmMap.Enable();
         }
@@ -69,10 +85,10 @@ namespace StageMachineSystem
         {
             inputManager.AlgorithmMap.Disable();
 
-            inputManager.AlgorithmMap.OnPlayData.Performed -= Play;
-            inputManager.AlgorithmMap.OnPauseData.Performed -= Pause;
-            inputManager.AlgorithmMap.OnStepData.Performed -= Step;
-            inputManager.AlgorithmMap.OnStopData.Performed -= Stop;
+            inputOnPlayData.Performed -= Play;
+            inputOnPauseData.Performed -= Pause;
+            inputOnStepData.Performed -= Step;
+            inputOnStopData.Performed -= Stop;
         }
         
         private void Play()

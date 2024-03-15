@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,10 +9,40 @@ namespace UI
 {
     public class Button : Selectable, IPointerClickHandler, ISubmitHandler
     {
+        private TextMeshProUGUI textLabel;
+        
         public event Action OnSelectAction;
         public event Action OnClickAction;
         public event Action OnSubmitAction;
         public event Action OnPressAction;
+        
+        public string Label
+        {
+            set => textLabel.text = value;
+        }
+
+        public void SetNavigation(
+            Selectable onUp = null,
+            Selectable onDown = null,
+            Selectable onLeft = null,
+            Selectable onRight = null)
+        {
+            
+            navigation = new Navigation
+            {
+                selectOnUp = onUp,
+                selectOnDown = onDown,
+                selectOnLeft = onLeft,
+                selectOnRight = onRight,
+                mode = Navigation.Mode.Explicit
+            };
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            textLabel = GetComponentInChildren<TextMeshProUGUI>();
+        }
 
         public void ResetObj()
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace StageMachineSystem
@@ -7,7 +6,6 @@ namespace StageMachineSystem
     public class SharedData
     {
         public Maze Maze { get; set; }
-        public Action OnBack { get; set; }
         
         public Dictionary<Enums.TileType, Vector2Int?> UniqueTilesCoordsLookup { get; set; } = new Dictionary<Enums.TileType, Vector2Int?>
         {

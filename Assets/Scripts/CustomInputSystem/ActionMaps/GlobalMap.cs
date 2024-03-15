@@ -4,14 +4,18 @@ namespace CustomInputSystem.ActionMaps
 {
     public class GlobalMap : ActionMap, Controls.IGlobalActions
     {
-        public ActionData OnClickInteractionData { get; } = new ActionData();
-        public ActionData OnCameraMovementData { get; } = new ActionData();
-        public ActionData OnExitStageData { get; } = new ActionData();
+        public ActionData OnClickInteractionData { get; }
+        public ActionData OnCameraMovementData { get; }
+        public ActionData OnExitStageData { get; }
         
         public GlobalMap(Controls.GlobalActions actionMap)
         {
             this.actionMap = actionMap.Get();
             actionMap.SetCallbacks(this);
+
+            OnClickInteractionData = new ActionData(actionMap.ClickInteraction);
+            OnCameraMovementData = new ActionData(actionMap.CameraMovement);
+            OnExitStageData = new ActionData(actionMap.ExitStage);
         }
 
         public void OnClickInteraction(InputAction.CallbackContext context) => OnClickInteractionData.Invoke(context.phase);

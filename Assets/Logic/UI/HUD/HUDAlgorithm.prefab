@@ -114,11 +114,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStateLabel: {fileID: 8719939990343257003}
-  play: {fileID: 2854950047273916952}
-  pause: {fileID: 6929238978397177523}
-  step: {fileID: 7135728593950440490}
-  stop: {fileID: 4123044553195164279}
-  back: {fileID: 3446819620701900584}
+  buttons:
+  - {fileID: 2854950047273916952}
+  - {fileID: 6929238978397177523}
+  - {fileID: 7135728593950440490}
+  - {fileID: 4123044553195164279}
+  - {fileID: 3446819620701900584}
 --- !u!1 &2734553805067352034
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,14 +523,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Step (E)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 6929238978397177523}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 4123044553195164279}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &470304151004932629 stripped
@@ -647,14 +640,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Pause (W)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 2854950047273916952}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 7135728593950440490}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &407701488931868812 stripped
@@ -878,14 +863,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Stop (R)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 7135728593950440490}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 3446819620701900584}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &6680552757185184840 stripped
@@ -1003,14 +980,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Back (ESC)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 4123044553195164279}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 2854950047273916952}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &5356038165763299607 stripped
@@ -1128,14 +1097,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Play (Q)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 3446819620701900584}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 6929238978397177523}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &4764590197028817959 stripped

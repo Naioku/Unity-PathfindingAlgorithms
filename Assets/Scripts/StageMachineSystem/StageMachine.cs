@@ -12,10 +12,9 @@ namespace StageMachineSystem
         private BaseStage currentStage;
         private SharedData SharedData { get; } = new SharedData();
 
-        public StageMachine(Maze maze, Action onBack)
+        public StageMachine(Maze maze)
         {
             SharedData.Maze = maze;
-            SharedData.OnBack = onBack;
         }
         
         /// <summary>
@@ -37,7 +36,7 @@ namespace StageMachineSystem
             }
             else
             {
-                currentStage.SharedData = SharedData;
+                currentStage.Initialize(SharedData);
                 currentStage.Enter();
                 if (tickCoroutineId == Guid.Empty)
                 {

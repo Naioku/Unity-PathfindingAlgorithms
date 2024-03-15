@@ -1,5 +1,5 @@
 ﻿using System;
-using UI;
+using CustomInputSystem.ActionMaps;
 
 namespace StageMachineSystem
 {
@@ -7,19 +7,29 @@ namespace StageMachineSystem
     public abstract class BaseStage
     {
         protected SharedData sharedData;
-
-        public SharedData SharedData
-        {
-            set => sharedData = value;
-        }
+        protected ActionMap.ActionData inputOnExitStageData;
 
         public void Initialize(SharedData sharedData)
         {
             this.sharedData = sharedData;
+            inputOnExitStageData = AllManagers.Instance.InputManager.GlobalMap.OnExitStageData;
         }
 
-        public virtual void Enter() {}
+        public virtual void Enter()
+        {
+            inputOnExitStageData.Performed += ExitStage;
+        }
+
         public virtual void Tick() {}
-        public virtual void Exit() {}
+
+        public virtual void Exit()
+        {
+            inputOnExitStageData.Performed -= ExitStage;
+        }
+
+        protected void ExitStage()
+        {
+            AllManagers.Instance.GameManager.ExitStage();
+        }
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2342553526681568805}
   - component: {fileID: 4713616010249376273}
   - component: {fileID: 2977907398350871713}
-  - component: {fileID: 6686175936323424900}
+  - component: {fileID: 3974532890081794258}
   m_Layer: 5
   m_Name: HUDMazeModification
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6686175936323424900
+--- !u!114 &3974532890081794258
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,12 +113,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d58dc6bd1dc4deb86011e5d764df9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttons:
+  - {fileID: 2854950047273916952}
+  - {fileID: 6929238978397177523}
+  - {fileID: 7135728593950440490}
+  - {fileID: 4123044553195164279}
+  - {fileID: 2381539363822914857}
   currentNodeLabel: {fileID: 8719939990343257003}
-  defaultNode: {fileID: 2854950047273916952}
-  startNode: {fileID: 6929238978397177523}
-  destinationNode: {fileID: 7135728593950440490}
-  blockedNode: {fileID: 4123044553195164279}
-  back: {fileID: 2381539363822914857}
 --- !u!1 &2734553805067352034
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,14 +523,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Destination (E)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 6929238978397177523}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 4123044553195164279}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &470304151004932629 stripped
@@ -647,14 +640,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Start (W)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 2854950047273916952}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 7135728593950440490}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &407701488931868812 stripped
@@ -878,14 +863,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Blocked (R)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 7135728593950440490}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 2381539363822914857}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &6680552757185184840 stripped
@@ -1003,14 +980,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Default (Q)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 2381539363822914857}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 6929238978397177523}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &4764590197028817959 stripped
@@ -1128,14 +1097,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Back (ESC)
       objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 4123044553195164279}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 2854950047273916952}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!224 &4939609957240625942 stripped

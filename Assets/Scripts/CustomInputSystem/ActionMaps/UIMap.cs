@@ -4,19 +4,28 @@ namespace CustomInputSystem.ActionMaps
 {
     public class UIMap : ActionMap, Controls.IUIActions
     {
-        public ActionData OnNavigateData { get; } = new ActionData();
-        public ActionData OnSubmitData { get; } = new ActionData();
-        public ActionData OnCancelData { get; } = new ActionData();
-        public ActionData OnPointData { get; } = new ActionData();
-        public ActionData OnClickData { get; } = new ActionData();
-        public ActionData OnScrollWheelData { get; } = new ActionData();
-        public ActionData OnMiddleClickData { get; } = new ActionData();
-        public ActionData OnRightClickData { get; } = new ActionData();
+        public ActionData OnNavigateData { get; }
+        public ActionData OnSubmitData { get; }
+        public ActionData OnCancelData { get; }
+        public ActionData OnPointData { get; }
+        public ActionData OnClickData { get; }
+        public ActionData OnScrollWheelData { get; }
+        public ActionData OnMiddleClickData { get; }
+        public ActionData OnRightClickData { get; }
 
         public UIMap(Controls.UIActions actionMap)
         {
             this.actionMap = actionMap.Get();
             actionMap.SetCallbacks(this);
+
+            OnNavigateData = new ActionData(actionMap.Navigate);
+            OnSubmitData = new ActionData(actionMap.Submit);
+            OnCancelData = new ActionData(actionMap.Cancel);
+            OnPointData = new ActionData(actionMap.Point);
+            OnClickData = new ActionData(actionMap.Click);
+            OnScrollWheelData = new ActionData(actionMap.ScrollWheel);
+            OnMiddleClickData = new ActionData(actionMap.MiddleClick);
+            OnRightClickData = new ActionData(actionMap.RightClick);
         }
 
         public void OnNavigate(InputAction.CallbackContext context) => OnNavigateData.Invoke(context.phase);

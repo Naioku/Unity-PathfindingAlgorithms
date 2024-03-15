@@ -13,6 +13,15 @@ namespace CustomInputSystem.ActionMaps
         
         public class ActionData
         {
+            private readonly InputAction inputAction;
+
+            public string Binding => inputAction.GetBindingDisplayString();
+            
+            public ActionData(InputAction inputAction)
+            {
+                this.inputAction = inputAction;
+            }
+            
             public void Invoke(InputActionPhase inputActionPhase)
             { 
                 switch (inputActionPhase)
@@ -42,6 +51,15 @@ namespace CustomInputSystem.ActionMaps
         
         public class ActionData<T>
         {
+            private readonly InputAction inputAction;
+
+            public string Binding => inputAction.GetBindingDisplayString();
+            
+            public ActionData(InputAction inputAction)
+            {
+                this.inputAction = inputAction;
+            }
+
             public void Invoke(InputActionPhase inputActionPhase, T value)
             { 
                 switch (inputActionPhase)

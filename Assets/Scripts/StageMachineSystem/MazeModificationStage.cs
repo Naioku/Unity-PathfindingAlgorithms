@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CustomInputSystem;
+using CustomInputSystem.ActionMaps;
 using UI.HUDPanels;
 using UnityEngine;
 
@@ -9,7 +11,7 @@ namespace StageMachineSystem
     {
         private InputManager inputManager;
         private Maze maze;
-        private readonly HUDControllerMazeModification hudControllerMazeModification;
+        private readonly HUDControllerMazeModification hudController;
         
         private Enums.TileType currentTileTypeToSet;
         private Enums.TileType CurrentTileTypeToSet
@@ -18,40 +20,46 @@ namespace StageMachineSystem
             set
             {
                 currentTileTypeToSet = value;
-                hudControllerMazeModification.UpdateCurrentNodeLabel(value);
+                hudController.UpdateCurrentNodeLabel(value);
             }
         }
 
         private Vector2Int? currentCoords;
+        private ActionMap.ActionData inputOnSetDefaultNodeData;
+        private ActionMap.ActionData inputOnSetStartNodeData;
+        private ActionMap.ActionData inputOnSetDestinationNodeData;
+        private ActionMap.ActionData inputOnSetBlockedNodeData;
 
-        public MazeModificationStage(HUDControllerMazeModification hudControllerMazeModification)
+        public MazeModificationStage(HUDControllerMazeModification hudController)
         {
-            this.hudControllerMazeModification = hudControllerMazeModification;
+            this.hudController = hudController;
+            InitInput();
         }
-        
+
         public override void Enter()
         {
             base.Enter();
-            inputManager = AllManagers.Instance.InputManager;
             maze = sharedData.Maze;
             InitInput();
+            AddInput();
             InitInteractions();
-            hudControllerMazeModification.Initialize
-            (
-                StartSettingNodeDefault,
-                StartSettingNodeStart,
-                StartSettingNodeDestination,
-                StartSettingNodeBlocked,
-                sharedData.OnBack
-            );
-            hudControllerMazeModification.Show();
+        
+            hudController.Initialize(new List<BaseHUDController.ButtonData>
+            {
+                new BaseHUDController.ButtonData{ Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = StartSettingNodeStart, Label = $"Start ({inputOnSetStartNodeData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = StartSettingNodeDestination, Label = $"Destination ({inputOnSetDestinationNodeData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = StartSettingNodeBlocked, Label = $"Blocked ({inputOnSetBlockedNodeData.Binding})"},
+                new BaseHUDController.ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})"}
+            });
+            hudController.Show();
         }
 
         public override void Exit()
         {
             base.Exit();
-            hudControllerMazeModification.Hide();
-            hudControllerMazeModification.Deinitialize();
+            hudController.Hide();
+            hudController.Deinitialize();
             RemoveInteractions();
             RemoveInput();
             if (currentCoords != null)
@@ -64,20 +72,30 @@ namespace StageMachineSystem
 
         private void InitInput()
         {
-            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed += StartSettingNodeDefault;
-            inputManager.MazeModificationMap.OnSetStartNodeData.Performed += StartSettingNodeStart;
-            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed += StartSettingNodeDestination;
-            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed += StartSettingNodeBlocked;
+            inputManager = AllManagers.Instance.InputManager;
+
+            inputOnSetDefaultNodeData = inputManager.MazeModificationMap.OnSetDefaultNodeData;
+            inputOnSetStartNodeData = inputManager.MazeModificationMap.OnSetStartNodeData;
+            inputOnSetDestinationNodeData = inputManager.MazeModificationMap.OnSetDestinationNodeData;
+            inputOnSetBlockedNodeData = inputManager.MazeModificationMap.OnSetBlockedNodeData;
+        }
+        
+        private void AddInput()
+        {
+            inputOnSetDefaultNodeData.Performed += StartSettingNodeDefault;
+            inputOnSetStartNodeData.Performed += StartSettingNodeStart;
+            inputOnSetDestinationNodeData.Performed += StartSettingNodeDestination;
+            inputOnSetBlockedNodeData.Performed += StartSettingNodeBlocked;
 
             inputManager.MazeModificationMap.Enable();
         }
 
         private void RemoveInput()
         {
-            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed -= StartSettingNodeDefault;
-            inputManager.MazeModificationMap.OnSetStartNodeData.Performed -= StartSettingNodeStart;
-            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed -= StartSettingNodeDestination;
-            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed -= StartSettingNodeBlocked;
+            inputOnSetDefaultNodeData.Performed -= StartSettingNodeDefault;
+            inputOnSetStartNodeData.Performed -= StartSettingNodeStart;
+            inputOnSetDestinationNodeData.Performed -= StartSettingNodeDestination;
+            inputOnSetBlockedNodeData.Performed -= StartSettingNodeBlocked;
         }
 
         private void StartSettingNodeDefault() => CurrentTileTypeToSet = Enums.TileType.Default;
