@@ -1,20 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UI.Buttons;
+using UnityEngine;
 
 namespace UI.MenuPanels
 {
-    public class BasePanel : MonoBehaviour
+    public abstract class BasePanel : MonoBehaviour
     {
-        [SerializeField] private Button backButton;
-        protected MenuController.InitData initData;
+        [SerializeField] protected Button backButton;
 
-        protected virtual void Awake() {}
+        protected void Initialize(Action onBack) => backButton.OnPressAction += onBack;
 
-        public void Initialize(MenuController.InitData initData)
-        {
-            this.initData = initData;
-            backButton.OnPressAction += initData.onBack;
-        }
-        
         public virtual void Show() => gameObject.SetActive(true);
         public void Close() => gameObject.SetActive(false);
     }

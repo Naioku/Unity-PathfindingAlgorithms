@@ -44,14 +44,17 @@ namespace StageMachineSystem
             AddInput();
             InitInteractions();
         
-            hudController.Initialize(new List<BaseHUDController.ButtonData>
-            {
-                new BaseHUDController.ButtonData{ Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = StartSettingNodeStart, Label = $"Start ({inputOnSetStartNodeData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = StartSettingNodeDestination, Label = $"Destination ({inputOnSetDestinationNodeData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = StartSettingNodeBlocked, Label = $"Blocked ({inputOnSetBlockedNodeData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})"}
-            });
+            hudController.Initialize
+            (
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new Dictionary<Enums.TileType, ButtonData>
+                {
+                    { Enums.TileType.Default, new ButtonData { Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})" } },
+                    { Enums.TileType.Start, new ButtonData { Action = StartSettingNodeStart, Label = $"Start ({inputOnSetStartNodeData.Binding})" } },
+                    { Enums.TileType.Destination, new ButtonData { Action = StartSettingNodeDestination, Label = $"Destination ({inputOnSetDestinationNodeData.Binding})" } },
+                    { Enums.TileType.Blocked, new ButtonData { Action = StartSettingNodeBlocked, Label = $"Blocked ({inputOnSetBlockedNodeData.Binding})" } },
+                }
+            );
             hudController.Show();
         }
 
@@ -106,25 +109,25 @@ namespace StageMachineSystem
         private void InputStartSettingNodeDefault()
         {
             StartSettingNodeDefault();
-            hudController.SelectButton(0);
+            hudController.SelectButton(Enums.TileType.Default);
         }
         
         private void InputStartSettingNodeStart()
         {
             StartSettingNodeStart();
-            hudController.SelectButton(1);
+            hudController.SelectButton(Enums.TileType.Start);
         }
         
         private void InputStartSettingNodeDestination()
         {
             StartSettingNodeDestination();
-            hudController.SelectButton(2);
+            hudController.SelectButton(Enums.TileType.Destination);
         }
         
         private void InputStartSettingNodeBlocked()
         {
             StartSettingNodeBlocked();
-            hudController.SelectButton(3);
+            hudController.SelectButton(Enums.TileType.Blocked);
         }
 
         #endregion

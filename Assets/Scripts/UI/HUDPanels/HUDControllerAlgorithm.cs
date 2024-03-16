@@ -1,9 +1,10 @@
 ﻿using TMPro;
+using UI.Buttons;
 using UnityEngine;
 
 namespace UI.HUDPanels
 {
-    public class HUDControllerAlgorithm : BaseHUDController
+    public class HUDControllerAlgorithm : BaseHUDController<Enums.AlgorithmAction>
     {
         [SerializeField] protected TextMeshProUGUI currentStateLabel;
 

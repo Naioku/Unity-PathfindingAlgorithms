@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4277312297327515667}
   - component: {fileID: 6520256715360634506}
   - component: {fileID: 1439928005214188424}
-  - component: {fileID: 6835893192719912492}
+  - component: {fileID: 8241021746772393210}
   m_Layer: 5
-  m_Name: Button
+  m_Name: HUDAlgorithmButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6835893192719912492
+--- !u!114 &8241021746772393210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 720610594986365411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c66a561cbd465ca0c7df343a2895dd, type: 3}
+  m_Script: {fileID: 11500000, guid: c38a8340816a4c23956ee807911bb15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -99,10 +99,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
-    m_HighlightedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
-    m_PressedColor: {r: 1, g: 0.8486104, b: 0.5518868, a: 1}
+    m_HighlightedColor: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+    m_PressedColor: {r: 1, g: 0.84705883, b: 0.5529412, a: 1}
     m_SelectedColor: {r: 0.98039216, g: 0.88235295, b: 0.6901961, a: 1}
-    m_DisabledColor: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 0.5019608}
+    m_DisabledColor: {r: 0.20784314, g: 0.20784314, b: 0.20784314, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -118,6 +118,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1439928005214188424}
+  buttonTag: 0
 --- !u!1001 &482201029454533078
 PrefabInstance:
   m_ObjectHideFlags: 0

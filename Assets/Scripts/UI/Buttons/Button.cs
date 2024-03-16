@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Buttons
 {
     public class Button : Selectable, IPointerClickHandler, ISubmitHandler
     {
@@ -65,7 +65,7 @@ namespace UI
         {
             Press();
 
-            // if we get set disabled during the press
+            // Unity comment: if we get set disabled during the press
             // don't run the coroutine.
             if (!IsActive() || !IsInteractable())
                 return;

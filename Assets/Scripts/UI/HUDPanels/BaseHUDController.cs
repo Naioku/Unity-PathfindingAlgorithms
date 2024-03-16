@@ -1,53 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using UI.Buttons;
 using UnityEngine;
 
 namespace UI.HUDPanels
 {
-    public abstract class BaseHUDController : MonoBehaviour
+    public abstract class BaseHUDController<T> : MonoBehaviour where T : Enum
     {
-        [SerializeField] private List<Button> buttons;
+        [SerializeField] private Button backButton;
+        [SerializeField] private List<TaggedButton<T>> buttons;
+        
+        private Dictionary<T, TaggedButton<T>> buttonsLookup;
 
-        public void Initialize(
-            List<ButtonData> buttonDataList)
+        private void Awake() => BuildButtonsLookup();
+
+        public void Initialize(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
-            if (buttonDataList.Count != buttons.Count)
+            if (buttonsData.Count != buttonsLookup.Count)
             {
-                Debug.LogError($"{name}: Action count does not match the button count.");
+                Debug.LogError($"{name}: Actions count does not match the buttons count.");
                 return;
             }
 
-            for (var i = 0; i < buttons.Count; i++)
-            {
-                var buttonData = buttonDataList[i];
-                Button button = buttons[i];
-                
-                button.OnPressAction += buttonData.Action;
-                button.Label = buttonData.Label;
-
-                int nextIndex = i + 1;
-                int previousIndex = i - 1;
-
-                if (nextIndex > buttons.Count - 1)
-                {
-                    nextIndex = 0;
-                }
-
-                if (previousIndex < 0)
-                {
-                    previousIndex = buttons.Count - 1;
-                }
-                
-                button.SetNavigation(onUp: buttons[previousIndex], onDown: buttons[nextIndex]);
-            }
+            InitButtonsData(onBack, buttonsData);
+            InitButtonsNavigation();
         }
 
         public void Deinitialize()
         {
-            foreach (Button button in buttons)
+            foreach (TaggedButton<T> button in buttons)
             {
                 button.ResetObj();
             }
+            backButton.ResetObj();
         }
         
         private void Start() => Hide();
@@ -60,12 +45,52 @@ namespace UI.HUDPanels
 
         public void Hide() => gameObject.SetActive(false);
 
-        public void SelectButton(int buttonIndex) => buttons[buttonIndex].Select();
+        public void SelectButton(T type) => buttonsLookup[type].Select();
 
-        public struct ButtonData
+        private void InitButtonsData(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
-            public Action Action;
-            public string Label;
+            backButton.OnPressAction += onBack.Action;
+            backButton.Label = onBack.Label;
+
+            foreach (var data in buttonsData)
+            {
+                TaggedButton<T> button = buttonsLookup[data.Key];
+
+                button.OnPressAction += buttonsData[button.Tag].Action;
+                button.Label = buttonsData[button.Tag].Label;
+            }
         }
+
+        private void InitButtonsNavigation()
+        {
+            List<Button> buttons = new List<Button>();
+            foreach (TaggedButton<T> button in this.buttons)
+            {
+                buttons.Add(button);
+            }
+
+            buttons.Add(backButton);
+
+            int buttonsCount = buttons.Count;
+            for (int i = 0; i < buttonsCount; i++)
+            {
+                buttons[i].SetNavigation
+                (
+                    onUp: Utility.CalculateButtonForNavigation(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    onDown: Utility.CalculateButtonForNavigation(i, Enums.Direction.Forward, buttonsCount, buttons)
+                );
+            }
+        }
+        
+        private void BuildButtonsLookup()
+        {
+            buttonsLookup = new Dictionary<T, TaggedButton<T>>();
+            foreach (TaggedButton<T> button in buttons)
+            {
+                buttonsLookup.Add(button.Tag, button);
+            }
+        }
+
+        private void SelectButton(int index) => buttons[index].Select();
     }
 }

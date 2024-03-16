@@ -1,9 +1,10 @@
 ﻿using TMPro;
+using UI.Buttons;
 using UnityEngine;
 
 namespace UI.HUDPanels
 {
-    public class HUDControllerMazeModification : BaseHUDController
+    public class HUDControllerMazeModification : BaseHUDController<Enums.TileType>
     {
         [SerializeField] protected TextMeshProUGUI currentNodeLabel;
 

@@ -35,14 +35,17 @@ namespace StageMachineSystem
                 () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
             
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
-            hudController.Initialize(new List<BaseHUDController.ButtonData>
-            {
-                new BaseHUDController.ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = Pause, Label = $"Pause ({inputOnPauseData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = Step, Label = $"Step ({inputOnStepData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = Stop, Label = $"Stop ({inputOnStopData.Binding})"},
-                new BaseHUDController.ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})"}
-            });
+            hudController.Initialize
+            (
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new Dictionary<Enums.AlgorithmAction, ButtonData>
+                {
+                    { Enums.AlgorithmAction.Play , new ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})" } },
+                    { Enums.AlgorithmAction.Pause , new ButtonData{ Action = Pause, Label = $"Pause ({inputOnPauseData.Binding})" } },
+                    { Enums.AlgorithmAction.Step , new ButtonData{ Action = Step, Label = $"Step ({inputOnStepData.Binding})" } },
+                    { Enums.AlgorithmAction.Stop, new ButtonData{ Action = Stop, Label = $"Stop ({inputOnStopData.Binding})" } },
+                }
+            );
             hudController.Show();
         }
 
@@ -94,25 +97,25 @@ namespace StageMachineSystem
         private void InputPlay()
         {
             Play();
-            hudController.SelectButton(0);
+            hudController.SelectButton(Enums.AlgorithmAction.Play);
         }
         
         private void InputPause()
         {
             Pause();
-            hudController.SelectButton(1);
+            hudController.SelectButton(Enums.AlgorithmAction.Pause);
         }
         
         private void InputStep()
         {
             Step();
-            hudController.SelectButton(2);
+            hudController.SelectButton(Enums.AlgorithmAction.Step);
         }
         
         private void InputStop()
         {
             Stop();
-            hudController.SelectButton(3);
+            hudController.SelectButton(Enums.AlgorithmAction.Stop);
         }
         
         private void Play()

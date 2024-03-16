@@ -94,6 +94,22 @@ public static class Enums
         Initial, Playing, Paused, Finished
     }
 
+    public enum AlgorithmAction
+    {
+        Play, Pause, Step, Stop
+    }
+    
+    public enum MainMenuPanelButtonTag
+    {
+        MazeModification, BFS, AStar, Settings, Help
+    }
+    
+    public enum Direction
+    {
+        Backward = -1,
+        Forward = 1,
+    }
+
     #endregion
     
     public enum CameraMovementMode

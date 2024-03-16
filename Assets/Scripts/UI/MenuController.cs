@@ -24,19 +24,18 @@ namespace UI
 
         private void InitializePanels(Action mazeModificationAction, Action bfsAction, Action aStarAction)
         {
-            InitData initData = new InitData
-            {
-                mainPanel = mainPanel,
-                // settingsPanel = settingsPanel,
-                // helpPanel = helpPanel,
-                onBack = Back,
-                onOpenPanel = OpenPanel,
-                mazeModificationAction = mazeModificationAction,
-                bfsAction = bfsAction,
-                aStarAction = aStarAction
-            };
-            
-            mainPanel.Initialize(initData);
+            mainPanel.Initialize
+            (
+                Back,
+                new Dictionary<Enums.MainMenuPanelButtonTag, Action>
+                {
+                    { Enums.MainMenuPanelButtonTag.MazeModification, mazeModificationAction },
+                    { Enums.MainMenuPanelButtonTag.BFS, bfsAction },
+                    { Enums.MainMenuPanelButtonTag.AStar, aStarAction },
+                    { Enums.MainMenuPanelButtonTag.Settings, OpenSettingsPanel },
+                    { Enums.MainMenuPanelButtonTag.Help, OpenHelpPanel }
+                }
+            );
             // settingsPanel.Initialize(initData);
             // helpPanel.Initialize(initData);
         }
@@ -65,6 +64,18 @@ namespace UI
             SwitchPanel(panel);
         }
 
+        private void OpenSettingsPanel()
+        {
+            // OpenPanel(settingsPanel);
+            Debug.Log("Opening Settings panel...");
+        }
+        
+        private void OpenHelpPanel()
+        {
+            // OpenPanel(helpPanel);
+            Debug.Log("Opening Help panel...");
+        }
+
         private void OpenPanel(BasePanel panel)
         {
             openedPanelsHistory.Push(currentPanel);
@@ -84,18 +95,6 @@ namespace UI
             {
                 currentPanel.Show();
             }
-        }
-        
-        public struct InitData
-        {
-            public MainPanel mainPanel;
-            // public SettingsPanel settingsPanel;
-            // public HelpPanel helpPanel;
-            public Action onBack;
-            public Action<BasePanel> onOpenPanel;
-            public Action mazeModificationAction;
-            public Action bfsAction;
-            public Action aStarAction;
         }
     }
 }
