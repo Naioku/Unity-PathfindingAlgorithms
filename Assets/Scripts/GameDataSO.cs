@@ -17,6 +17,7 @@ public class GameDataSO : ScriptableObject
     [Header("Miscellaneous")]
     [SerializeField] private WaitingTimeData waitingTimeData;
     [SerializeField] private Enums.PermittedDirection[] permittedDirections;
+    
     private readonly Dictionary<Enums.PermittedDirection, Vector2Int> permittedDirectionsLookup = new Dictionary<Enums.PermittedDirection, Vector2Int>
     {
         {Enums.PermittedDirection.Up, Vector2Int.up}, 
@@ -35,6 +36,7 @@ public class GameDataSO : ScriptableObject
     public float TileHighlightValue => tileHighlightValue;
     public float MarkerColorAlpha => markerColorAlpha;
     
+    // Todo: Shouldn't it be called GetTileColor?
     public Color GetPermanentColor(Enums.TileType tileType)
     {
         return tileType switch

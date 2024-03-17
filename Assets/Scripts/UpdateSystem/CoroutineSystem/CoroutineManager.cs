@@ -251,6 +251,8 @@ namespace UpdateSystem.CoroutineSystem
 
             public void StopCoroutine(ref Guid coroutineId)
             {
+                if (coroutineId == Guid.Empty) return;
+
                 coroutineManager.StopCoroutine(this, coroutineId);
                 coroutineId = Guid.Empty;
             }

@@ -1,5 +1,6 @@
 ﻿using CustomInputSystem;
 using SpawningSystem;
+using UI;
 using UnityEngine;
 using UpdateSystem;
 using UpdateSystem.CoroutineSystem;
@@ -7,8 +8,10 @@ using UpdateSystem.CoroutineSystem;
 public class AllManagers : MonoBehaviour
 {
     [field: SerializeField] public GameManager GameManager { get; private set; }
-    [field: SerializeField] public SpawnManager<Enums.Utils> UtilsSpawner { get; private set; }
+    [field: SerializeField] public SpawnManager<Enums.SpawnedUtils> UtilsSpawner { get; private set; }
+    [field: SerializeField] public SpawnManager<Enums.SpawnedUI> UISpawner { get; private set; }
     [field: SerializeField] public UpdateManager UpdateManager { get; private set; }
+    [field: SerializeField] public UIManager UIManager { get; private set; }
     public CoroutineManager CoroutineManager { get; private set; }
     public InputManager InputManager { get; private set; }
         
@@ -31,7 +34,9 @@ public class AllManagers : MonoBehaviour
 
         CoroutineManager.Initialize();
         UtilsSpawner.Initialize();
+        UISpawner.Initialize();
         InputManager.Initialize();
+        UIManager.Initialize();
         GameManager.Initialize();
     }
 

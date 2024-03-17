@@ -27,7 +27,6 @@ public class CameraController
 
         inputManager.GlobalMap.OnCameraMovementData.Performed += StartKeyModeMovement;
         inputManager.GlobalMap.OnCameraMovementData.Canceled += StopKeyModeMovement;
-        StartMovement();
     }
 
     public void Destroy()
@@ -50,12 +49,12 @@ public class CameraController
         movementMode = Enums.CameraMovementMode.Border;
     }
 
-    private void StartMovement()
+    public void StartMovement()
     {
         movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement());
     }
 
-    private void StopMovement()
+    public void StopMovement()
     {
         coroutineCaller.StopCoroutine(ref movementCoroutineId);
     }

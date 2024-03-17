@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using StageMachineSystem.Algorithm;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 
@@ -11,11 +10,21 @@ namespace StageMachineSystem
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         private Guid tickCoroutineId;
         private BaseStage currentStage;
-        private SharedData SharedData { get; set; } = new SharedData();
+        private SharedData SharedData { get; } = new SharedData();
 
-        public void SetStage(BaseStage newStage)
+        public StageMachine(Maze maze)
         {
-            if (!SanityCheck(newStage)) return;
+            SharedData.Maze = maze;
+        }
+        
+        /// <summary>
+        /// Sets stage as current.
+        /// </summary>
+        /// <param name="newStage">New stage object to set.</param>
+        /// <returns>True if stage has been correctly set.</returns>
+        public bool SetStage(BaseStage newStage)
+        {
+            if (!SanityCheck(newStage)) return false;
             
             AllManagers.Instance.InputManager.StageSelectionMap.Disable();
             currentStage?.Exit();
@@ -29,8 +38,13 @@ namespace StageMachineSystem
             {
                 currentStage.Initialize(SharedData);
                 currentStage.Enter();
-                tickCoroutineId = coroutineCaller.StartCoroutine(Tick());
+                if (tickCoroutineId == Guid.Empty)
+                {
+                    tickCoroutineId = coroutineCaller.StartCoroutine(Tick());
+                }
             }
+
+            return true;
         }
 
         private bool SanityCheck(BaseStage newStage)
@@ -40,7 +54,7 @@ namespace StageMachineSystem
             {
                 if (!AreUniqueTilesSet())
                 {
-                    // Todo: Create log-to-user system.
+                    AllManagers.Instance.UIManager.OpenInfoPanel("Algorithm", "You can't enter the algorithm with Start and Destination tiles not selected.");
                     Debug.LogError("You can't enter Algorithm Stage with Start and Destination tiles not selected.");
                     return false;
                 }

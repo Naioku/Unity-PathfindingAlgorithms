@@ -51,13 +51,21 @@ public static class Enums
 
     public enum EmptyEnum {}
 
-    public enum Utils
+    public enum SpawnedUtils
     {
         Tile, Maze
+    }
+    
+    public enum SpawnedUI
+    {
+        Menu,
+        HUDMazeModification,
+        HUDAlgorithm
     }
 
     #endregion
 
+    // Todo: Delete it.
     #region InputSystem
 
     public enum ActionMap
@@ -86,6 +94,31 @@ public static class Enums
 
     #endregion
 
+    #region UI
+
+    public enum AlgorithmState
+    {
+        Initial, Playing, Paused, Finished
+    }
+
+    public enum AlgorithmAction
+    {
+        Play, Pause, Step, Stop
+    }
+    
+    public enum MainMenuPanelButtonTag
+    {
+        MazeModification, BFS, AStar, Settings, Help
+    }
+    
+    public enum Direction
+    {
+        Backward = -1,
+        Forward = 1,
+    }
+
+    #endregion
+    
     public enum CameraMovementMode
     {
         Border, Key

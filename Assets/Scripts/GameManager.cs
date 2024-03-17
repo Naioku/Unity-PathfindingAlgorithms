@@ -3,7 +3,7 @@ using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
 using InteractionSystem;
 using StageMachineSystem;
-using StageMachineSystem.Algorithm;
+using UI;
 using UnityEngine;
 
 [Serializable]
@@ -13,14 +13,22 @@ public class GameManager
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
+    private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
-    private Maze maze;
     
     public GameDataSO GameDataSO => gameDataSO;
 
     public void Initialize()
     {
+        menuController = AllManagers.Instance.UIManager.MenuController;
+        menuController.Initialize
+        (
+            StartMazeModification,
+            StartBFS,
+            StartAStar,
+            Quit
+        );
         inputManager = AllManagers.Instance.InputManager;
         InitInput();
     }
@@ -28,11 +36,30 @@ public class GameManager
     public void Destroy()
     {
         RemoveInput();
+        cameraController.Destroy();
+    }
+    
+    public void StartGame()
+    {
+        inputManager.GlobalMap.Enable();
+        cameraController.Initialize(Camera.main);
+        interactionController.Initialize(Camera.main);
+        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        stageMachine = new StageMachine(maze);
+    }
+    
+    public void ExitStage()
+    {
+        if (!stageMachine.SetStage(null)) return;
+        
+        menuController.Open();
+        cameraController.StopMovement();
+        interactionController.StopInteracting();
+        inputManager.StageSelectionMap.Enable();
     }
 
     private void InitInput()
     {
-        inputManager.GlobalMap.OnExitStageData.Performed += ExitStage;
         inputManager.StageSelectionMap.OnMazeModificationData.Performed += StartMazeModification;
         inputManager.StageSelectionMap.OnBFSData.Performed += StartBFS;
         inputManager.StageSelectionMap.OnAStarData.Performed += StartAStar;
@@ -44,28 +71,33 @@ public class GameManager
     {
         inputManager.StageSelectionMap.Disable();
         
-        inputManager.GlobalMap.OnExitStageData.Performed -= ExitStage;
         inputManager.StageSelectionMap.OnMazeModificationData.Performed -= StartMazeModification;
         inputManager.StageSelectionMap.OnBFSData.Performed -= StartBFS;
         inputManager.StageSelectionMap.OnAStarData.Performed -= StartAStar;
     }
 
-    private void ExitStage()
+    private void EnterStage(BaseStage stage)
     {
-        stageMachine.SetStage(null);
-        inputManager.StageSelectionMap.Enable();
+        if (!stageMachine.SetStage(stage))
+        {
+            return;
+        }
+
+        cameraController.StartMovement();
+        interactionController.StartInteracting();
+        menuController.Close();
     }
 
-    private void StartMazeModification() => stageMachine.SetStage(new MazeModificationStage(maze));
-    private void StartBFS() => stageMachine.SetStage(new AlgorithmStage(maze, new BFS()));
+    private void StartMazeModification() => EnterStage(new MazeModificationStage());
+    private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
-
-    public void StartGame()
+    
+    private void Quit()
     {
-        inputManager.GlobalMap.Enable();
-        cameraController.Initialize(Camera.main);
-        interactionController.Initialize(Camera.main);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.Utils.Maze);
-        stageMachine = new StageMachine();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

@@ -1,12 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CustomInputSystem;
+using CustomInputSystem.ActionMaps;
+using UI.HUDPanels;
 using UnityEngine;
 
 namespace StageMachineSystem
 {
     public class MazeModificationStage : BaseStage
     {
-        private InputManager inputManager = AllManagers.Instance.InputManager;
+        private InputManager inputManager;
+        private Maze maze;
+        private readonly HUDControllerMazeModification hudController;
+        
         private Enums.TileType currentTileTypeToSet;
         private Enums.TileType CurrentTileTypeToSet
         {
@@ -14,25 +20,49 @@ namespace StageMachineSystem
             set
             {
                 currentTileTypeToSet = value;
-                Debug.Log("CurrentTileType: " + currentTileTypeToSet); // Todo: Show it in the UI.
+                hudController.UpdateCurrentNodeLabel(value);
             }
         }
 
         private Vector2Int? currentCoords;
+        private ActionMap.ActionData inputOnSetDefaultNodeData;
+        private ActionMap.ActionData inputOnSetStartNodeData;
+        private ActionMap.ActionData inputOnSetDestinationNodeData;
+        private ActionMap.ActionData inputOnSetBlockedNodeData;
 
-        public MazeModificationStage(Maze maze) : base(maze) {}
-        
+        public MazeModificationStage()
+        {
+            hudController = AllManagers.Instance.UIManager.HUDControllerMazeModification;
+            InitInput();
+        }
+
         public override void Enter()
         {
             base.Enter();
-            inputManager = AllManagers.Instance.InputManager;
+            maze = sharedData.Maze;
             InitInput();
+            AddInput();
             InitInteractions();
+        
+            hudController.Initialize
+            (
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new Dictionary<Enums.TileType, ButtonData>
+                {
+                    { Enums.TileType.Default, new ButtonData { Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})" } },
+                    { Enums.TileType.Start, new ButtonData { Action = StartSettingNodeStart, Label = $"Start ({inputOnSetStartNodeData.Binding})" } },
+                    { Enums.TileType.Destination, new ButtonData { Action = StartSettingNodeDestination, Label = $"Destination ({inputOnSetDestinationNodeData.Binding})" } },
+                    { Enums.TileType.Blocked, new ButtonData { Action = StartSettingNodeBlocked, Label = $"Blocked ({inputOnSetBlockedNodeData.Binding})" } },
+                }
+            );
+            hudController.Show();
         }
 
         public override void Exit()
         {
             base.Exit();
+            hudController.Hide();
+            hudController.Deinitialize();
             RemoveInteractions();
             RemoveInput();
             if (currentCoords != null)
@@ -40,31 +70,65 @@ namespace StageMachineSystem
                 maze.DeselectTile(currentCoords.Value);
             }
         }
+        
+        private void StartSettingNodeDefault() => CurrentTileTypeToSet = Enums.TileType.Default;
+        private void StartSettingNodeStart() => CurrentTileTypeToSet = Enums.TileType.Start;
+        private void StartSettingNodeDestination() => CurrentTileTypeToSet = Enums.TileType.Destination;
+        private void StartSettingNodeBlocked() => CurrentTileTypeToSet = Enums.TileType.Blocked;
 
         #region Input
 
         private void InitInput()
         {
-            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed += StartSettingNodeDefault;
-            inputManager.MazeModificationMap.OnSetStartNodeData.Performed += StartSettingNodeStart;
-            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed += StartSettingNodeDestination;
-            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed += StartSettingNodeBlocked;
+            inputManager = AllManagers.Instance.InputManager;
+
+            inputOnSetDefaultNodeData = inputManager.MazeModificationMap.OnSetDefaultNodeData;
+            inputOnSetStartNodeData = inputManager.MazeModificationMap.OnSetStartNodeData;
+            inputOnSetDestinationNodeData = inputManager.MazeModificationMap.OnSetDestinationNodeData;
+            inputOnSetBlockedNodeData = inputManager.MazeModificationMap.OnSetBlockedNodeData;
+        }
+        
+        private void AddInput()
+        {
+            inputOnSetDefaultNodeData.Performed += InputStartSettingNodeDefault;
+            inputOnSetStartNodeData.Performed += InputStartSettingNodeStart;
+            inputOnSetDestinationNodeData.Performed += InputStartSettingNodeDestination;
+            inputOnSetBlockedNodeData.Performed += InputStartSettingNodeBlocked;
 
             inputManager.MazeModificationMap.Enable();
         }
 
         private void RemoveInput()
         {
-            inputManager.MazeModificationMap.OnSetDefaultNodeData.Performed -= StartSettingNodeDefault;
-            inputManager.MazeModificationMap.OnSetStartNodeData.Performed -= StartSettingNodeStart;
-            inputManager.MazeModificationMap.OnSetDestinationNodeData.Performed -= StartSettingNodeDestination;
-            inputManager.MazeModificationMap.OnSetBlockedNodeData.Performed -= StartSettingNodeBlocked;
+            inputOnSetDefaultNodeData.Performed -= InputStartSettingNodeDefault;
+            inputOnSetStartNodeData.Performed -= InputStartSettingNodeStart;
+            inputOnSetDestinationNodeData.Performed -= InputStartSettingNodeDestination;
+            inputOnSetBlockedNodeData.Performed -= InputStartSettingNodeBlocked;
         }
 
-        private void StartSettingNodeDefault() => CurrentTileTypeToSet = Enums.TileType.Default;
-        private void StartSettingNodeStart() => CurrentTileTypeToSet = Enums.TileType.Start;
-        private void StartSettingNodeDestination() => CurrentTileTypeToSet = Enums.TileType.Destination;
-        private void StartSettingNodeBlocked() => CurrentTileTypeToSet = Enums.TileType.Blocked;
+        private void InputStartSettingNodeDefault()
+        {
+            StartSettingNodeDefault();
+            hudController.SelectButton(Enums.TileType.Default);
+        }
+        
+        private void InputStartSettingNodeStart()
+        {
+            StartSettingNodeStart();
+            hudController.SelectButton(Enums.TileType.Start);
+        }
+        
+        private void InputStartSettingNodeDestination()
+        {
+            StartSettingNodeDestination();
+            hudController.SelectButton(Enums.TileType.Destination);
+        }
+        
+        private void InputStartSettingNodeBlocked()
+        {
+            StartSettingNodeBlocked();
+            hudController.SelectButton(Enums.TileType.Blocked);
+        }
 
         #endregion
 

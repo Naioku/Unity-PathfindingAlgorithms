@@ -13,8 +13,7 @@ namespace CustomInputSystem
         public GlobalMap GlobalMap { get; private set; }
         public StageSelectionMap StageSelectionMap { get; private set; }
         public MazeModificationMap MazeModificationMap { get; private set; }
-        public AlgorithmMap AlgorithmMap{ get; private set; }
-        public UIMap UIMap { get; private set; }
+        public AlgorithmMap AlgorithmMap { get; private set; }
         public Vector2 CursorPosition { get; private set; }
         
         public void Initialize()
@@ -22,7 +21,11 @@ namespace CustomInputSystem
             AllManagers.Instance.UpdateManager.RegisterOnUpdate(UpdateCursorPosition);
             InitializeMaps();
             BuildMapsList();
-            UIMap.Enable();
+        }
+
+        public void Destroy()
+        {
+            AllManagers.Instance.UpdateManager.UnregisterFromUpdate(UpdateCursorPosition);
         }
 
         public void DisableAllMaps()
@@ -33,25 +36,20 @@ namespace CustomInputSystem
             }
         }
 
-        public void Destroy()
-        {
-            AllManagers.Instance.UpdateManager.UnregisterFromUpdate(UpdateCursorPosition);
-        }
+        public void EnableInput() => controls.Enable();
+        public void DisableInput() => controls.Disable();
 
-        public void UpdateCursorPosition()
+        private void UpdateCursorPosition()
         {
             CursorPosition = Mouse.current.position.ReadValue();
         }
-        
-        public void PerformUpdate() => UpdateCursorPosition();
-        
+
         private void InitializeMaps()
         {
             GlobalMap = new GlobalMap(controls.Global);
             StageSelectionMap = new StageSelectionMap(controls.StageSelection);
             MazeModificationMap = new MazeModificationMap(controls.MazeModification);
             AlgorithmMap = new AlgorithmMap(controls.Algorithm);
-            UIMap = new UIMap(controls.UI);
         }
 
         private void BuildMapsList()
@@ -60,7 +58,6 @@ namespace CustomInputSystem
             mapsList.Add(StageSelectionMap);
             mapsList.Add(MazeModificationMap);
             mapsList.Add(AlgorithmMap);
-            mapsList.Add(UIMap);
         }
     }
 }

@@ -101,4 +101,14 @@ MonoBehaviour:
     spawnableItems:
     - {fileID: 11400000, guid: 8e614657912d6e24580b5356ea0b88cd, type: 2}
     - {fileID: 11400000, guid: a573cd4ccf93b5b4c9374a5946269469, type: 2}
+  <UISpawner>k__BackingField:
+    spawnableItems:
+    - {fileID: 11400000, guid: 7d0cdc07499e7604386f5f64c9fb543d, type: 2}
+    - {fileID: 11400000, guid: 577cddea07f827e4ab75692d1ff6e0f2, type: 2}
+    - {fileID: 11400000, guid: 8454cc5de660d7a41a0aceb237bc90e3, type: 2}
   <UpdateManager>k__BackingField: {fileID: 3928309026115602704}
+  <UIManager>k__BackingField:
+    menuPrefab: {fileID: 8391452431305063952, guid: c144a059c81ab94469e892955661e61f, type: 3}
+    hudPrefabMazeModification: {fileID: 3974532890081794258, guid: b6b2d03a471d3de48acde819fc1c5fce, type: 3}
+    hudPrefabAlgorithm: {fileID: 8360593091318187310, guid: a12d89a3d72c97a41b6ace971fb0273c, type: 3}
+    infoPanelPrefab: {fileID: -181332036966275979, guid: d486578c48138364f93f9ffdf27615e9, type: 3}

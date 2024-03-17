@@ -4,15 +4,20 @@ namespace CustomInputSystem.ActionMaps
 {
     public class MazeModificationMap : ActionMap, Controls.IMazeModificationActions
     {
-        public ActionData OnSetDefaultNodeData { get; } = new ActionData();
-        public ActionData OnSetStartNodeData { get; } = new ActionData();
-        public ActionData OnSetDestinationNodeData { get; } = new ActionData();
-        public ActionData OnSetBlockedNodeData { get; } = new ActionData();
+        public ActionData OnSetDefaultNodeData { get; }
+        public ActionData OnSetStartNodeData { get; }
+        public ActionData OnSetDestinationNodeData { get; }
+        public ActionData OnSetBlockedNodeData { get; }
         
         public MazeModificationMap(Controls.MazeModificationActions actionMap)
         {
             this.actionMap = actionMap.Get();
             actionMap.SetCallbacks(this);
+
+            OnSetDefaultNodeData = new ActionData(actionMap.SetDefaultNode);
+            OnSetStartNodeData = new ActionData(actionMap.SetStartNode);
+            OnSetDestinationNodeData = new ActionData(actionMap.SetDestinationNode);
+            OnSetBlockedNodeData = new ActionData(actionMap.SetBlockedNode);
         }
 
         public void OnSetDefaultNode(InputAction.CallbackContext context) => OnSetDefaultNodeData.Invoke(context.phase);

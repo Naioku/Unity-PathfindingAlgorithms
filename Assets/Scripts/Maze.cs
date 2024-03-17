@@ -110,7 +110,7 @@ public class Maze : MonoBehaviour, IInteractable
             for (int j = 0; j < gameDataSO.Size.x; j++)
             {
                 Vector3 position = tilesParent.position + new Vector3(j, 0.5f * gameDataSO.TileHeight, i);
-                Tile instance = AllManagers.Instance.UtilsSpawner.CreateObject<Tile>(Enums.Utils.Tile, tilesParent, position);
+                Tile instance = AllManagers.Instance.UtilsSpawner.CreateObject<Tile>(Enums.SpawnedUtils.Tile, tilesParent, position);
                 instance.Initialize(new Vector2Int(j, i));
                 tileInstances.Add(instance);
             }

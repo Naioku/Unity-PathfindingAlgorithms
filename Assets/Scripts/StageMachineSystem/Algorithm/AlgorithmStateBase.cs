@@ -2,7 +2,9 @@
 {
     public abstract class AlgorithmStateBase
     {
-        protected Algorithm algorithm;
+        protected readonly Algorithm algorithm;
+        
+        public abstract Enums.AlgorithmState Name { get; }
         
         protected AlgorithmStateBase(Algorithm algorithm)
         {
