@@ -44,7 +44,7 @@ public class GameManager
         inputManager.GlobalMap.Enable();
         cameraController.Initialize(Camera.main);
         interactionController.Initialize(Camera.main);
-        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.Utils.Maze);
+        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
     }
     

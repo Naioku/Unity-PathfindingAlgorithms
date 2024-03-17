@@ -51,9 +51,16 @@ public static class Enums
 
     public enum EmptyEnum {}
 
-    public enum Utils
+    public enum SpawnedUtils
     {
         Tile, Maze
+    }
+    
+    public enum SpawnedUI
+    {
+        Menu,
+        HUDMazeModification,
+        HUDAlgorithm
     }
 
     #endregion

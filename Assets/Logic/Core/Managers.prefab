@@ -101,6 +101,11 @@ MonoBehaviour:
     spawnableItems:
     - {fileID: 11400000, guid: 8e614657912d6e24580b5356ea0b88cd, type: 2}
     - {fileID: 11400000, guid: a573cd4ccf93b5b4c9374a5946269469, type: 2}
+  <UISpawner>k__BackingField:
+    spawnableItems:
+    - {fileID: 11400000, guid: 7d0cdc07499e7604386f5f64c9fb543d, type: 2}
+    - {fileID: 11400000, guid: 577cddea07f827e4ab75692d1ff6e0f2, type: 2}
+    - {fileID: 11400000, guid: 8454cc5de660d7a41a0aceb237bc90e3, type: 2}
   <UpdateManager>k__BackingField: {fileID: 3928309026115602704}
   <UIManager>k__BackingField:
     menuPrefab: {fileID: 8391452431305063952, guid: c144a059c81ab94469e892955661e61f, type: 3}

@@ -20,7 +20,7 @@ namespace StageMachineSystem
         public AlgorithmStage(Algorithm.Algorithm algorithm)
         {
             this.algorithm = algorithm;
-            hudController = AllManagers.Instance.UIManager.HudControllerAlgorithm;
+            hudController = AllManagers.Instance.UIManager.HUDControllerAlgorithm;
         }
 
         public override void Enter()

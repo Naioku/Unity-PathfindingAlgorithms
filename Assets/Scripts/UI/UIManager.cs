@@ -1,4 +1,5 @@
 ﻿using System;
+using SpawningSystem;
 using UI.HUDPanels;
 using UI.PopupPanels;
 using UnityEngine;
@@ -15,8 +16,8 @@ namespace UI
         [SerializeField] private InfoPanel infoPanelPrefab;
         
         public MenuController MenuController { get; private set; }
-        public HUDControllerMazeModification HudControllerMazeModification { get; private set; }
-        public HUDControllerAlgorithm HudControllerAlgorithm { get; private set; }
+        public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
+        public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
         public UIStaticPanel CurrentStaticPanel { set; private get; }
         
         private PopupPanel currentPopupPanel;
@@ -25,9 +26,10 @@ namespace UI
 
         public void CreatePanels()
         {
-            MenuController = Object.Instantiate(menuPrefab);
-            HudControllerMazeModification = Object.Instantiate(hudPrefabMazeModification);
-            HudControllerAlgorithm = Object.Instantiate(hudPrefabAlgorithm);
+            SpawnManager<Enums.SpawnedUI> uiSpawner = AllManagers.Instance.UISpawner;
+            MenuController = uiSpawner.CreateObject<MenuController>(Enums.SpawnedUI.Menu);
+            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.SpawnedUI.HUDMazeModification);
+            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.SpawnedUI.HUDAlgorithm);
         }
         
         public void OpenInfoPanel(string header, string info)

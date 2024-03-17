@@ -32,7 +32,7 @@ namespace StageMachineSystem
 
         public MazeModificationStage()
         {
-            hudController = AllManagers.Instance.UIManager.HudControllerMazeModification;
+            hudController = AllManagers.Instance.UIManager.HUDControllerMazeModification;
             InitInput();
         }
 
