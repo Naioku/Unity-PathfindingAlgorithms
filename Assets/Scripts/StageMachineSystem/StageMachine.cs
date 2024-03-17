@@ -54,7 +54,7 @@ namespace StageMachineSystem
             {
                 if (!AreUniqueTilesSet())
                 {
-                    // Todo: Create log-to-user system.
+                    AllManagers.Instance.UIManager.OpenInfoPanel("Algorithm", "You can't enter the algorithm with Start and Destination tiles not selected.");
                     Debug.LogError("You can't enter Algorithm Stage with Start and Destination tiles not selected.");
                     return false;
                 }

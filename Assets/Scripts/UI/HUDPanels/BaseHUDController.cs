@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI.HUDPanels
 {
-    public abstract class BaseHUDController<T> : MonoBehaviour where T : Enum
+    public abstract class BaseHUDController<T> : UIStaticPanel where T : Enum
     {
         [SerializeField] private Button backButton;
         [SerializeField] private List<TaggedButton<T>> buttons;
@@ -13,7 +13,8 @@ namespace UI.HUDPanels
         private Dictionary<T, TaggedButton<T>> buttonsLookup;
 
         private void Awake() => BuildButtonsLookup();
-
+        private void Start() => Hide(false);
+        
         public void Initialize(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
             if (buttonsData.Count != buttonsLookup.Count)
@@ -35,17 +36,15 @@ namespace UI.HUDPanels
             backButton.ResetObj();
         }
         
-        private void Start() => Hide();
-
-        public virtual void Show()
+        public override void Show()
         {
-            gameObject.SetActive(true);
-            SelectButton(0);
+            base.Show();
+            SelectDefaultButton();
         }
 
-        public void Hide() => gameObject.SetActive(false);
-
         public void SelectButton(T type) => buttonsLookup[type].Select();
+
+        public override void SelectDefaultButton() => SelectButton(0);
 
         private void InitButtonsData(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {

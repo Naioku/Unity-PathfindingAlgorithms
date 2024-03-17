@@ -30,9 +30,9 @@ namespace StageMachineSystem
         private ActionMap.ActionData inputOnSetDestinationNodeData;
         private ActionMap.ActionData inputOnSetBlockedNodeData;
 
-        public MazeModificationStage(HUDControllerMazeModification hudController)
+        public MazeModificationStage()
         {
-            this.hudController = hudController;
+            hudController = AllManagers.Instance.UIManager.HudControllerMazeModification;
             InitInput();
         }
 

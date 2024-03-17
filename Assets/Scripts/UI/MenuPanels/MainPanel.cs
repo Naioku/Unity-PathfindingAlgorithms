@@ -20,11 +20,7 @@ namespace UI.MenuPanels
             InitButtonActions(actionsData);
         }
         
-        public override void Show()
-        {
-            base.Show();
-            buttons[0].Select();
-        }
+        public override void SelectDefaultButton() => buttons[0].Select();
 
         private void BuildButtonsLookup()
         {

@@ -17,10 +17,10 @@ namespace StageMachineSystem
         private ActionMap.ActionData inputOnStepData;
         private ActionMap.ActionData inputOnStopData;
 
-        public AlgorithmStage(HUDControllerAlgorithm hudController, Algorithm.Algorithm algorithm)
+        public AlgorithmStage(Algorithm.Algorithm algorithm)
         {
             this.algorithm = algorithm;
-            this.hudController = hudController;
+            hudController = AllManagers.Instance.UIManager.HudControllerAlgorithm;
         }
 
         public override void Enter()

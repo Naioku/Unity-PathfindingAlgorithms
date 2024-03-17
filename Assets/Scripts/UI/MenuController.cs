@@ -86,7 +86,7 @@ namespace UI
         {
             if (currentPanel != null)
             {
-                currentPanel.Close();
+                currentPanel.Hide();
             }
             
             currentPanel = panel;

@@ -4,23 +4,16 @@ using CustomInputSystem;
 using InteractionSystem;
 using StageMachineSystem;
 using UI;
-using UI.HUDPanels;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 [Serializable]
 public class GameManager
 {
-    [SerializeField] private MenuController menuPrefab;
-    [SerializeField] private HUDControllerMazeModification hudPrefabMazeModification;
-    [SerializeField] private HUDControllerAlgorithm hudPrefabAlgorithm;
     [SerializeField] private GameDataSO gameDataSO;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
     private MenuController menuController;
-    private HUDControllerMazeModification hudControllerMazeModification;
-    private HUDControllerAlgorithm hudControllerAlgorithm;
     private InputManager inputManager;
     private StageMachine stageMachine;
     
@@ -28,14 +21,14 @@ public class GameManager
 
     public void Initialize()
     {
-        menuController = Object.Instantiate(menuPrefab);
-        menuController.Initialize(
+        menuController = AllManagers.Instance.UIManager.MenuController;
+        menuController.Initialize
+        (
             StartMazeModification,
             StartBFS,
             StartAStar,
-            Quit);
-        hudControllerMazeModification = Object.Instantiate(hudPrefabMazeModification);
-        hudControllerAlgorithm = Object.Instantiate(hudPrefabAlgorithm);
+            Quit
+        );
         inputManager = AllManagers.Instance.InputManager;
         InitInput();
     }
@@ -85,15 +78,18 @@ public class GameManager
 
     private void EnterStage(BaseStage stage)
     {
-        if (!stageMachine.SetStage(stage)) return;
+        if (!stageMachine.SetStage(stage))
+        {
+            return;
+        }
 
         cameraController.StartMovement();
         interactionController.StartInteracting();
         menuController.Close();
     }
 
-    private void StartMazeModification() => EnterStage(new MazeModificationStage(hudControllerMazeModification));
-    private void StartBFS() => EnterStage(new AlgorithmStage(hudControllerAlgorithm, new BFS()));
+    private void StartMazeModification() => EnterStage(new MazeModificationStage());
+    private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
     
     private void Quit()
