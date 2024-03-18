@@ -65,35 +65,6 @@ public static class Enums
 
     #endregion
 
-    // Todo: Delete it.
-    #region InputSystem
-
-    public enum ActionMap
-    {
-        Global, StageSelection, MazeModification, Algorithm
-    }
-    
-    public enum InputAction
-    {
-        CameraMovement,
-        ClickInteraction,
-        ExitStage,
-        MazeModification,
-        BFS,
-        AStar,
-        SetStartNode,
-        SetDestinationNode,
-        SetBlockedNode,
-        SetDefaultNode,
-        Play,
-        Pause,
-        Step,
-        Refresh,
-        Stop
-    }
-
-    #endregion
-
     #region UI
 
     public enum AlgorithmState
