@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Settings;
 using UI.MenuPanels;
 using UnityEngine;
 
@@ -8,21 +9,21 @@ namespace UI
     public class MenuController : MonoBehaviour
     {
         [SerializeField] private MainPanel mainPanel;
-        // [SerializeField] private SettingsPanel settingsPanel;
+        [SerializeField] private SettingsPanel settingsPanel;
         // [SerializeField] private HelpPanel helpPanel;
 
         private BasePanel currentPanel;
         private readonly Stack<BasePanel> openedPanelsHistory = new Stack<BasePanel>();
         private Action onExit;
 
-        public void Initialize(Action mazeModificationAction, Action bfsAction, Action aStarAction, Action onExit)
+        public void Initialize(Action mazeModificationAction, Action bfsAction, Action aStarAction, Action<GameSettings> saveSettingsAction, Action onExit)
         {
-            InitializePanels(mazeModificationAction, bfsAction, aStarAction);
+            InitializePanels(mazeModificationAction, bfsAction, aStarAction, saveSettingsAction);
             this.onExit = onExit;
             SwitchPanel(mainPanel);
         }
 
-        private void InitializePanels(Action mazeModificationAction, Action bfsAction, Action aStarAction)
+        private void InitializePanels(Action mazeModificationAction, Action bfsAction, Action aStarAction, Action<GameSettings> saveSettingsAction)
         {
             mainPanel.Initialize
             (
@@ -36,7 +37,7 @@ namespace UI
                     { Enums.MainMenuPanelButtonTag.Help, OpenHelpPanel }
                 }
             );
-            // settingsPanel.Initialize(initData);
+            settingsPanel.Initialize(Back, saveSettingsAction);
             // helpPanel.Initialize(initData);
         }
 
@@ -64,12 +65,8 @@ namespace UI
             SwitchPanel(panel);
         }
 
-        private void OpenSettingsPanel()
-        {
-            // OpenPanel(settingsPanel);
-            Debug.Log("Opening Settings panel...");
-        }
-        
+        private void OpenSettingsPanel() => OpenPanel(settingsPanel);
+
         private void OpenHelpPanel()
         {
             // OpenPanel(helpPanel);

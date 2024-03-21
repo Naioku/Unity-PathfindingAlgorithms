@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using InteractionSystem;
+using Settings;
 using UnityEngine;
 
 public class Maze : MonoBehaviour, IInteractable
 {
-    private GameDataSO gameDataSO;
+    private GameSettings gameSettings;
     private Transform tilesParent;
     private readonly List<Tile> tileInstances = new List<Tile>();
     private Interaction cursorInteraction;
@@ -19,7 +20,7 @@ public class Maze : MonoBehaviour, IInteractable
     
     private void Start()
     {
-        gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
+        gameSettings = AllManagers.Instance.GameManager.GameSettings;
 
         CreateGameBoard();
         InitializeInteractions();
@@ -105,13 +106,18 @@ public class Maze : MonoBehaviour, IInteractable
 
     private void CreateTiles()
     {
-        for (int i = 0; i < gameDataSO.Size.y; i++)
+        for (int i = 0; i < gameSettings.Size.y; i++)
         {
-            for (int j = 0; j < gameDataSO.Size.x; j++)
+            for (int j = 0; j < gameSettings.Size.x; j++)
             {
-                Vector3 position = tilesParent.position + new Vector3(j, 0.5f * gameDataSO.TileHeight, i);
+                Vector3 position = tilesParent.position + new Vector3
+                (
+                    j * gameSettings.TileDimensions.Length,
+                    0.5f * gameSettings.TileDimensions.Height,
+                    i * gameSettings.TileDimensions.Length
+                );
                 Tile instance = AllManagers.Instance.UtilsSpawner.CreateObject<Tile>(Enums.SpawnedUtils.Tile, tilesParent, position);
-                instance.Initialize(new Vector2Int(j, i));
+                instance.Initialize(new Vector2Int(j, i), gameSettings.TileDimensions);
                 tileInstances.Add(instance);
             }
         }
@@ -119,12 +125,16 @@ public class Maze : MonoBehaviour, IInteractable
 
     private void CreateInteraction()
     {
-        Vector3 interactionSize = new Vector3(gameDataSO.Size.x, gameDataSO.TileHeight, gameDataSO.Size.y);
+        Vector3 interactionSize = new Vector3
+        (
+            gameSettings.Size.x * gameSettings.TileDimensions.Length,
+            gameSettings.TileDimensions.Height * gameSettings.TileDimensions.Height,
+            gameSettings.Size.y * gameSettings.TileDimensions.Length
+        );
         cursorInteraction = new Interaction
         (
             transform,
-            interactionSize,
-            gameDataSO.TileLength
+            interactionSize
         );
     }
     
@@ -157,10 +167,10 @@ public class Maze : MonoBehaviour, IInteractable
 
     private Tile GetTile(Vector2Int coords)
     {
-        if (coords.x < 0 || coords.x >= gameDataSO.Size.x) return null;
-        if (coords.y < 0 || coords.y >= gameDataSO.Size.y) return null;
+        if (coords.x < 0 || coords.x >= gameSettings.Size.x) return null;
+        if (coords.y < 0 || coords.y >= gameSettings.Size.y) return null;
 
-        int index = coords.y * gameDataSO.Size.x + coords.x;
+        int index = coords.y * gameSettings.Size.x + coords.x;
         return tileInstances[index];
     }
     
@@ -192,8 +202,8 @@ public class Maze : MonoBehaviour, IInteractable
         Vector3 localHitPoint = tilesParent.InverseTransformPoint(hitPoint);
         Vector2Int coordinates = new Vector2Int
         (
-            Mathf.Clamp(Mathf.FloorToInt(localHitPoint.x / gameDataSO.TileLength), 0, gameDataSO.Size.x - 1),
-            Mathf.Clamp(Mathf.FloorToInt(localHitPoint.z / gameDataSO.TileLength), 0, gameDataSO.Size.x - 1)
+            Mathf.Clamp(Mathf.FloorToInt(localHitPoint.x / gameSettings.TileDimensions.Length), 0, gameSettings.Size.x - 1),
+            Mathf.Clamp(Mathf.FloorToInt(localHitPoint.z / gameSettings.TileDimensions.Length), 0, gameSettings.Size.x - 1)
         );
         return coordinates;
     }

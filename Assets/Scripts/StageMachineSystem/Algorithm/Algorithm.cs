@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Settings;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 using WaitForSeconds = UpdateSystem.CoroutineSystem.WaitForSeconds;
@@ -13,8 +14,8 @@ namespace StageMachineSystem.Algorithm
         #region StaticValues
 
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-        protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameDataSO.GetPermittedDirections();
-        private readonly GameDataSO gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
+        protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameSettings.GetPermittedDirections();
+        private readonly GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
         protected Maze maze;
         private Vector2Int startCoords;
         private Vector2Int destinationCoords;
@@ -53,7 +54,7 @@ namespace StageMachineSystem.Algorithm
 
         protected Action onFinish;
         
-        protected IWait GetWaitObject(Enums.WaitingTime waitingTime)
+        protected IWait GetWaitObject(Enums.AlgorithmStageDelay algorithmStageDelay)
         {
             if (performingStep)
             {
@@ -67,7 +68,7 @@ namespace StageMachineSystem.Algorithm
             }
             else
             {
-                return new WaitForSeconds(gameDataSO.GetWaitingTimeData(waitingTime));
+                return new WaitForSeconds(gameSettings.AlgorithmStagesDelay.GetValue(algorithmStageDelay));
             }
         }
 
@@ -164,7 +165,7 @@ namespace StageMachineSystem.Algorithm
             while (path.Count > 0)
             {
                 maze.SetMarkerType(path.Pop().Coords, Enums.MarkerType.Path);
-                yield return GetWaitObject(Enums.WaitingTime.AfterPathNodeSetting);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterPathNodeSetting);
             }
         }
         

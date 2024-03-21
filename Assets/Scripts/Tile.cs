@@ -1,3 +1,4 @@
+using Settings;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -6,7 +7,7 @@ public class Tile : MonoBehaviour
     private Enums.MarkerType markerType = Enums.MarkerType.None;
     private bool highlighted;
 
-    private GameDataSO gameDataSO;
+    private GameSettings gameSettings;
     private MeshRenderer permanentMeshRenderer;
     private MeshRenderer markerMeshRenderer;
     
@@ -42,14 +43,17 @@ public class Tile : MonoBehaviour
         }
     }
     
-    public void Initialize(Vector2Int initialCoords)
+    public void Initialize(Vector2Int initialCoords, TileDimensions tileDimensions)
     {
         name = $"({initialCoords.x}; {initialCoords.y})";
+        Vector3 scale = new Vector3(tileDimensions.Length, tileDimensions.Height, tileDimensions.Length);
+        transform.localScale = scale;
+        TileType = Enums.TileType.Default;
     }
 
     private void Awake()
     {
-        gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
+        gameSettings = AllManagers.Instance.GameManager.GameSettings;
         permanentMeshRenderer = transform.Find("TileMesh").GetComponent<MeshRenderer>();
         markerMeshRenderer = transform.Find("MarkerMesh").GetComponent<MeshRenderer>();
     }
@@ -66,13 +70,13 @@ public class Tile : MonoBehaviour
         
         void UpdateMaterial()
         {
-            permanentMeshRenderer.material.color = gameDataSO.GetPermanentColor(tileType);
+            permanentMeshRenderer.material.color = gameSettings.TileColors.GetValue(tileType);
         }
 
         void UpdateHighlight()
         {
             Color color = permanentMeshRenderer.material.color;
-            float highlightValue = gameDataSO.TileHighlightValue;
+            float highlightValue = gameSettings.TileColors.HighlightValue;
 
             if (highlighted)
             {
@@ -89,8 +93,8 @@ public class Tile : MonoBehaviour
     
     private void UpdateMarkerView()
     {
-        Color color = gameDataSO.GetMarkerColor(markerType);
-        color.a = gameDataSO.MarkerColorAlpha;
+        Color color = gameSettings.MarkerColors.GetValue(markerType);
+        color.a = gameSettings.MarkerColors.Alpha;
         markerMeshRenderer.material.color = color;
         markerMeshRenderer.gameObject.SetActive(markerType != Enums.MarkerType.None);
     }

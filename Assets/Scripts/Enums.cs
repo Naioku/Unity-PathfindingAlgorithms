@@ -95,7 +95,7 @@ public static class Enums
         Border, Key
     }
 
-    public enum WaitingTime
+    public enum AlgorithmStageDelay
     {
         AfterNewNodeEnqueuing,
         AfterNodeChecking,

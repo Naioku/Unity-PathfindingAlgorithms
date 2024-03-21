@@ -12,20 +12,19 @@ namespace InteractionSystem
 
         public Interaction(
             Transform owner,
-            Vector3 size,
-            float tileLenght)
+            Vector3 size)
         {
-            CreateInteractionCollider(owner, size, tileLenght);
+            CreateInteractionCollider(owner, size);
             InitializeActions();
         }
     
-        private void CreateInteractionCollider(Transform owner, Vector3 size, float tileLenght)
+        private void CreateInteractionCollider(Transform owner, Vector3 size)
         {
             interactionCollider = new GameObject("Interaction").transform;
             interactionCollider.parent = owner;
             interactionCollider.gameObject.AddComponent<BoxCollider>();
             interactionCollider.localScale = size;
-            interactionCollider.position = 0.5f * tileLenght * size;
+            interactionCollider.position = 0.5f * size;
         }
     
         private void InitializeActions()

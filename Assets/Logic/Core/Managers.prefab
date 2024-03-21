@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <GameManager>k__BackingField:
-    gameDataSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
+    defaultSettingsSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
     cameraController:
       speed: 20
       keyModeMovementSpeed: 0.05

@@ -2,6 +2,7 @@
 using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
 using InteractionSystem;
+using Settings;
 using StageMachineSystem;
 using UI;
 using UnityEngine;
@@ -9,24 +10,29 @@ using UnityEngine;
 [Serializable]
 public class GameManager
 {
-    [SerializeField] private GameDataSO gameDataSO;
+    [SerializeField] private DefaultSettingsSO defaultSettingsSO;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
+    private Maze maze;
+    private GameSettings gameSettings;
     private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
     
-    public GameDataSO GameDataSO => gameDataSO;
+    public GameSettings GameSettings => gameSettings;
 
     public void Initialize()
     {
+        defaultSettingsSO.Initialize();
+        gameSettings = defaultSettingsSO.Settings;
         menuController = AllManagers.Instance.UIManager.MenuController;
         menuController.Initialize
         (
             StartMazeModification,
             StartBFS,
             StartAStar,
+            UpdateGameSettings,
             Quit
         );
         inputManager = AllManagers.Instance.InputManager;
@@ -44,7 +50,7 @@ public class GameManager
         inputManager.GlobalMap.Enable();
         cameraController.Initialize(Camera.main);
         interactionController.Initialize(Camera.main);
-        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
     }
     
@@ -91,7 +97,14 @@ public class GameManager
     private void StartMazeModification() => EnterStage(new MazeModificationStage());
     private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
-    
+    private void UpdateGameSettings(GameSettings settings)
+    {
+        gameSettings = settings;
+        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        stageMachine.Maze = maze;
+    }
+
     private void Quit()
     {
 #if UNITY_EDITOR

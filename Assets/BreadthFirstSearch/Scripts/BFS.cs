@@ -10,7 +10,7 @@ namespace BreadthFirstSearch.Scripts
         {
             while (!CheckNode())
             {
-                yield return GetWaitObject(Enums.WaitingTime.AfterNodeChecking);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNodeChecking);
                 yield return EnqueueNeighbors();
 
                 if (!ReloadNode())
@@ -18,7 +18,7 @@ namespace BreadthFirstSearch.Scripts
                     Debug.Log("Path cannot be found!");
                     Stop();
                 }
-                yield return GetWaitObject(Enums.WaitingTime.AfterCursorPositionChange);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
             }
          
             yield return DrawPath();
@@ -36,11 +36,11 @@ namespace BreadthFirstSearch.Scripts
 
                 if (!maze.CheckTileType(position, Enums.TileType.Default, Enums.TileType.Destination)) continue;
                 if (!maze.CheckMarkerType(position, Enums.MarkerType.None)) continue;
-                yield return GetWaitObject(Enums.WaitingTime.AfterCursorPositionChange);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
                 
                 maze.SetMarkerType(position, Enums.MarkerType.ReadyToCheck);
                 nodesToCheck.Enqueue(new Node(position, currentNode));
-                yield return GetWaitObject(Enums.WaitingTime.AfterNewNodeEnqueuing);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing);
             }
         }
     }

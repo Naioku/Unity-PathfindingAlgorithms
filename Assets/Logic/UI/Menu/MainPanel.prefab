@@ -282,10 +282,6 @@ PrefabInstance:
       propertyPath: buttonTag
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: -3729205477033418557, guid: 675d27b4bbc49e74f942f737684f0b35, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 720610594986365411, guid: 675d27b4bbc49e74f942f737684f0b35, type: 3}
       propertyPath: m_Name
       value: Settings
