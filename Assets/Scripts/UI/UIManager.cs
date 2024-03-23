@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpawningSystem;
 using UI.HUDPanels;
 using UI.PopupPanels;
@@ -10,34 +11,66 @@ namespace UI
     [Serializable]
     public class UIManager
     {
-        [SerializeField] private MenuController menuPrefab;
-        [SerializeField] private HUDControllerMazeModification hudPrefabMazeModification;
-        [SerializeField] private HUDControllerAlgorithm hudPrefabAlgorithm;
-        [SerializeField] private InfoPanel infoPanelPrefab;
-        
+        private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
+        private PopupPanel currentPopupPanel;
+        private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new Dictionary<Type, Enums.UIPopupType>
+        {
+            // { typeof(int), Enums.UIPopupType.InputInt },
+            { typeof(float), Enums.UIPopupType.InputFloat },
+            { typeof(Color), Enums.UIPopupType.InputColor },
+            // { typeof(float), Enums.UIPopupType.InputChoice }
+        };
+
         public MenuController MenuController { get; private set; }
         public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
         public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
         public UIStaticPanel CurrentStaticPanel { set; private get; }
         
-        private PopupPanel currentPopupPanel;
-
-        public void Initialize() => CreatePanels();
+        public void Awake()
+        {
+            uiPopupSpawner = AllManagers.Instance.UIPopupSpawner;
+            CreatePanels();
+        }
 
         public void CreatePanels()
         {
-            SpawnManager<Enums.SpawnedUI> uiSpawner = AllManagers.Instance.UISpawner;
-            MenuController = uiSpawner.CreateObject<MenuController>(Enums.SpawnedUI.Menu);
-            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.SpawnedUI.HUDMazeModification);
-            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.SpawnedUI.HUDAlgorithm);
+            SpawnManager<Enums.UISpawned> uiSpawner = AllManagers.Instance.UISpawner;
+            MenuController = uiSpawner.CreateObject<MenuController>(Enums.UISpawned.Menu);
+            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.UISpawned.HUDMazeModification);
+            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.UISpawned.HUDAlgorithm);
         }
         
-        public void OpenInfoPanel(string header, string info)
+        public void OpenPopupInfo(string header, string info)
+        {
+            InfoPanel infoPanel = uiPopupSpawner.CreateObject<InfoPanel>(Enums.UIPopupType.Info);
+            infoPanel.Initialize(header, info, CloseCurrentPopupPanel);
+            OpenPanel(infoPanel);
+        }
+
+        public void OpenPopupInput<TReturn>(
+            string header,
+            TReturn initialValue,
+            Action<TReturn> onClose)
+        {
+            if (!inputPopupsLookup.ContainsKey(typeof(TReturn)))
+            {
+                Debug.LogError("Input popup type not supported, yet.");
+                return;
+            }
+            
+            InputPanel<TReturn> infoPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
+            infoPanel.Initialize(header, initialValue, result =>
+            {
+                onClose.Invoke(result);
+                CloseCurrentPopupPanel();
+            });
+            OpenPanel(infoPanel);
+        }
+
+        private void OpenPanel(PopupPanel createdPanel)
         {
             AllManagers.Instance.InputManager.DisableInput();
-            InfoPanel infoPanel = Object.Instantiate(infoPanelPrefab);
-            infoPanel.Initialize(header, info, CloseCurrentPopupPanel);
-            currentPopupPanel = infoPanel;
+            currentPopupPanel = createdPanel;
         }
 
         private void CloseCurrentPopupPanel()

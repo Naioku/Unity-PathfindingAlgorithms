@@ -15,7 +15,7 @@ MonoBehaviour:
   size: {x: 10, y: 10}
   tileDimensions:
     Length: 1
-    Height: 0.5
+    Height: 1
   tileColors:
     entries:
     - Key: 0

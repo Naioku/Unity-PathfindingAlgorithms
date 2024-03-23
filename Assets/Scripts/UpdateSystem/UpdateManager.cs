@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace UpdateSystem
 {
-    public class UpdateManager : MonoBehaviour
+    public class UpdateManager
     {
         private readonly List<Action> objectsToUpdate = new List<Action>();
         private readonly List<Action> objectsToFixedUpdate = new List<Action>();

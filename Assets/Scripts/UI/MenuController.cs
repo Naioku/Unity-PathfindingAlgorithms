@@ -20,6 +20,8 @@ namespace UI
         {
             InitializePanels(mazeModificationAction, bfsAction, aStarAction, saveSettingsAction);
             this.onExit = onExit;
+            mainPanel.gameObject.SetActive(false);
+            settingsPanel.gameObject.SetActive(false);
             SwitchPanel(mainPanel);
         }
 

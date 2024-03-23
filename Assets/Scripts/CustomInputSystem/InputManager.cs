@@ -16,7 +16,7 @@ namespace CustomInputSystem
         public AlgorithmMap AlgorithmMap { get; private set; }
         public Vector2 CursorPosition { get; private set; }
         
-        public void Initialize()
+        public void Awake()
         {
             AllManagers.Instance.UpdateManager.RegisterOnUpdate(UpdateCursorPosition);
             InitializeMaps();

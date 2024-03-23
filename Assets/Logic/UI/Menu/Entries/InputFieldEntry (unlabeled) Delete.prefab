@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 295144372167917747}
   - component: {fileID: 1903593023680773962}
   m_Layer: 5
-  m_Name: InputFieldEntry (unlabeled)
+  m_Name: InputFieldEntry (unlabeled) Delete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

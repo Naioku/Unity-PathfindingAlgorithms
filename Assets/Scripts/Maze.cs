@@ -128,7 +128,7 @@ public class Maze : MonoBehaviour, IInteractable
         Vector3 interactionSize = new Vector3
         (
             gameSettings.Size.x * gameSettings.TileDimensions.Length,
-            gameSettings.TileDimensions.Height * gameSettings.TileDimensions.Height,
+            gameSettings.TileDimensions.Height,
             gameSettings.Size.y * gameSettings.TileDimensions.Length
         );
         cursorInteraction = new Interaction

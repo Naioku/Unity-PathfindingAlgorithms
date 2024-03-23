@@ -56,11 +56,16 @@ public static class Enums
         Tile, Maze
     }
     
-    public enum SpawnedUI
+    public enum UISpawned
     {
         Menu,
         HUDMazeModification,
         HUDAlgorithm
+    }
+    
+    public enum UIPopupType
+    {
+        Info, InputFloat, InputColor, InputChoice
     }
 
     #endregion

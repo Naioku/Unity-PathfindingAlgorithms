@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Settings;
-using TMPro;
+using UI.Buttons;
 using UnityEngine;
-using Button = UI.Buttons.Button;
 
 namespace UI.MenuPanels
 {
@@ -17,8 +17,7 @@ namespace UI.MenuPanels
         [SerializeField] private AlgorithmStagesDelayPanel stagesDelay;
         
         // Todo: Temporary.
-        private Enums.PermittedDirection[] permittedDirections = new []
-        {
+        private Enums.PermittedDirection[] permittedDirections = {
             Enums.PermittedDirection.UpRight,
             Enums.PermittedDirection.Up,
             Enums.PermittedDirection.UpLeft,
@@ -43,6 +42,12 @@ namespace UI.MenuPanels
 
         private void InitInputValues()
         {
+            size.Initialize();
+            tileDimensions.Initialize();
+            tileColors.Initialize();
+            markerColors.Initialize();
+            stagesDelay.Initialize();
+            
             size.Setting = gameSettings.Size;
             tileDimensions.Setting = gameSettings.TileDimensions;
             tileColors.Setting = gameSettings.TileColors;
@@ -52,86 +57,122 @@ namespace UI.MenuPanels
 
         private void Save()
         {
-            Vector2Int size = this.size.Setting;
-
             gameSettings = new GameSettings(
-                size,
+                size.Setting,
                 tileDimensions.Setting,
                 tileColors.Setting,
                 markerColors.Setting,
                 stagesDelay.Setting,
                 permittedDirections);
-            
+
             onSave.Invoke(gameSettings);
         }
         
         public override void SelectDefaultButton() => backButton.Select();
 
-        private static string ColorToHexString(Color value)
-        {
-            int red = Convert.ToInt32(value.r * 255);
-            int green = Convert.ToInt32(value.g * 255);
-            int blue = Convert.ToInt32(value.b * 255);
-            
-            return $"#{red:X}{green:X}{blue:X}";
-        }
-        
-        private static Color HexStringToColor(string input)
-        {
-            if (input.StartsWith("#"))
-            {
-                input = input.Substring(1);
-            }
-
-            float red = (float)int.Parse(input.Substring(0, 2), NumberStyles.HexNumber) / 255;
-            float green = (float)int.Parse(input.Substring(2, 2), NumberStyles.HexNumber) / 255;
-            float blue = (float)int.Parse(input.Substring(4, 2), NumberStyles.HexNumber) / 255;
-            return new Color(red, green, blue);
-        }
+        // private static string ColorToHexString(Color value)
+        // {
+        //     int red = Convert.ToInt32(value.r * 255);
+        //     int green = Convert.ToInt32(value.g * 255);
+        //     int blue = Convert.ToInt32(value.b * 255);
+        //     
+        //     return $"#{red:X}{green:X}{blue:X}";
+        // }
+        //
+        // private static Color HexStringToColor(string input)
+        // {
+        //     if (input.StartsWith("#"))
+        //     {
+        //         input = input.Substring(1);
+        //     }
+        //
+        //     float red = (float)int.Parse(input.Substring(0, 2), NumberStyles.HexNumber) / 255;
+        //     float green = (float)int.Parse(input.Substring(2, 2), NumberStyles.HexNumber) / 255;
+        //     float blue = (float)int.Parse(input.Substring(4, 2), NumberStyles.HexNumber) / 255;
+        //     return new Color(red, green, blue);
+        // }
 
         [Serializable]
-        private struct Size
+        private class Size
         {
-            [SerializeField] private TMP_InputField widthField;
-            [SerializeField] private TMP_InputField lengthField;
+            private const string PopupHeaderWidth = "Board width";
+            private const string PopupHeaderLength = "Board length";
+            
+            [SerializeField] private SettingEntry<int> width;
+            [SerializeField] private SettingEntry<int> length;
+
+            public void Initialize()
+            {
+                width.Initialize(PopupHeaderWidth);
+                length.Initialize(PopupHeaderLength);
+            }
             
             public Vector2Int Setting
             {
-                get => new Vector2Int(int.Parse(widthField.text), int.Parse(lengthField.text));
+                get => new Vector2Int(width.Value, length.Value);
                 set
                 {
-                    widthField.text = value.x.ToString();
-                    lengthField.text = value.y.ToString();
+                    width.Value = value.x;
+                    length.Value = value.y;
                 }
             }
         }
 
         [Serializable]
-        private struct TileDimensionsPanel
+        private class TileDimensionsPanel
         {
-            [SerializeField] private TMP_InputField lengthField;
-            [SerializeField] private TMP_InputField heightField;
+            private const string PopupHeaderLength = "Tile length";
+            private const string PopupHeaderHeight = "Tile height";
             
+            [SerializeField] private SettingEntry<float> length;
+            [SerializeField] private SettingEntry<float> height;
+
+            public void Initialize()
+            {
+                length.Initialize(PopupHeaderLength);
+                height.Initialize(PopupHeaderHeight);
+            }
+
             public TileDimensions Setting
             {
                 get =>
                     new TileDimensions
                     {
-                        Length = float.Parse(lengthField.text),
-                        Height = float.Parse(heightField.text)
+                        Length = length.Value,
+                        Height = height.Value
                     };
                 set
                 {
-                    lengthField.text = value.Length.ToString(CultureInfo.CurrentCulture);
-                    heightField.text = value.Height.ToString(CultureInfo.CurrentCulture);
+                    length.Value = value.Length;
+                    height.Value = value.Height;
                 }
             }
         }
 
         [Serializable]
-        private class TileColorsPanel : SettingChange<Enums.TileType, TMP_InputField>
+        private class TileColorsPanel : SettingChange<Enums.TileType, SettingEntry<Color>>
         {
-            [SerializeField] private TMP_InputField highlightField;
+            private const string PopupHeaderHighlight = "Cursor highlight";
+            
+            [SerializeField] private SettingEntry<float> highlight;
+
+            private readonly Dictionary<Enums.TileType, string> headersLookup = new Dictionary<Enums.TileType, string>
+            {
+                { Enums.TileType.Default, "Default color" },
+                { Enums.TileType.Start, "Start color" },
+                { Enums.TileType.Destination, "Destination color" },
+                { Enums.TileType.Blocked, "Blocked color" }
+            };
+            
+            public override void Initialize()
+            {
+                base.Initialize();
+                foreach (Entry entry in entries)
+                {
+                    entry.Value.Initialize(headersLookup[entry.Key]);
+                }
+                highlight.Initialize(PopupHeaderHighlight);
+            }
             
             public TileColors Setting
             {
@@ -140,9 +181,9 @@ namespace UI.MenuPanels
                     TileColors setting = new TileColors();
                     foreach (Entry entry in entries)
                     {
-                        setting.SetValue(entry.Key, HexStringToColor(entry.Value.text));
+                        setting.SetValue(entry.Key, entry.Value.Value);
                     }
-                    setting.HighlightValue = float.Parse(highlightField.text);
+                    setting.HighlightValue = highlight.Value;
 
                     return setting;
                 }
@@ -150,18 +191,38 @@ namespace UI.MenuPanels
                 {
                     foreach (Entry entry in entries)
                     {
-                       entry.Value.text = ColorToHexString(value.GetValue(entry.Key));
+                       entry.Value.Value = value.GetValue(entry.Key);
                     }
-                    highlightField.text = value.HighlightValue.ToString(CultureInfo.CurrentCulture);
+                    highlight.Value = value.HighlightValue;
 
                 }
             }
         }
         
         [Serializable]
-        private class MarkerColorsPanel : SettingChange<Enums.MarkerType, TMP_InputField>
+        private class MarkerColorsPanel : SettingChange<Enums.MarkerType, SettingEntry<Color>>
         {
-            [SerializeField] private TMP_InputField alpha;
+            private const string PopupHeaderAlpha = "Marker alpha";
+            
+            [SerializeField] private SettingEntry<float> alpha;
+
+            private readonly Dictionary<Enums.MarkerType, string> headersLookup = new Dictionary<Enums.MarkerType, string>
+            {
+                { Enums.MarkerType.None, "None color" },
+                { Enums.MarkerType.ReadyToCheck, "Ready to check color" },
+                { Enums.MarkerType.Checked, "Checked color" },
+                { Enums.MarkerType.Path, "Path color" }
+            };
+            
+            public override void Initialize()
+            {
+                base.Initialize();
+                foreach (Entry entry in entries)
+                {
+                    entry.Value.Initialize(headersLookup[entry.Key]);
+                }
+                alpha.Initialize(PopupHeaderAlpha);
+            }
             
             public MarkerColors Setting
             {
@@ -170,9 +231,9 @@ namespace UI.MenuPanels
                     MarkerColors setting = new MarkerColors();
                     foreach (Entry entry in entries)
                     {
-                        setting.SetValue(entry.Key, HexStringToColor(entry.Value.text));
+                        setting.SetValue(entry.Key, entry.Value.Value);
                     }
-                    setting.Alpha = float.Parse(alpha.text);
+                    setting.Alpha = alpha.Value;
 
                     return setting;
                 }
@@ -180,16 +241,34 @@ namespace UI.MenuPanels
                 {
                     foreach (Entry entry in entries)
                     {
-                        entry.Value.text = ColorToHexString(value.GetValue(entry.Key));
+                        entry.Value.Value = value.GetValue(entry.Key);
                     }
-                    alpha.text = value.Alpha.ToString(CultureInfo.CurrentCulture);
+                    alpha.Value = value.Alpha;
+
                 }
             }
         }
         
         [Serializable]
-        private class AlgorithmStagesDelayPanel : SettingChange<Enums.AlgorithmStageDelay, TMP_InputField>
+        private class AlgorithmStagesDelayPanel : SettingChange<Enums.AlgorithmStageDelay, SettingEntry<float>>
         {
+            private readonly Dictionary<Enums.AlgorithmStageDelay, string> headersLookup = new Dictionary<Enums.AlgorithmStageDelay, string>
+            {
+                { Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing, "Delay after new node enqueuing" },
+                { Enums.AlgorithmStageDelay.AfterNodeChecking, "Delay after node checkin" },
+                { Enums.AlgorithmStageDelay.AfterCursorPositionChange, "Delay after cursor position change" },
+                { Enums.AlgorithmStageDelay.AfterPathNodeSetting, "Delay after path node setting" }
+            };
+            
+            public override void Initialize()
+            {
+                base.Initialize();
+                foreach (Entry entry in entries)
+                {
+                    entry.Value.Initialize(headersLookup[entry.Key]);
+                }
+            }
+            
             public AlgorithmStagesDelay Setting
             {
                 get
@@ -197,7 +276,7 @@ namespace UI.MenuPanels
                     AlgorithmStagesDelay setting = new AlgorithmStagesDelay();
                     foreach (Entry entry in entries)
                     {
-                        setting.SetValue(entry.Key, float.Parse(entry.Value.text));
+                        setting.SetValue(entry.Key, entry.Value.Value);
                     }
 
                     return setting;
@@ -206,10 +285,58 @@ namespace UI.MenuPanels
                 {
                     foreach (Entry entry in entries)
                     {
-                        entry.Value.text = value.GetValue(entry.Key).ToString(CultureInfo.CurrentCulture);
+                        entry.Value.Value = value.GetValue(entry.Key);
+                    }
+
+                }
+            }
+        }
+        
+        [Serializable]
+        private class SettingEntry<T>
+        {
+            [SerializeField] private Button button;
+            
+            private T value;
+            private string popupHeader;
+
+            public T Value
+            {
+                get => value;
+                set
+                {
+                    this.value = value;
+                    switch (value)
+                    {
+                        case float floatValue:
+                            button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
+                            break;
+                        
+                        case int intValue:
+                            button.Label = intValue.ToString();
+                            break;
+                        
+                        case Color colorValue:
+                            button.Color = colorValue;
+                            break;
                     }
                 }
             }
+            
+            public void Initialize(string popupHeader)
+            {
+                this.popupHeader = popupHeader;
+                button.OnPressAction += ButtonAction;
+            }
+
+            private void ButtonAction() => AllManagers.Instance.UIManager.OpenPopupInput
+            (
+                popupHeader,
+                value,
+                OnClosePanel
+            );
+            
+            private void OnClosePanel(T value) => Value = value;
         }
     }
 }

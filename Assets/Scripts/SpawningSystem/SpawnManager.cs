@@ -20,7 +20,7 @@ namespace SpawningSystem
         /// <summary>
         /// Initializes the manager. Should be used in MonoBehaviour's Awake() methods.
         /// </summary>
-        public void Initialize()
+        public void Awake()
         {
             foreach (Spawnable<TKey, TType> spawnableItem in spawnableItems)
             {

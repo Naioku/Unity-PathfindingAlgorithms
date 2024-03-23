@@ -21,6 +21,16 @@ namespace UI.Buttons
             set => textLabel.text = value;
         }
 
+        public Color Color
+        {
+            set
+            {
+                ColorBlock newBlock = colors;
+                newBlock.normalColor = value;
+                colors = newBlock;
+            }
+        }
+
         public void SetNavigation(
             Selectable onUp = null,
             Selectable onDown = null,

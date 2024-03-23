@@ -10,7 +10,7 @@ namespace Settings
         [SerializeField] protected Entry[] entries;
         protected Dictionary<TKey, TValue> valuesLookup = new Dictionary<TKey, TValue>();
 
-        public void Initialize() => BuildLookup();
+        public virtual void Initialize() => BuildLookup();
     
         private void BuildLookup()
         {

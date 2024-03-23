@@ -22,7 +22,7 @@ public class GameManager
     
     public GameSettings GameSettings => gameSettings;
 
-    public void Initialize()
+    public void Awake()
     {
         defaultSettingsSO.Initialize();
         gameSettings = defaultSettingsSO.Settings;
