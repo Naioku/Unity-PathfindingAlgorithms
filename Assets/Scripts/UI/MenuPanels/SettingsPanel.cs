@@ -70,28 +70,6 @@ namespace UI.MenuPanels
         
         public override void SelectDefaultButton() => backButton.Select();
 
-        // private static string ColorToHexString(Color value)
-        // {
-        //     int red = Convert.ToInt32(value.r * 255);
-        //     int green = Convert.ToInt32(value.g * 255);
-        //     int blue = Convert.ToInt32(value.b * 255);
-        //     
-        //     return $"#{red:X}{green:X}{blue:X}";
-        // }
-        //
-        // private static Color HexStringToColor(string input)
-        // {
-        //     if (input.StartsWith("#"))
-        //     {
-        //         input = input.Substring(1);
-        //     }
-        //
-        //     float red = (float)int.Parse(input.Substring(0, 2), NumberStyles.HexNumber) / 255;
-        //     float green = (float)int.Parse(input.Substring(2, 2), NumberStyles.HexNumber) / 255;
-        //     float blue = (float)int.Parse(input.Substring(4, 2), NumberStyles.HexNumber) / 255;
-        //     return new Color(red, green, blue);
-        // }
-
         [Serializable]
         private class Size
         {
@@ -318,6 +296,7 @@ namespace UI.MenuPanels
                         
                         case Color colorValue:
                             button.Color = colorValue;
+                            button.Label = Utility.ColorToHexString(colorValue, true);
                             break;
                     }
                 }

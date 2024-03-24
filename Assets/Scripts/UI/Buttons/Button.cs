@@ -25,9 +25,22 @@ namespace UI.Buttons
         {
             set
             {
-                ColorBlock newBlock = colors;
-                newBlock.normalColor = value;
-                colors = newBlock;
+                SetBackgroundColor();
+                SetLabelColor();
+                return;
+                
+                void SetBackgroundColor()
+                {
+                    ColorBlock newBlock = colors;
+                    newBlock.normalColor = value;
+                    colors = newBlock;
+                }
+                
+                void SetLabelColor()
+                {
+                    Color.RGBToHSV(value, out _, out _, out float v);
+                    textLabel.color = Color.HSVToRGB(0, 0, v < 0.5 ? 1 : 0);
+                }
             }
         }
 
@@ -37,7 +50,6 @@ namespace UI.Buttons
             Selectable onLeft = null,
             Selectable onRight = null)
         {
-            
             navigation = new Navigation
             {
                 selectOnUp = onUp,
