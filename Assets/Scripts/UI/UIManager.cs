@@ -4,6 +4,7 @@ using SpawningSystem;
 using UI.HUDPanels;
 using UI.PopupPanels;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
 namespace UI
@@ -24,7 +25,8 @@ namespace UI
         public MenuController MenuController { get; private set; }
         public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
         public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
-        public UIStaticPanel CurrentStaticPanel { set; private get; }
+
+        private GameObject lastStaticPanelGameObject;
         
         public void Awake()
         {
@@ -43,7 +45,7 @@ namespace UI
         public void OpenPopupInfo(string header, string info)
         {
             InfoPanel infoPanel = uiPopupSpawner.CreateObject<InfoPanel>(Enums.UIPopupType.Info);
-            infoPanel.Initialize(header, info, CloseCurrentPopupPanel);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, info);
             OpenPanel(infoPanel);
         }
 
@@ -59,7 +61,7 @@ namespace UI
             }
             
             InputPanel<TReturn> infoPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
-            infoPanel.Initialize(header, initialValue, result =>
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
             {
                 onClose.Invoke(result);
                 CloseCurrentPopupPanel();
@@ -69,15 +71,17 @@ namespace UI
 
         private void OpenPanel(PopupPanel createdPanel)
         {
-            AllManagers.Instance.InputManager.DisableInput();
+            AllManagers.Instance.InputManager.EnablePopupMode();
             currentPopupPanel = createdPanel;
+            lastStaticPanelGameObject = EventSystem.current.currentSelectedGameObject;
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         private void CloseCurrentPopupPanel()
         {
-            AllManagers.Instance.InputManager.EnableInput();
             Object.Destroy(currentPopupPanel.gameObject);
-            CurrentStaticPanel.SelectDefaultButton();
+            AllManagers.Instance.InputManager.DisablePopupMode();
+            EventSystem.current.SetSelectedGameObject(lastStaticPanelGameObject);
         }
     }
 }

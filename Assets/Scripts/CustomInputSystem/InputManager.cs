@@ -9,11 +9,13 @@ namespace CustomInputSystem
     {
         private readonly Controls controls = new Controls();
         private readonly List<ActionMap> mapsList = new List<ActionMap>();
+        private readonly List<ActionMap> savedState = new List<ActionMap>();
         
         public GlobalMap GlobalMap { get; private set; }
         public StageSelectionMap StageSelectionMap { get; private set; }
         public MazeModificationMap MazeModificationMap { get; private set; }
         public AlgorithmMap AlgorithmMap { get; private set; }
+        public PopupMap PopupMap { get; private set; }
         public Vector2 CursorPosition { get; private set; }
         
         public void Awake()
@@ -36,8 +38,30 @@ namespace CustomInputSystem
             }
         }
 
-        public void EnableInput() => controls.Enable();
-        public void DisableInput() => controls.Disable();
+        public void EnablePopupMode()
+        {
+            foreach (ActionMap map in mapsList)
+            {
+                if (map.Enabled)
+                {
+                    savedState.Add(map);
+                }
+                map.Disable();
+            }
+
+            PopupMap.Enable();
+        }
+
+        public void DisablePopupMode()
+        {
+            PopupMap.Disable();
+            foreach (ActionMap map in savedState)
+            {
+                map.Enable();
+            }
+            
+            savedState.Clear();
+        }
 
         private void UpdateCursorPosition()
         {
@@ -50,6 +74,7 @@ namespace CustomInputSystem
             StageSelectionMap = new StageSelectionMap(controls.StageSelection);
             MazeModificationMap = new MazeModificationMap(controls.MazeModification);
             AlgorithmMap = new AlgorithmMap(controls.Algorithm);
+            PopupMap = new PopupMap(controls.Popup);
         }
 
         private void BuildMapsList()
@@ -58,6 +83,7 @@ namespace CustomInputSystem
             mapsList.Add(StageSelectionMap);
             mapsList.Add(MazeModificationMap);
             mapsList.Add(AlgorithmMap);
+            mapsList.Add(PopupMap);
         }
     }
 }

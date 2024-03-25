@@ -13,7 +13,7 @@ namespace UI.HUDPanels
         private Dictionary<T, TaggedButton<T>> buttonsLookup;
 
         private void Awake() => BuildButtonsLookup();
-        private void Start() => Hide(false);
+        private void Start() => Hide();
         
         public void Initialize(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
@@ -35,16 +35,10 @@ namespace UI.HUDPanels
             }
             backButton.ResetObj();
         }
-        
-        public override void Show()
-        {
-            base.Show();
-            SelectDefaultButton();
-        }
 
         public void SelectButton(T type) => buttonsLookup[type].Select();
 
-        public override void SelectDefaultButton() => SelectButton(0);
+        protected override void SelectDefaultButton() => SelectButton(0);
 
         private void InitButtonsData(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {

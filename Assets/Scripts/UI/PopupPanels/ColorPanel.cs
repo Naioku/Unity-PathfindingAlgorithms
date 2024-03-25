@@ -23,8 +23,9 @@ namespace UI.PopupPanels
         private float currentSat;
         private float currentVal;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             CreateHueImage();
             CreateSatValImage();
             CreateOutputImage();
@@ -34,7 +35,7 @@ namespace UI.PopupPanels
         }
         
         protected override void SetInitialValue(Color initialValue) => UpdateTexturesAndControllers(initialValue);
-        protected override void OnConfirm() => onConfirm.Invoke(Color.HSVToRGB(currentHue, currentSat, currentVal));
+        protected override void Confirm() => onConfirm.Invoke(Color.HSVToRGB(currentHue, currentSat, currentVal));
 
         private void CreateHueImage()
         {

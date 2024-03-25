@@ -7,7 +7,8 @@ namespace CustomInputSystem.ActionMaps
     public abstract class ActionMap
     {
         protected InputActionMap actionMap;
-        
+
+        public bool Enabled => actionMap.enabled;
         public void Enable() => actionMap.Enable();
         public void Disable() => actionMap.Disable();
         

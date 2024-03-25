@@ -68,7 +68,7 @@ namespace UI.MenuPanels
             onSave.Invoke(gameSettings);
         }
         
-        public override void SelectDefaultButton() => backButton.Select();
+        protected override void SelectDefaultButton() => backButton.Select();
 
         [Serializable]
         private class Size

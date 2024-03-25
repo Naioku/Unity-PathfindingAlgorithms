@@ -9,6 +9,6 @@ namespace UI.PopupPanels
         [SerializeField] private TMP_InputField inputField;
 
         protected override void SetInitialValue(float initialValue) => inputField.text = initialValue.ToString(CultureInfo.CurrentCulture);
-        protected override void OnConfirm() => onConfirm.Invoke(float.Parse(inputField.text));
+        protected override void Confirm() => onConfirm.Invoke(float.Parse(inputField.text));
     }
 }
