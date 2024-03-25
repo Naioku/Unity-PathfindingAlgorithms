@@ -9,6 +9,10 @@ namespace UI.MenuPanels
 {
     public class SettingsPanel : BasePanel
     {
+        private const string ResetToDefaultPopupHeader = "Reset to default?";
+        private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
+        [SerializeField] private Button resetButton;
+        [SerializeField] private Button resetToDefaultButton;
         [SerializeField] private Button saveButton;
         [SerializeField] private Size size;
         [SerializeField] private TileDimensionsPanel tileDimensions;
@@ -28,17 +32,22 @@ namespace UI.MenuPanels
             Enums.PermittedDirection.Right,
         };
 
-        private Action<GameSettings> onSave;
-        private GameSettings gameSettings;
+        private Action onResetToDefault;
+        private Action<GameSettings, Enums.SettingsReloadingParam> onSave;
         
-        public void Initialize(Action onBack, Action<GameSettings> onSave)
+        public void Initialize(Action onBack, Action onResetToDefault, Action<GameSettings, Enums.SettingsReloadingParam> onSave)
         {
             base.Initialize(onBack);
+            this.onResetToDefault = onResetToDefault;
             this.onSave = onSave;
-            gameSettings = AllManagers.Instance.GameManager.GameSettings;
+            resetToDefaultButton.OnPressAction += OnResetValuesToDefault;
+            resetButton.OnPressAction += LoadInputValues;
             saveButton.OnPressAction += Save;
             InitInputValues();
         }
+        
+        protected override void SelectDefaultButton() => backButton.Select();
+        protected override void ResetPanel() => LoadInputValues();
 
         private void InitInputValues()
         {
@@ -48,6 +57,13 @@ namespace UI.MenuPanels
             markerColors.Initialize();
             stagesDelay.Initialize();
             
+            LoadInputValues();
+        }
+
+        private void LoadInputValues()
+        {
+            GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+
             size.Setting = gameSettings.Size;
             tileDimensions.Setting = gameSettings.TileDimensions;
             tileColors.Setting = gameSettings.TileColors;
@@ -55,21 +71,45 @@ namespace UI.MenuPanels
             stagesDelay.Setting = gameSettings.AlgorithmStagesDelay;
         }
 
+        private void OnResetValuesToDefault() =>
+            AllManagers.Instance.UIManager.OpenPopupConfirmation
+            (
+                ResetToDefaultPopupHeader,
+                ResetToDefaultPopupMessage,
+                ResetValuesToDefault
+            );
+
+        private void ResetValuesToDefault()
+        {
+            onResetToDefault.Invoke();
+            LoadInputValues();
+        }
+
         private void Save()
         {
-            gameSettings = new GameSettings(
+            GameSettings gameSettings = new GameSettings
+            (
                 size.Setting,
                 tileDimensions.Setting,
                 tileColors.Setting,
                 markerColors.Setting,
                 stagesDelay.Setting,
-                permittedDirections);
+                permittedDirections
+            );
 
-            onSave.Invoke(gameSettings);
+            Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
+            if (size.AnyValueChanged() || tileDimensions.AnyValueChanged())
+            {
+                reloadingParam = Enums.SettingsReloadingParam.Maze;
+            }
+            else if (tileColors.AnyColorChanged())
+            {
+                reloadingParam = Enums.SettingsReloadingParam.TileColors;
+            }
+            
+            onSave.Invoke(gameSettings, reloadingParam);
         }
         
-        protected override void SelectDefaultButton() => backButton.Select();
-
         [Serializable]
         private class Size
         {
@@ -84,7 +124,7 @@ namespace UI.MenuPanels
                 width.Initialize(PopupHeaderWidth);
                 length.Initialize(PopupHeaderLength);
             }
-            
+
             public Vector2Int Setting
             {
                 get => new Vector2Int(width.Value, length.Value);
@@ -94,6 +134,8 @@ namespace UI.MenuPanels
                     length.Value = value.y;
                 }
             }
+
+            public bool AnyValueChanged() => width.ChangedThroughPopup || length.ChangedThroughPopup;
         }
 
         [Serializable]
@@ -125,6 +167,8 @@ namespace UI.MenuPanels
                     height.Value = value.Height;
                 }
             }
+
+            public bool AnyValueChanged() => length.ChangedThroughPopup || height.ChangedThroughPopup;
         }
 
         [Serializable]
@@ -174,6 +218,19 @@ namespace UI.MenuPanels
                     highlight.Value = value.HighlightValue;
 
                 }
+            }
+
+            public bool AnyColorChanged()
+            {
+                foreach (Entry entry in entries)
+                {
+                    if (entry.Value.ChangedThroughPopup)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
         }
         
@@ -278,30 +335,18 @@ namespace UI.MenuPanels
             private T value;
             private string popupHeader;
 
+            public bool ChangedThroughPopup { get; private set; }
+            
             public T Value
             {
                 get => value;
                 set
                 {
-                    this.value = value;
-                    switch (value)
-                    {
-                        case float floatValue:
-                            button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
-                            break;
-                        
-                        case int intValue:
-                            button.Label = intValue.ToString();
-                            break;
-                        
-                        case Color colorValue:
-                            button.Color = colorValue;
-                            button.Label = Utility.ColorToHexString(colorValue, true);
-                            break;
-                    }
+                    ChangedThroughPopup = false;
+                    SetValueInternal(value);
                 }
             }
-            
+
             public void Initialize(string popupHeader)
             {
                 this.popupHeader = popupHeader;
@@ -314,8 +359,32 @@ namespace UI.MenuPanels
                 value,
                 OnClosePanel
             );
-            
-            private void OnClosePanel(T value) => Value = value;
+
+            private void OnClosePanel(T value)
+            {
+                SetValueInternal(value);
+                ChangedThroughPopup = true;
+            }
+
+            private void SetValueInternal(T value)
+            {
+                this.value = value;
+                switch (value)
+                {
+                    case float floatValue:
+                        button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
+                        break;
+
+                    case int intValue:
+                        button.Label = intValue.ToString();
+                        break;
+
+                    case Color colorValue:
+                        button.Color = colorValue;
+                        button.Label = Utility.ColorToHexString(colorValue, true);
+                        break;
+                }
+            }
         }
     }
 }

@@ -16,16 +16,27 @@ namespace UI
         private readonly Stack<BasePanel> openedPanelsHistory = new Stack<BasePanel>();
         private Action onExit;
 
-        public void Initialize(Action mazeModificationAction, Action bfsAction, Action aStarAction, Action<GameSettings> saveSettingsAction, Action onExit)
+        public void Initialize(
+            Action mazeModificationAction,
+            Action bfsAction,
+            Action aStarAction,
+            Action resetToDefaultAction,
+            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction,
+            Action onExit)
         {
-            InitializePanels(mazeModificationAction, bfsAction, aStarAction, saveSettingsAction);
+            InitializePanels(mazeModificationAction, bfsAction, aStarAction, resetToDefaultAction, saveSettingsAction);
             this.onExit = onExit;
             mainPanel.gameObject.SetActive(false);
             settingsPanel.gameObject.SetActive(false);
             SwitchPanel(mainPanel);
         }
 
-        private void InitializePanels(Action mazeModificationAction, Action bfsAction, Action aStarAction, Action<GameSettings> saveSettingsAction)
+        private void InitializePanels(
+            Action mazeModificationAction,
+            Action bfsAction,
+            Action aStarAction,
+            Action resetToDefaultAction,
+            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction)
         {
             mainPanel.Initialize
             (
@@ -39,7 +50,7 @@ namespace UI
                     { Enums.MainMenuPanelButtonTag.Help, OpenHelpPanel }
                 }
             );
-            settingsPanel.Initialize(Back, saveSettingsAction);
+            settingsPanel.Initialize(Back, resetToDefaultAction, saveSettingsAction);
             // helpPanel.Initialize(initData);
         }
 

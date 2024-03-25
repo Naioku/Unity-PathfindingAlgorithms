@@ -12,7 +12,9 @@ namespace UI
     [Serializable]
     public class UIManager
     {
-        private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
+        [SerializeField] private SpawnManager<Enums.UISpawned> uiSpawner;
+        [SerializeField] private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
+        
         private PopupPanel currentPopupPanel;
         private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new Dictionary<Type, Enums.UIPopupType>
         {
@@ -30,22 +32,22 @@ namespace UI
         
         public void Awake()
         {
-            uiPopupSpawner = AllManagers.Instance.UIPopupSpawner;
+            uiSpawner.Awake();
+            uiPopupSpawner.Awake();
             CreatePanels();
         }
 
         public void CreatePanels()
         {
-            SpawnManager<Enums.UISpawned> uiSpawner = AllManagers.Instance.UISpawner;
             MenuController = uiSpawner.CreateObject<MenuController>(Enums.UISpawned.Menu);
             HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.UISpawned.HUDMazeModification);
             HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.UISpawned.HUDAlgorithm);
         }
         
-        public void OpenPopupInfo(string header, string info)
+        public void OpenPopupInfo(string header, string message)
         {
             InfoPanel infoPanel = uiPopupSpawner.CreateObject<InfoPanel>(Enums.UIPopupType.Info);
-            infoPanel.Initialize(header, CloseCurrentPopupPanel, info);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, message);
             OpenPanel(infoPanel);
         }
 
@@ -64,6 +66,17 @@ namespace UI
             infoPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
             {
                 onClose.Invoke(result);
+                CloseCurrentPopupPanel();
+            });
+            OpenPanel(infoPanel);
+        }
+        
+        public void OpenPopupConfirmation(string header, string message, Action onConfirm)
+        {
+            ConfirmationPanel infoPanel = uiPopupSpawner.CreateObject<ConfirmationPanel>(Enums.UIPopupType.Confirmation);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, message, () =>
+            {
+                onConfirm.Invoke();
                 CloseCurrentPopupPanel();
             });
             OpenPanel(infoPanel);

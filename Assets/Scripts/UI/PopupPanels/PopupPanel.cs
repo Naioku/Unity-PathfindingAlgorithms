@@ -8,6 +8,9 @@ namespace UI.PopupPanels
 {
     public abstract class PopupPanel : MonoBehaviour
     {
+        private const string ConfirmationButtonText = "OK";
+        private const string ClosingButtonText = "X";
+        
         [SerializeField] protected Button confirmationButton;
         [SerializeField] protected Button closeButton;
         [SerializeField] private TextMeshProUGUI headerLabel;
@@ -28,7 +31,11 @@ namespace UI.PopupPanels
             inputManager.PopupMap.OnCloseData.Canceled -= Close;
         }
 
-        protected void Initialize(string header, Action onClose)
+        protected void Initialize(
+            string header,
+            Action onClose,
+            string confirmationButtonText = ConfirmationButtonText,
+            string closingButtonText = ClosingButtonText)
         {
             headerLabel.text = header;
             this.onClose = onClose;

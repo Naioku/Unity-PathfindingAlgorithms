@@ -67,3 +67,16 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 74f873b6bda46b94cbbb6c7bb5ae76f5, type: 2}
     - {fileID: 11400000, guid: 1e6c957c882d30e42a93fc0e32613cf7, type: 2}
     - {fileID: 11400000, guid: 4d195f455d168ef498ef505365f6baf2, type: 2}
+    - {fileID: 11400000, guid: abcb7ff9e811c464f8bda14dea97dce6, type: 2}
+  <UIManager>k__BackingField:
+    uiSpawner:
+      spawnableItems:
+      - {fileID: 11400000, guid: 7d0cdc07499e7604386f5f64c9fb543d, type: 2}
+      - {fileID: 11400000, guid: 577cddea07f827e4ab75692d1ff6e0f2, type: 2}
+      - {fileID: 11400000, guid: 8454cc5de660d7a41a0aceb237bc90e3, type: 2}
+    uiPopupSpawner:
+      spawnableItems:
+      - {fileID: 11400000, guid: 74f873b6bda46b94cbbb6c7bb5ae76f5, type: 2}
+      - {fileID: 11400000, guid: 1e6c957c882d30e42a93fc0e32613cf7, type: 2}
+      - {fileID: 11400000, guid: 4d195f455d168ef498ef505365f6baf2, type: 2}
+      - {fileID: 11400000, guid: abcb7ff9e811c464f8bda14dea97dce6, type: 2}

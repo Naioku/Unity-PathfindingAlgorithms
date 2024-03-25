@@ -65,7 +65,7 @@ public static class Enums
     
     public enum UIPopupType
     {
-        Info, InputFloat, InputColor, InputChoice
+        Info, InputFloat, InputColor, InputChoice, Confirmation
     }
 
     #endregion
@@ -94,6 +94,11 @@ public static class Enums
     }
 
     #endregion
+
+    public enum SettingsReloadingParam
+    {
+        None, Maze, TileColors
+    }
     
     public enum CameraMovementMode
     {

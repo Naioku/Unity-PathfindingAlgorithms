@@ -15,7 +15,7 @@ namespace StageMachineSystem.Algorithm
 
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameSettings.GetPermittedDirections();
-        private readonly GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+        private readonly GameManager gameManager = AllManagers.Instance.GameManager;
         protected Maze maze;
         private Vector2Int startCoords;
         private Vector2Int destinationCoords;
@@ -68,7 +68,7 @@ namespace StageMachineSystem.Algorithm
             }
             else
             {
-                return new WaitForSeconds(gameSettings.AlgorithmStagesDelay.GetValue(algorithmStageDelay));
+                return new WaitForSeconds(gameManager.GameSettings.AlgorithmStagesDelay.GetValue(algorithmStageDelay));
             }
         }
 
@@ -117,7 +117,7 @@ namespace StageMachineSystem.Algorithm
         {
             currentNode = null;
             CursorPosition = null;
-            maze.Refresh();
+            maze.RefreshMarkers();
             nodesToCheck.Clear();
         }
 

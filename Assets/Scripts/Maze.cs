@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Maze : MonoBehaviour, IInteractable
 {
-    private GameSettings gameSettings;
     private Transform tilesParent;
     private readonly List<Tile> tileInstances = new List<Tile>();
     private Interaction cursorInteraction;
@@ -20,8 +19,6 @@ public class Maze : MonoBehaviour, IInteractable
     
     private void Start()
     {
-        gameSettings = AllManagers.Instance.GameManager.GameSettings;
-
         CreateGameBoard();
         InitializeInteractions();
     }
@@ -83,11 +80,19 @@ public class Maze : MonoBehaviour, IInteractable
         return TryGetMarkerType(coords, out Enums.MarkerType currentNodeMarkerType) && currentNodeMarkerType == type;
     }
     
-    public void Refresh()
+    public void RefreshMarkers()
     {
         foreach (Tile tile in tileInstances)
         {
             tile.MarkerType = Enums.MarkerType.None;
+        }
+    }
+    
+    public void RefreshTiles()
+    {
+        foreach (Tile tile in tileInstances)
+        {
+            tile.UpdateTileView(Enums.TileViewUpdateParam.Material);
         }
     }
     
@@ -106,6 +111,8 @@ public class Maze : MonoBehaviour, IInteractable
 
     private void CreateTiles()
     {
+        GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+        
         for (int i = 0; i < gameSettings.Size.y; i++)
         {
             for (int j = 0; j < gameSettings.Size.x; j++)
@@ -125,6 +132,8 @@ public class Maze : MonoBehaviour, IInteractable
 
     private void CreateInteraction()
     {
+        GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+
         Vector3 interactionSize = new Vector3
         (
             gameSettings.Size.x * gameSettings.TileDimensions.Length,
@@ -167,6 +176,8 @@ public class Maze : MonoBehaviour, IInteractable
 
     private Tile GetTile(Vector2Int coords)
     {
+        GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+
         if (coords.x < 0 || coords.x >= gameSettings.Size.x) return null;
         if (coords.y < 0 || coords.y >= gameSettings.Size.y) return null;
 
@@ -199,6 +210,8 @@ public class Maze : MonoBehaviour, IInteractable
     
     private Vector2Int CalculateCoords(Vector3 hitPoint)
     {
+        GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+
         Vector3 localHitPoint = tilesParent.InverseTransformPoint(hitPoint);
         Vector2Int coordinates = new Vector2Int
         (

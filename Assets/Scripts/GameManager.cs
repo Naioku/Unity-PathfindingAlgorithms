@@ -32,6 +32,7 @@ public class GameManager
             StartMazeModification,
             StartBFS,
             StartAStar,
+            ResetSettingsToDefault,
             UpdateGameSettings,
             Quit
         );
@@ -97,12 +98,25 @@ public class GameManager
     private void StartMazeModification() => EnterStage(new MazeModificationStage());
     private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
-    private void UpdateGameSettings(GameSettings settings)
+    private void ResetSettingsToDefault()
+    {
+        gameSettings = defaultSettingsSO.Settings;
+        ReloadMaze();
+    }
+
+    private void UpdateGameSettings(GameSettings settings, Enums.SettingsReloadingParam reloadParam)
     {
         gameSettings = settings;
-        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
-        stageMachine.Maze = maze;
+        switch (reloadParam)
+        {
+            case Enums.SettingsReloadingParam.Maze:
+                ReloadMaze();
+                break;
+            
+            case Enums.SettingsReloadingParam.TileColors:
+                ReloadTileColors();
+                break;
+        }
     }
 
     private void Quit()
@@ -113,4 +127,13 @@ public class GameManager
         Application.Quit();
 #endif
     }
+
+    private void ReloadMaze()
+    {
+        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        stageMachine.Maze = maze;
+    }
+
+    private void ReloadTileColors() => maze.RefreshTiles();
 }

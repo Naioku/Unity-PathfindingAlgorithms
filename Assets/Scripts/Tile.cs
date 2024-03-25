@@ -7,9 +7,24 @@ public class Tile : MonoBehaviour
     private Enums.MarkerType markerType = Enums.MarkerType.None;
     private bool highlighted;
 
-    private GameSettings gameSettings;
+    private GameManager gameManager;
     private MeshRenderer permanentMeshRenderer;
     private MeshRenderer markerMeshRenderer;
+    
+    public void Initialize(Vector2Int initialCoords, TileDimensions tileDimensions)
+    {
+        name = $"({initialCoords.x}; {initialCoords.y})";
+        Vector3 scale = new Vector3(tileDimensions.Length, tileDimensions.Height, tileDimensions.Length);
+        transform.localScale = scale;
+        TileType = Enums.TileType.Default;
+    }
+
+    private void Awake()
+    {
+        gameManager = AllManagers.Instance.GameManager;
+        permanentMeshRenderer = transform.Find("TileMesh").GetComponent<MeshRenderer>();
+        markerMeshRenderer = transform.Find("MarkerMesh").GetComponent<MeshRenderer>();
+    }
     
     public Enums.TileType TileType
     {
@@ -42,26 +57,11 @@ public class Tile : MonoBehaviour
             UpdateTileView(Enums.TileViewUpdateParam.Highlight);
         }
     }
-    
-    public void Initialize(Vector2Int initialCoords, TileDimensions tileDimensions)
-    {
-        name = $"({initialCoords.x}; {initialCoords.y})";
-        Vector3 scale = new Vector3(tileDimensions.Length, tileDimensions.Height, tileDimensions.Length);
-        transform.localScale = scale;
-        TileType = Enums.TileType.Default;
-    }
-
-    private void Awake()
-    {
-        gameSettings = AllManagers.Instance.GameManager.GameSettings;
-        permanentMeshRenderer = transform.Find("TileMesh").GetComponent<MeshRenderer>();
-        markerMeshRenderer = transform.Find("MarkerMesh").GetComponent<MeshRenderer>();
-    }
 
     public void Select() => Highlighted = true;
     public void Deselect() => Highlighted = false;
     
-    private void UpdateTileView(Enums.TileViewUpdateParam parameters)
+    public void UpdateTileView(Enums.TileViewUpdateParam parameters)
     {
         if ((parameters & Enums.TileViewUpdateParam.Material) > 0) UpdateMaterial();
         if ((parameters & Enums.TileViewUpdateParam.Highlight) > 0) UpdateHighlight();
@@ -70,13 +70,13 @@ public class Tile : MonoBehaviour
         
         void UpdateMaterial()
         {
-            permanentMeshRenderer.material.color = gameSettings.TileColors.GetValue(tileType);
+            permanentMeshRenderer.material.color = gameManager.GameSettings.TileColors.GetValue(tileType);
         }
 
         void UpdateHighlight()
         {
             Color color = permanentMeshRenderer.material.color;
-            float highlightValue = gameSettings.TileColors.HighlightValue;
+            float highlightValue = gameManager.GameSettings.TileColors.HighlightValue;
 
             if (highlighted)
             {
@@ -93,8 +93,8 @@ public class Tile : MonoBehaviour
     
     private void UpdateMarkerView()
     {
-        Color color = gameSettings.MarkerColors.GetValue(markerType);
-        color.a = gameSettings.MarkerColors.Alpha;
+        Color color = gameManager.GameSettings.MarkerColors.GetValue(markerType);
+        color.a = gameManager.GameSettings.MarkerColors.Alpha;
         markerMeshRenderer.material.color = color;
         markerMeshRenderer.gameObject.SetActive(markerType != Enums.MarkerType.None);
     }
