@@ -60,7 +60,9 @@ public static class Enums
     {
         Menu,
         HUDMazeModification,
-        HUDAlgorithm
+        HUDAlgorithm,
+        SettingGroupEntry,
+        SettingEntry
     }
     
     public enum UIPopupType

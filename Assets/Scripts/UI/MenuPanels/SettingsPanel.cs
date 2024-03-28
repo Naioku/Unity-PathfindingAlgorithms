@@ -11,11 +11,15 @@ namespace UI.MenuPanels
     {
         private const string ResetToDefaultPopupHeader = "Reset to default?";
         private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
+        
         [SerializeField] private Button resetButton;
         [SerializeField] private Button resetToDefaultButton;
         [SerializeField] private Button saveButton;
-        [SerializeField] private Size size;
-        [SerializeField] private TileDimensionsPanel tileDimensions;
+        [SerializeField] private Transform uiSettingGroupEntriesTiles;
+        [SerializeField] private Transform uiSettingGroupEntriesAlgorithms;
+        
+        private readonly Size size = new Size();
+        private readonly TileDimensionsPanel tileDimensions = new TileDimensionsPanel();
         [SerializeField] private TileColorsPanel tileColors;
         [SerializeField] private MarkerColorsPanel markerColors;
         [SerializeField] private AlgorithmStagesDelayPanel stagesDelay;
@@ -51,11 +55,11 @@ namespace UI.MenuPanels
 
         private void InitInputValues()
         {
-            size.Initialize();
-            tileDimensions.Initialize();
-            tileColors.Initialize();
-            markerColors.Initialize();
-            stagesDelay.Initialize();
+            size.Initialize().SetParent(uiSettingGroupEntriesTiles);
+            tileDimensions.Initialize().SetParent(uiSettingGroupEntriesTiles);
+            tileColors.Initialize().SetParent(uiSettingGroupEntriesTiles);
+            markerColors.Initialize().SetParent(uiSettingGroupEntriesTiles);
+            stagesDelay.Initialize().SetParent(uiSettingGroupEntriesAlgorithms);
             
             LoadInputValues();
         }
@@ -110,19 +114,27 @@ namespace UI.MenuPanels
             onSave.Invoke(gameSettings, reloadingParam);
         }
         
-        [Serializable]
         private class Size
         {
-            private const string PopupHeaderWidth = "Board width";
-            private const string PopupHeaderLength = "Board length";
+            private const string SettingGroupName = "Board size";
+            private const string SettingNameWidth = "Width";
+            private const string SettingNameLength = "Length";
             
-            [SerializeField] private SettingEntry<int> width;
-            [SerializeField] private SettingEntry<int> length;
+            private readonly SettingEntry<int> width = new SettingEntry<int>();
+            private readonly SettingEntry<int> length = new SettingEntry<int>();
 
-            public void Initialize()
+            public UISettingGroup Initialize()
             {
-                width.Initialize(PopupHeaderWidth);
-                length.Initialize(PopupHeaderLength);
+                List<UISetting> uiSettings = new List<UISetting>
+                {
+                    width.Initialize(SettingGroupName, SettingNameWidth),
+                    length.Initialize(SettingGroupName, SettingNameLength)
+                };
+                
+                UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
+                uiSettingGroup.Initialize(SettingGroupName, uiSettings);
+
+                return uiSettingGroup;
             }
 
             public Vector2Int Setting
@@ -138,19 +150,27 @@ namespace UI.MenuPanels
             public bool AnyValueChanged() => width.ChangedThroughPopup || length.ChangedThroughPopup;
         }
 
-        [Serializable]
         private class TileDimensionsPanel
         {
-            private const string PopupHeaderLength = "Tile length";
-            private const string PopupHeaderHeight = "Tile height";
+            private const string SettingGroupName = "Tile dimensions";
+            private const string SettingNameLength = "Tile length";
+            private const string SettingNameHeight = "Tile height";
             
-            [SerializeField] private SettingEntry<float> length;
-            [SerializeField] private SettingEntry<float> height;
+            private readonly SettingEntry<float> length = new SettingEntry<float>();
+            private readonly SettingEntry<float> height = new SettingEntry<float>();
 
-            public void Initialize()
+            public UISettingGroup Initialize()
             {
-                length.Initialize(PopupHeaderLength);
-                height.Initialize(PopupHeaderHeight);
+                List<UISetting> uiSettings = new List<UISetting>
+                {
+                    length.Initialize(SettingGroupName, SettingNameLength),
+                    height.Initialize(SettingGroupName, SettingNameHeight)
+                };
+                
+                UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
+                uiSettingGroup.Initialize(SettingGroupName, uiSettings);
+                
+                return uiSettingGroup;
             }
 
             public TileDimensions Setting
@@ -172,28 +192,35 @@ namespace UI.MenuPanels
         }
 
         [Serializable]
-        private class TileColorsPanel : SettingChange<Enums.TileType, SettingEntry<Color>>
+        private class TileColorsPanel : SettingGroupChangeInGame<Enums.TileType, SettingEntry<Color>>
         {
-            private const string PopupHeaderHighlight = "Cursor highlight";
+            private const string SettingGroupName = "Tile colors";
+            private const string SettingNameHighlight = "Cursor highlight";
             
-            [SerializeField] private SettingEntry<float> highlight;
-
+            private readonly SettingEntry<float> highlight = new SettingEntry<float>();
             private readonly Dictionary<Enums.TileType, string> headersLookup = new Dictionary<Enums.TileType, string>
             {
-                { Enums.TileType.Default, "Default color" },
-                { Enums.TileType.Start, "Start color" },
-                { Enums.TileType.Destination, "Destination color" },
-                { Enums.TileType.Blocked, "Blocked color" }
+                { Enums.TileType.Default, "Default" },
+                { Enums.TileType.Start, "Start" },
+                { Enums.TileType.Destination, "Destination" },
+                { Enums.TileType.Blocked, "Blocked" }
             };
             
-            public override void Initialize()
+            public new UISettingGroup Initialize()
             {
                 base.Initialize();
-                foreach (Entry entry in entries)
+                
+                List<UISetting> uiSettings = new List<UISetting>();
+                foreach (Enums.TileType key in keysOrder)
                 {
-                    entry.Value.Initialize(headersLookup[entry.Key]);
+                    uiSettings.Add(valuesLookup[key].Initialize(SettingGroupName, headersLookup[key]));
                 }
-                highlight.Initialize(PopupHeaderHighlight);
+                uiSettings.Add(highlight.Initialize(SettingGroupName, SettingNameHighlight));
+                
+                UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
+                uiSettingGroup.Initialize(SettingGroupName, uiSettings);
+                
+                return uiSettingGroup;
             }
             
             public TileColors Setting
@@ -201,7 +228,7 @@ namespace UI.MenuPanels
                 get
                 {
                     TileColors setting = new TileColors();
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                         setting.SetValue(entry.Key, entry.Value.Value);
                     }
@@ -211,7 +238,7 @@ namespace UI.MenuPanels
                 }
                 set
                 {
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                        entry.Value.Value = value.GetValue(entry.Key);
                     }
@@ -222,7 +249,7 @@ namespace UI.MenuPanels
 
             public bool AnyColorChanged()
             {
-                foreach (Entry entry in entries)
+                foreach (var entry in valuesLookup)
                 {
                     if (entry.Value.ChangedThroughPopup)
                     {
@@ -235,12 +262,12 @@ namespace UI.MenuPanels
         }
         
         [Serializable]
-        private class MarkerColorsPanel : SettingChange<Enums.MarkerType, SettingEntry<Color>>
+        private class MarkerColorsPanel : SettingGroupChangeInGame<Enums.MarkerType, SettingEntry<Color>>
         {
-            private const string PopupHeaderAlpha = "Marker alpha";
+            private const string SettingGroupName = "Marker colors";
+            private const string SettingNameAlpha = "Marker alpha";
             
-            [SerializeField] private SettingEntry<float> alpha;
-
+            private readonly SettingEntry<float> alpha = new SettingEntry<float>();
             private readonly Dictionary<Enums.MarkerType, string> headersLookup = new Dictionary<Enums.MarkerType, string>
             {
                 { Enums.MarkerType.None, "None color" },
@@ -249,14 +276,21 @@ namespace UI.MenuPanels
                 { Enums.MarkerType.Path, "Path color" }
             };
             
-            public override void Initialize()
+            public new UISettingGroup Initialize()
             {
                 base.Initialize();
-                foreach (Entry entry in entries)
+                
+                List<UISetting> uiSettings = new List<UISetting>();
+                foreach (Enums.MarkerType key in keysOrder)
                 {
-                    entry.Value.Initialize(headersLookup[entry.Key]);
+                    uiSettings.Add(valuesLookup[key].Initialize(SettingGroupName, headersLookup[key]));
                 }
-                alpha.Initialize(PopupHeaderAlpha);
+                uiSettings.Add(alpha.Initialize(SettingGroupName, SettingNameAlpha));
+                
+                UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
+                uiSettingGroup.Initialize(SettingGroupName, uiSettings);
+                
+                return uiSettingGroup;
             }
             
             public MarkerColors Setting
@@ -264,7 +298,7 @@ namespace UI.MenuPanels
                 get
                 {
                     MarkerColors setting = new MarkerColors();
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                         setting.SetValue(entry.Key, entry.Value.Value);
                     }
@@ -274,7 +308,7 @@ namespace UI.MenuPanels
                 }
                 set
                 {
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                         entry.Value.Value = value.GetValue(entry.Key);
                     }
@@ -285,23 +319,32 @@ namespace UI.MenuPanels
         }
         
         [Serializable]
-        private class AlgorithmStagesDelayPanel : SettingChange<Enums.AlgorithmStageDelay, SettingEntry<float>>
+        private class AlgorithmStagesDelayPanel : SettingGroupChangeInGame<Enums.AlgorithmStageDelay, SettingEntry<float>>
         {
+            private const string SettingGroupName = "Algorithm stages delay";
+
             private readonly Dictionary<Enums.AlgorithmStageDelay, string> headersLookup = new Dictionary<Enums.AlgorithmStageDelay, string>
             {
-                { Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing, "Delay after new node enqueuing" },
-                { Enums.AlgorithmStageDelay.AfterNodeChecking, "Delay after node checkin" },
-                { Enums.AlgorithmStageDelay.AfterCursorPositionChange, "Delay after cursor position change" },
-                { Enums.AlgorithmStageDelay.AfterPathNodeSetting, "Delay after path node setting" }
+                { Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing, "After new node enqueuing" },
+                { Enums.AlgorithmStageDelay.AfterNodeChecking, "After node checkin" },
+                { Enums.AlgorithmStageDelay.AfterCursorPositionChange, "After cursor position change" },
+                { Enums.AlgorithmStageDelay.AfterPathNodeSetting, "After path node setting" }
             };
             
-            public override void Initialize()
+            public new UISettingGroup Initialize()
             {
                 base.Initialize();
-                foreach (Entry entry in entries)
+                
+                List<UISetting> uiSettings = new List<UISetting>();
+                foreach (Enums.AlgorithmStageDelay key in keysOrder)
                 {
-                    entry.Value.Initialize(headersLookup[entry.Key]);
+                    uiSettings.Add(valuesLookup[key].Initialize(SettingGroupName, headersLookup[key]));
                 }
+                
+                UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
+                uiSettingGroup.Initialize(SettingGroupName, uiSettings);
+                
+                return uiSettingGroup;
             }
             
             public AlgorithmStagesDelay Setting
@@ -309,7 +352,7 @@ namespace UI.MenuPanels
                 get
                 {
                     AlgorithmStagesDelay setting = new AlgorithmStagesDelay();
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                         setting.SetValue(entry.Key, entry.Value.Value);
                     }
@@ -318,11 +361,10 @@ namespace UI.MenuPanels
                 }
                 set
                 {
-                    foreach (Entry entry in entries)
+                    foreach (var entry in valuesLookup)
                     {
                         entry.Value.Value = value.GetValue(entry.Key);
                     }
-
                 }
             }
         }
@@ -330,8 +372,7 @@ namespace UI.MenuPanels
         [Serializable]
         private class SettingEntry<T>
         {
-            [SerializeField] private Button button;
-            
+            private UISetting uiSetting;
             private T value;
             private string popupHeader;
 
@@ -347,10 +388,13 @@ namespace UI.MenuPanels
                 }
             }
 
-            public void Initialize(string popupHeader)
+            public UISetting Initialize(string groupName, string name)
             {
-                this.popupHeader = popupHeader;
-                button.OnPressAction += ButtonAction;
+                popupHeader = $"{groupName}: {name}";
+                uiSetting = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISetting>(Enums.UISpawned.SettingEntry);
+                uiSetting.Initialize(name, ButtonAction);
+                
+                return uiSetting;
             }
 
             private void ButtonAction() => AllManagers.Instance.UIManager.OpenPopupInput
@@ -372,16 +416,16 @@ namespace UI.MenuPanels
                 switch (value)
                 {
                     case float floatValue:
-                        button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
+                        uiSetting.Button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
                         break;
 
                     case int intValue:
-                        button.Label = intValue.ToString();
+                        uiSetting.Button.Label = intValue.ToString();
                         break;
 
                     case Color colorValue:
-                        button.Color = colorValue;
-                        button.Label = Utility.ColorToHexString(colorValue, true);
+                        uiSetting.Button.Color = colorValue;
+                        uiSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
                         break;
                 }
             }

@@ -24,6 +24,7 @@ namespace UI
             // { typeof(float), Enums.UIPopupType.InputChoice }
         };
 
+        public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
         public MenuController MenuController { get; private set; }
         public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
         public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }

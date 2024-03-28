@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Settings
 {
     [Serializable]
-    public abstract class SettingChange<TKey, TValue> where TKey : Enum
+    public abstract class SettingGroupChangeDefault<TKey, TValue> where TKey : Enum
     {
         [SerializeField] protected Entry[] entries;
         protected Dictionary<TKey, TValue> valuesLookup = new Dictionary<TKey, TValue>();
@@ -20,7 +20,15 @@ namespace Settings
                 valuesLookup.Add(entry.Key, entry.Value);
             }
         }
-            
+
+        protected void SetLookupValues(Setting<TKey, TValue> setting)
+        {
+            foreach (var entry in valuesLookup)
+            {
+                setting.SetValue(entry.Key, entry.Value);
+            }
+        }
+
         [Serializable]
         protected class Entry
         {
