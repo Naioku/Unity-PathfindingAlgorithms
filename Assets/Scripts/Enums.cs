@@ -6,18 +6,18 @@ public static class Enums
 
     public enum TileType
     {
-        Default,
-        Blocked,
-        Start,
-        Destination
+        Default = 0,
+        Start = 1,
+        Destination = 2,
+        Blocked = 3
     }
     
     public enum MarkerType
     {
-        None,
-        ReadyToCheck,
-        Checked,
-        Path
+        None = 0,
+        ReadyToCheck = 1,
+        Checked = 2,
+        Path = 3
     }
     
     [Flags]
@@ -94,13 +94,31 @@ public static class Enums
         Backward = -1,
         Forward = 1,
     }
+    
+    public enum ButtonsNaviDirection
+    {
+        Up, Down, Left, Right
+    }
 
     #endregion
+
+    #region Settings
 
     public enum SettingsReloadingParam
     {
         None, Maze, TileColors
     }
+    
+    // public enum SettingGroup
+    // {
+    //     Size,
+    //     TileDimensions,
+    //     TileColors,
+    //     MarkerColors,
+    //     AlgorithmStagesDelay
+    // }
+    
+    #endregion
     
     public enum CameraMovementMode
     {
@@ -109,10 +127,10 @@ public static class Enums
 
     public enum AlgorithmStageDelay
     {
-        AfterNewNodeEnqueuing,
-        AfterNodeChecking,
-        AfterCursorPositionChange,
-        AfterPathNodeSetting
+        AfterNewNodeEnqueuing = 0,
+        AfterNodeChecking = 1,
+        AfterCursorPositionChange = 2,
+        AfterPathNodeSetting = 3
     }
     
     public enum PermittedDirection

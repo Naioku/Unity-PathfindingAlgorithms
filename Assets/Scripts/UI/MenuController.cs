@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Settings;
 using UI.MenuPanels;
+using UI.MenuPanels.Settings;
 using UnityEngine;
 
 namespace UI

@@ -562,6 +562,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ef0327af-134b-4239-8e44-30990c48b5fc",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "340af6d1-0c5b-4733-a220-1d5042088a3a",
                     "path": "<Keyboard>/escape",
                     "interactions": "",

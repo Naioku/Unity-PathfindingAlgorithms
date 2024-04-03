@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using UI.Buttons;
+using UI;
 using UnityEngine;
 
 public static class Utility
@@ -23,24 +23,24 @@ public static class Utility
         return result;
     }
     
-    public static Button CalculateButtonForNavigation<T>(int beginIndex, Enums.Direction direction, int buttonsCount, List<T> buttons) where T : Button
+    public static T CalculateNextSelectableElement<T>(int beginIndex, Enums.Direction direction, int elementsCount, List<T> elements) where T : class, ISelectableElement
     {
-        Button result = null;
+        T result = null;
         int intDirection = (int)direction;
         int nextIndex = beginIndex;
         int j = 0;
         do
         {
-            nextIndex = CorrectIndex(nextIndex + intDirection, buttonsCount);
+            nextIndex = CorrectIndex(nextIndex + intDirection, elementsCount);
                 
-            if (buttons[nextIndex].IsInteractable())
+            if (elements[nextIndex].IsInteractable())
             {
-                result = buttons[nextIndex];
+                result = elements[nextIndex];
                 break;
             }
                 
             j++;
-        } while (j < buttonsCount);
+        } while (j < elementsCount);
 
         return result;
     }

@@ -129,8 +129,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 728, y: 0}
-  m_SizeDelta: {x: 1456, y: 0}
+  m_AnchoredPosition: {x: 727.5, y: 0}
+  m_SizeDelta: {x: 1455, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6697864589310480231
 MonoBehaviour:
@@ -457,8 +457,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 758, y: 0}
-  m_SizeDelta: {x: 1456, y: 0}
+  m_AnchoredPosition: {x: 757.5, y: 0}
+  m_SizeDelta: {x: 1455, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &353023089600566378
 MonoBehaviour:
@@ -755,8 +755,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 758, y: 0}
-  m_SizeDelta: {x: 1456, y: 0}
+  m_AnchoredPosition: {x: 757.5, y: 0}
+  m_SizeDelta: {x: 1455, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7135589986549261475
 MonoBehaviour:
@@ -832,8 +832,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 728, y: 0}
-  m_SizeDelta: {x: 1456, y: 0}
+  m_AnchoredPosition: {x: 727.5, y: 0}
+  m_SizeDelta: {x: 1455, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2435387611213378398
 MonoBehaviour:
@@ -1085,13 +1085,13 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
       objectReference: {fileID: 8194444993393801859}
+    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 7390620727804672234}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!114 &8947808189977808718 stripped
@@ -1214,13 +1214,9 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
-      objectReference: {fileID: 2319547171072590276}
+      objectReference: {fileID: 8947808189977808718}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!114 &8194444993393801859 stripped
@@ -1340,13 +1336,13 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
-      objectReference: {fileID: 8194444993393801859}
+      objectReference: {fileID: 8947808189977808718}
+    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 2319547171072590276}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!114 &7390620727804672234 stripped
@@ -1402,7 +1398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5075092648311358545, guid: 1f60c8a1701be8045a722fa754c76b8b, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1456
+      value: 1455
       objectReference: {fileID: 0}
     - target: {fileID: 5075092648311358545, guid: 1f60c8a1701be8045a722fa754c76b8b, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1438,7 +1434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5075092648311358545, guid: 1f60c8a1701be8045a722fa754c76b8b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 728
+      value: 727.5
       objectReference: {fileID: 0}
     - target: {fileID: 5075092648311358545, guid: 1f60c8a1701be8045a722fa754c76b8b, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1625,14 +1621,22 @@ MonoBehaviour:
   resetButton: {fileID: 8947808189977808718}
   resetToDefaultButton: {fileID: 7390620727804672234}
   saveButton: {fileID: 2319547171072590276}
-  uiSettingGroupEntriesTiles: {fileID: 5755644769384575914}
-  uiSettingGroupEntriesAlgorithms: {fileID: 7866876260947253166}
-  tileColors:
-    keysOrder: 00000000020000000300000001000000
-  markerColors:
-    keysOrder: 00000000010000000200000003000000
-  stagesDelay:
-    keysOrder: 00000000010000000200000003000000
+  tilesPanel:
+    uiParent: {fileID: 5755644769384575914}
+    settingGroupsOrder: 00000000010000000200000003000000
+    size:
+      settingsOrder: 0000000001000000
+    tileDimensions:
+      settingsOrder: 0000000001000000
+    tileColors:
+      settingsOrder: 0000000001000000020000000300000004000000
+    markerColors:
+      settingsOrder: 0000000001000000020000000300000004000000
+  algorithmsPanel:
+    uiParent: {fileID: 7866876260947253166}
+    settingGroupsOrder: 00000000
+    stagesDelay:
+      settingsOrder: 00000000010000000200000003000000
 --- !u!1001 &9146062594675544040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1737,13 +1741,9 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
-      propertyPath: m_Navigation.m_SelectOnDown
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6835893192719912492, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
       value: 
-      objectReference: {fileID: 8194444993393801859}
+      objectReference: {fileID: 7390620727804672234}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
 --- !u!114 &2319547171072590276 stripped

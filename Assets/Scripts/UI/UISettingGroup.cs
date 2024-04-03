@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -14,19 +12,13 @@ namespace UI
 
         private void Awake() => rectTransform = transform.GetComponent<RectTransform>();
 
-        public void Initialize(string labelText, List<UISetting> entries)
+        public void Initialize(Transform parent, string labelText)
         {
             label.text = labelText;
-            foreach (UISetting entry in entries)
-            {
-                entry.SetParent(inputEntries);
-            }
-        }
-
-        public void SetParent(Transform parent)
-        {
             transform.SetParent(parent);
             rectTransform.localScale = new Vector3(1, 1, 1);
         }
+
+        public void AddChild(UISetting child) => child.SetParent(inputEntries);
     }
 }

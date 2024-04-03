@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Buttons
 {
-    public class Button : Selectable, IPointerClickHandler, ISubmitHandler
+    public class Button : Selectable, IPointerClickHandler, ISubmitHandler, ISelectableElement
     {
         private TextMeshProUGUI textLabel;
         
@@ -44,18 +45,55 @@ namespace UI.Buttons
             }
         }
 
-        public void SetNavigation(
-            Selectable onUp = null,
-            Selectable onDown = null,
-            Selectable onLeft = null,
-            Selectable onRight = null)
+        public void SetNavigation(Enums.ButtonsNaviDirection direction, Selectable selectable)
         {
-            navigation = new Navigation
+            Navigation navigation = this.navigation;
+            
+            switch (direction)
             {
-                selectOnUp = onUp,
-                selectOnDown = onDown,
-                selectOnLeft = onLeft,
-                selectOnRight = onRight,
+                case Enums.ButtonsNaviDirection.Up:
+                    navigation.selectOnUp = selectable;
+                    break;
+                
+                case Enums.ButtonsNaviDirection.Down:
+                    navigation.selectOnDown = selectable;
+                    break;
+                
+                case Enums.ButtonsNaviDirection.Left:
+                    navigation.selectOnLeft = selectable;
+                    break;
+                
+                case Enums.ButtonsNaviDirection.Right:
+                    navigation.selectOnRight = selectable;
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+            
+            this.navigation = navigation;
+        }
+        
+        // public void SetNavigation(Dictionary<Enums.ButtonsNaviDirection, Selectable> data)
+        // {
+        //     navigation = new Navigation
+        //     {
+        //         selectOnUp = data[Enums.ButtonsNaviDirection.Up],
+        //         selectOnDown = data[Enums.ButtonsNaviDirection.Down],
+        //         selectOnLeft = data[Enums.ButtonsNaviDirection.Left],
+        //         selectOnRight = data[Enums.ButtonsNaviDirection.Right],
+        //         mode = Navigation.Mode.Explicit
+        //     };
+        // }
+        
+        public void SetNavigation(SelectableNavigation navigation)
+        {
+            this.navigation = new Navigation
+            {
+                selectOnUp = navigation.OnUp,
+                selectOnDown = navigation.OnDown,
+                selectOnLeft = navigation.OnLeft,
+                selectOnRight = navigation.OnRight,
                 mode = Navigation.Mode.Explicit
             };
         }
