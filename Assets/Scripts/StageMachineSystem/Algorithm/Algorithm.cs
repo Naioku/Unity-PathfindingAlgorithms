@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Settings;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 using WaitForSeconds = UpdateSystem.CoroutineSystem.WaitForSeconds;

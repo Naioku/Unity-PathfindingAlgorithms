@@ -1621,7 +1621,7 @@ MonoBehaviour:
   resetButton: {fileID: 8947808189977808718}
   resetToDefaultButton: {fileID: 7390620727804672234}
   saveButton: {fileID: 2319547171072590276}
-  tilesPanel:
+  tilesGroupPanel:
     uiParent: {fileID: 5755644769384575914}
     settingGroupsOrder: 00000000010000000200000003000000
     size:
@@ -1632,7 +1632,7 @@ MonoBehaviour:
       settingsOrder: 0000000001000000020000000300000004000000
     markerColors:
       settingsOrder: 0000000001000000020000000300000004000000
-  algorithmsPanel:
+  algorithmsGroupPanel:
     uiParent: {fileID: 7866876260947253166}
     settingGroupsOrder: 00000000
     stagesDelay:

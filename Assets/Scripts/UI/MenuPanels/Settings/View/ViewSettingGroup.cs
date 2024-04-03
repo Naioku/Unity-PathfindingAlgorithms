@@ -1,9 +1,9 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.MenuPanels.Settings.View
 {
-    public class UISettingGroup : MonoBehaviour
+    public class ViewSettingGroup : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private Transform inputEntries;
@@ -19,6 +19,6 @@ namespace UI
             rectTransform.localScale = new Vector3(1, 1, 1);
         }
 
-        public void AddChild(UISetting child) => child.SetParent(inputEntries);
+        public void AddChild(ViewSetting child) => child.SetParent(inputEntries);
     }
 }

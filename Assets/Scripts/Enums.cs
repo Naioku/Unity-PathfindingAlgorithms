@@ -109,15 +109,6 @@ public static class Enums
         None, Maze, TileColors
     }
     
-    // public enum SettingGroup
-    // {
-    //     Size,
-    //     TileDimensions,
-    //     TileColors,
-    //     MarkerColors,
-    //     AlgorithmStagesDelay
-    // }
-    
     #endregion
     
     public enum CameraMovementMode

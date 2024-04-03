@@ -1,12 +1,11 @@
 ﻿using System;
 using TMPro;
 using UI.Buttons;
-using UI.MenuPanels.Settings;
 using UnityEngine;
 
-namespace UI
+namespace UI.MenuPanels.Settings.View
 {
-    public class UISetting : MonoBehaviour
+    public class ViewSetting : MonoBehaviour
     {
         [Header("Programmer")]
         [SerializeField] private TextMeshProUGUI label;
@@ -31,7 +30,7 @@ namespace UI
             rectTransform.localScale = new Vector3(1, 1, 1);
         }
 
-        public void SetNavigation(UISettingNavigation navigation)
+        public void SetNavigation(ViewSettingNavigation navigation)
         {
             SelectableNavigation selectableNavigation = new SelectableNavigation();
 

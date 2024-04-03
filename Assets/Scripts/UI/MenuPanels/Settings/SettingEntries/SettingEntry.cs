@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
+using UI.MenuPanels.Settings.View;
 using UnityEngine;
 
-namespace UI.MenuPanels.Settings
+namespace UI.MenuPanels.Settings.SettingEntries
 {
     public class SettingEntry<T> : ISettingEntry
     {
@@ -10,7 +11,7 @@ namespace UI.MenuPanels.Settings
         private readonly string name;
 
         public bool ChangedThroughPopup { get; private set; }
-        public UISetting UISetting { get; private set; }
+        public ViewSetting ViewSetting { get; private set; }
 
         public SettingEntry(string groupName, string name)
         {
@@ -28,21 +29,21 @@ namespace UI.MenuPanels.Settings
             }
         }
 
-        public UISetting InitializeUI()
+        public ViewSetting InitializeUI()
         {
-            UISetting = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISetting>(Enums.UISpawned.SettingEntry);
-            UISetting.Initialize(name, ButtonAction);
+            ViewSetting = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSetting>(Enums.UISpawned.SettingEntry);
+            ViewSetting.Initialize(name, ButtonAction);
             
-            return UISetting;
+            return ViewSetting;
         }
 
-        public void SetNavigation(SettingNavigation navigation) => UISetting.SetNavigation(new UISettingNavigation
+        public void SetNavigation(SettingNavigation navigation) => ViewSetting.SetNavigation(new ViewSettingNavigation
         {
-            OnUp = navigation.OnUp?.UISetting,
-            OnDown = navigation.OnDown?.UISetting
+            OnUp = navigation.OnUp?.ViewSetting,
+            OnDown = navigation.OnDown?.ViewSetting
         });
 
-        public bool IsInteractable() => UISetting.IsInteractable();
+        public bool IsInteractable() => ViewSetting.IsInteractable();
 
         private void ButtonAction() => AllManagers.Instance.UIManager.OpenPopupInput
         (
@@ -63,16 +64,16 @@ namespace UI.MenuPanels.Settings
             switch (value)
             {
                 case float floatValue:
-                    UISetting.Button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
+                    ViewSetting.Button.Label = floatValue.ToString(CultureInfo.CurrentCulture);
                     break;
 
                 case int intValue:
-                    UISetting.Button.Label = intValue.ToString();
+                    ViewSetting.Button.Label = intValue.ToString();
                     break;
 
                 case Color colorValue:
-                    UISetting.Button.Color = colorValue;
-                    UISetting.Button.Label = Utility.ColorToHexString(colorValue, true);
+                    ViewSetting.Button.Color = colorValue;
+                    ViewSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
                     break;
             }
         }

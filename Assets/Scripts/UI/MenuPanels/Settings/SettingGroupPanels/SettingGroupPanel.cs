@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace UI.MenuPanels.Settings
+namespace UI.MenuPanels.Settings.SettingGroupPanels
 {
     public abstract class SettingGroupPanel<T> : SettingGroupPanel
     {

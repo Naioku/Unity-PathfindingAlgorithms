@@ -1,4 +1,6 @@
-﻿namespace UI.MenuPanels.Settings
+﻿using UI.MenuPanels.Settings.SettingEntries;
+
+namespace UI.MenuPanels.Settings
 {
     public struct SettingNavigation
     {

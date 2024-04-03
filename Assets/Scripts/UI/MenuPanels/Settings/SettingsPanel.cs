@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Settings;
+using UI.MenuPanels.Settings.SettingGroupPanels;
 using UnityEngine;
 using Button = UI.Buttons.Button;
 
@@ -15,8 +16,8 @@ namespace UI.MenuPanels.Settings
         [SerializeField] private Button resetToDefaultButton;
         [SerializeField] private Button saveButton;
 
-        [SerializeField] private TilesPanel tilesPanel;
-        [SerializeField] private AlgorithmsPanel algorithmsPanel;
+        [SerializeField] private TilesGroupPanel tilesGroupPanel;
+        [SerializeField] private AlgorithmsGroupPanel algorithmsGroupPanel;
         
         // Todo: Temporary.
         private Enums.PermittedDirection[] permittedDirections = {
@@ -52,39 +53,39 @@ namespace UI.MenuPanels.Settings
 
         private void BuildLookups()
         {
-            tilesPanel.BuildLookup();
-            algorithmsPanel.BuildLookup();
+            tilesGroupPanel.BuildLookup();
+            algorithmsGroupPanel.BuildLookup();
         }
 
         private void InitUIs()
         {
-            tilesPanel.InitUI();
-            algorithmsPanel.InitUI();
+            tilesGroupPanel.InitUI();
+            algorithmsGroupPanel.InitUI();
         }
 
         private void InitButtonsNavigation()
         {
-            backButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesPanel.FirstGroup.FirstSetting.UISetting.Button);
-            resetButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesPanel.FirstGroup.FirstSetting.UISetting.Button);
-            resetToDefaultButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesPanel.FirstGroup.FirstSetting.UISetting.Button);
-            saveButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesPanel.FirstGroup.FirstSetting.UISetting.Button);
+            backButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            resetButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            resetToDefaultButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            saveButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
             
-            tilesPanel.InitButtonsNavigation(null, algorithmsPanel);
-            algorithmsPanel.InitButtonsNavigation(tilesPanel, null);
+            tilesGroupPanel.InitButtonsNavigation(null, algorithmsGroupPanel);
+            algorithmsGroupPanel.InitButtonsNavigation(tilesGroupPanel, null);
             
-            // Todo: When You will delete upper buttons, delete also this line.
-            tilesPanel.FirstGroup.FirstSetting.UISetting.Button.SetNavigation(Enums.ButtonsNaviDirection.Up, saveButton);
+            // Todo: When You delete upper buttons, delete also this line.
+            tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button.SetNavigation(Enums.ButtonsNaviDirection.Up, saveButton);
         }
 
         private void LoadInputValues()
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
 
-            tilesPanel.SizeSetting = gameSettings.Size;
-            tilesPanel.TileDimensionsSetting = gameSettings.TileDimensions;
-            tilesPanel.TileColorsSetting = gameSettings.TileColors;
-            tilesPanel.MarkerColorsSetting = gameSettings.MarkerColors;
-            algorithmsPanel.StagesDelaySetting = gameSettings.AlgorithmStagesDelay;
+            tilesGroupPanel.SizeSetting = gameSettings.Size;
+            tilesGroupPanel.TileDimensionsSetting = gameSettings.TileDimensions;
+            tilesGroupPanel.TileColorsSetting = gameSettings.TileColors;
+            tilesGroupPanel.MarkerColorsSetting = gameSettings.MarkerColors;
+            algorithmsGroupPanel.StagesDelaySetting = gameSettings.AlgorithmStagesDelay;
         }
         
         private void OnResetValuesToDefault() =>
@@ -105,23 +106,23 @@ namespace UI.MenuPanels.Settings
         {
             GameSettings gameSettings = new GameSettings
             (
-                tilesPanel.SizeSetting,
-                tilesPanel.TileDimensionsSetting,
-                tilesPanel.TileColorsSetting,
-                tilesPanel.MarkerColorsSetting,
-                algorithmsPanel.StagesDelaySetting,
+                tilesGroupPanel.SizeSetting,
+                tilesGroupPanel.TileDimensionsSetting,
+                tilesGroupPanel.TileColorsSetting,
+                tilesGroupPanel.MarkerColorsSetting,
+                algorithmsGroupPanel.StagesDelaySetting,
                 permittedDirections
             );
 
             Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
-            List<TilesPanel.SettingGroupName> settingGroupChangedValues = tilesPanel.ChangedValues;
+            List<TilesGroupPanel.SettingGroupName> settingGroupChangedValues = tilesGroupPanel.ChangedValues;
             
-            if (settingGroupChangedValues.Contains(TilesPanel.SettingGroupName.Size) ||
-                settingGroupChangedValues.Contains(TilesPanel.SettingGroupName.TileDimensions))
+            if (settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.Size) ||
+                settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.TileDimensions))
             {
                 reloadingParam = Enums.SettingsReloadingParam.Maze;
             }
-            else if (settingGroupChangedValues.Contains(TilesPanel.SettingGroupName.Size))
+            else if (settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.Size))
             {
                 reloadingParam = Enums.SettingsReloadingParam.TileColors;
             }

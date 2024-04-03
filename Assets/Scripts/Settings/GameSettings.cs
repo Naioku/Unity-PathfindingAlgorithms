@@ -63,28 +63,6 @@ namespace Settings
         public float Length;
         public float Height;
     }
-
-    // public class TileColors : Setting<Enums.SettingsTileColor, Color>
-    // {
-    //     private Setting<Enums.TileType, Color> tileTypesLookup = new Setting<Enums.TileType, Color>();
-    //     
-    //     public float HighlightValue;
-    //
-    //     public Color GetValue(Enums.TileType tileType)
-    //     {
-    //         
-    //     }
-    //
-    //     public void SetValue(Enums.TileType tileType)
-    //     {
-    //         
-    //     }
-    //     
-    //     public void SetValue(Enums.TileType tileType)
-    //     {
-    //         
-    //     }
-    // }
     
     public class TileColors : Setting<Enums.TileType, Color>
     {

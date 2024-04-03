@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UI.MenuPanels.Settings.SettingEntries;
+using UI.MenuPanels.Settings.View;
 using UnityEngine;
 
 namespace UI.MenuPanels.Settings
@@ -26,11 +28,11 @@ namespace UI.MenuPanels.Settings
 
         protected void InitUI(Transform uiParent, string settingGroupName)
         {
-            UISettingGroup uiSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<UISettingGroup>(Enums.UISpawned.SettingGroupEntry);
-            uiSettingGroup.Initialize(uiParent, settingGroupName);
+            ViewSettingGroup viewSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSettingGroup>(Enums.UISpawned.SettingGroupEntry);
+            viewSettingGroup.Initialize(uiParent, settingGroupName);
             foreach (TSetting key in settingsOrder)
             {
-                uiSettingGroup.AddChild(settingsLookup[key].InitializeUI());
+                viewSettingGroup.AddChild(settingsLookup[key].InitializeUI());
             }
         }
 
