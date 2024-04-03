@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48b594a6aca94eae8713583e55f5b0a8, type: 3}
   m_Name: InputPopupColor
   m_EditorClassIdentifier: 
-  uiName: 2
+  uiName: 3
   prefab: {fileID: 1581510332525018709, guid: f8c25b4a6b6741547856490ff8b63d4d, type: 3}

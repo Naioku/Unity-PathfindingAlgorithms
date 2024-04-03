@@ -67,7 +67,7 @@ public static class Enums
     
     public enum UIPopupType
     {
-        Info, InputFloat, InputColor, InputChoice, Confirmation
+        Info, InputFloat, InputInt, InputColor, InputChoice, Confirmation
     }
 
     #endregion

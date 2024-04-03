@@ -18,7 +18,7 @@ namespace UI
         private PopupPanel currentPopupPanel;
         private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new Dictionary<Type, Enums.UIPopupType>
         {
-            // { typeof(int), Enums.UIPopupType.InputInt },
+            { typeof(int), Enums.UIPopupType.InputInt },
             { typeof(float), Enums.UIPopupType.InputFloat },
             { typeof(Color), Enums.UIPopupType.InputColor },
             // { typeof(float), Enums.UIPopupType.InputChoice }

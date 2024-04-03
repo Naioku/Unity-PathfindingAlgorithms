@@ -638,7 +638,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806035336545991117, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}
       propertyPath: buttonTag
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}
@@ -861,7 +861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806035336545991117, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}
       propertyPath: buttonTag
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}
@@ -978,7 +978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806035336545991117, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}
       propertyPath: buttonTag
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17ae8d276575841409ba7422d069ffd4, type: 3}

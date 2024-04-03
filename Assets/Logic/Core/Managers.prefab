@@ -69,5 +69,6 @@ MonoBehaviour:
       spawnableItems:
       - {fileID: 11400000, guid: 74f873b6bda46b94cbbb6c7bb5ae76f5, type: 2}
       - {fileID: 11400000, guid: 1e6c957c882d30e42a93fc0e32613cf7, type: 2}
+      - {fileID: 11400000, guid: acf06ccdc147b7049b0d0d515a168c4a, type: 2}
       - {fileID: 11400000, guid: 4d195f455d168ef498ef505365f6baf2, type: 2}
       - {fileID: 11400000, guid: abcb7ff9e811c464f8bda14dea97dce6, type: 2}
