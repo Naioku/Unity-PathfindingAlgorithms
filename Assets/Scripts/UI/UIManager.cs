@@ -88,7 +88,7 @@ namespace UI
             AllManagers.Instance.InputManager.EnablePopupMode();
             currentPopupPanel = createdPanel;
             lastStaticPanelGameObject = EventSystem.current.currentSelectedGameObject;
-            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(currentPopupPanel.SelectableOnOpen);
         }
 
         private void CloseCurrentPopupPanel()

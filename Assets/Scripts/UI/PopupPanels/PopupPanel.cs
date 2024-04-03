@@ -1,8 +1,8 @@
 ﻿using System;
 using CustomInputSystem;
 using TMPro;
-using UI.Buttons;
 using UnityEngine;
+using Button = UI.Buttons.Button;
 
 namespace UI.PopupPanels
 {
@@ -16,6 +16,7 @@ namespace UI.PopupPanels
         [SerializeField] private TextMeshProUGUI headerLabel;
 
         private Action onClose;
+        public virtual GameObject SelectableOnOpen => null;
 
         protected virtual void Awake()
         {

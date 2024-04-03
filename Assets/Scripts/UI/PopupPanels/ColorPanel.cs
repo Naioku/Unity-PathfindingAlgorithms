@@ -22,6 +22,8 @@ namespace UI.PopupPanels
         private float currentHue;
         private float currentSat;
         private float currentVal;
+        
+        public override GameObject SelectableOnOpen => hexInputField.gameObject;
 
         protected override void Awake()
         {
