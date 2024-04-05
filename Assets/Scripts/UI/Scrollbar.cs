@@ -6,36 +6,39 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    /// <summary>
+    /// Unity <see cref="UnityEngine.UI.Scrollbar"/> without Selectable class and other IMHO unnecessary stuff.
+    /// </summary>
+    [AddComponentMenu("Naioku/UI/Naioku Scrollbar")]
     [ExecuteAlways]
     [RequireComponent(typeof(RectTransform))]
-    public class Scrollbar : UIBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IInitializePotentialDragHandler, ICanvasElement
+    public class Scrollbar :
+        UIBehaviour,
+        IPointerDownHandler,
+        IPointerUpHandler,
+        IBeginDragHandler,
+        IDragHandler,
+        IInitializePotentialDragHandler,
+        ICanvasElement
     {
-        [SerializeField] private RectTransform m_HandleRect;
-        [SerializeField] private Direction m_Direction = Direction.LeftToRight;
-        [SerializeField, Range(0f, 1f)] private float m_Value;
-        [SerializeField, Range(0f, 1f)] private float m_Size = 0.2f;
-        [SerializeField, Range(0, 11)] private int m_NumberOfSteps = 0;
+        [SerializeField] private RectTransform handleRect;
+        [SerializeField] private Direction direction = Direction.LeftToRight;
+        [SerializeField, Range(0f, 1f)] private float value;
+        [SerializeField, Range(0f, 1f)] private float size = 0.2f;
+        [SerializeField, Range(0, 11)] private int numberOfSteps;
         
-        private RectTransform m_ContainerRect;
-
-        // The offset from handle position to mouse down position
-        private Vector2 m_Offset = Vector2.zero;
+        private RectTransform containerRect;
+        private Vector2 offset = Vector2.zero; // The offset from handle position to mouse down position
+        private Coroutine pointerDownRepeat;
+        private bool isPointerDownAndNotDragging;
+        private bool delayedUpdateVisuals; // This "delayed" mechanism is required for case 1037681.
         
-        // field is never assigned warning
-#pragma warning disable 649
-        private DrivenRectTransformTracker m_Tracker;
-#pragma warning restore 649
-        private Coroutine m_PointerDownRepeat;
-        private bool isPointerDownAndNotDragging = false;
-
-        // This "delayed" mechanism is required for case 1037681.
-        private bool m_DelayedUpdateVisuals = false;
-
+        public event Action<float> OnValueChanged;
         
-        public event Action<float> OnValueChanged; 
-
         // Size of each step.
-        public float StepSize => m_NumberOfSteps > 1 ? 1f / (m_NumberOfSteps - 1) : 0.1f;
+        public float StepSize => numberOfSteps > 1 ? 1f / (numberOfSteps - 1) : 0.1f;
+        private AxisEnum Axis => direction == Direction.LeftToRight || direction == Direction.RightToLeft ? AxisEnum.Horizontal : AxisEnum.Vertical;
+        private bool ReverseValue => direction == Direction.RightToLeft || direction == Direction.TopToBottom;
 
 
         /// <summary>
@@ -45,9 +48,12 @@ namespace UI
         {
             get
             {
-                float val = m_Value;
-                if (m_NumberOfSteps > 1)
-                    val = Mathf.Round(val * (m_NumberOfSteps - 1)) / (m_NumberOfSteps - 1);
+                float val = value;
+                if (numberOfSteps > 1)
+                {
+                    val = Mathf.Round(val * (numberOfSteps - 1)) / (numberOfSteps - 1);
+                }
+
                 return val;
             }
             set => Set(value);
@@ -55,15 +61,14 @@ namespace UI
 
         public float Size
         {
-            get => m_Size;
-            set => m_Size = value;
+            set => size = value;
         }
 
         /// <summary>
         /// Set the value of the scrollbar without invoking onValueChanged callback.
         /// </summary>
         /// <param name="input">The new value for the scrollbar.</param>
-        public virtual void SetValueWithoutNotify(float input)
+        public void SetValueWithoutNotify(float input)
         {
             Set(input, false);
         }
@@ -71,15 +76,15 @@ namespace UI
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
-            m_Size = Mathf.Clamp01(m_Size);
+            size = Mathf.Clamp01(size);
 
             //This can be invoked before OnEnabled is called. So we shouldn't be accessing other objects, before OnEnable is called.
             if (IsActive())
             {
                 UpdateCachedReferences();
-                Set(m_Value, false);
+                Set(value, false);
                 // Update rects (in next update) since other things might affect them even if value didn't change.
-                m_DelayedUpdateVisuals = true;
+                delayedUpdateVisuals = true;
             }
 
             if (!UnityEditor.PrefabUtility.IsPartOfPrefabAsset(this) && !Application.isPlaying)
@@ -87,7 +92,9 @@ namespace UI
         }
 #endif
 
-        public virtual void Rebuild(CanvasUpdate executing)
+        #region ICanvasElement
+
+        public void Rebuild(CanvasUpdate executing)
         {
 #if UNITY_EDITOR
             if (executing == CanvasUpdate.Prelayout)
@@ -95,62 +102,50 @@ namespace UI
 #endif
         }
 
-        /// <summary>
-        /// See ICanvasElement.LayoutComplete.
-        /// </summary>
-        public virtual void LayoutComplete()
-        {}
+        public void LayoutComplete() {}
+        public void GraphicUpdateComplete() {}
 
-        /// <summary>
-        /// See ICanvasElement.GraphicUpdateComplete.
-        /// </summary>
-        public virtual void GraphicUpdateComplete()
-        {}
+        #endregion
 
         protected override void OnEnable()
         {
             UpdateCachedReferences();
-            Set(m_Value, false);
+            Set(value, false);
             // Update rects since they need to be initialized correctly.
             UpdateVisuals();
         }
 
-        protected override void OnDisable()
-        {
-            m_Tracker.Clear();
-        }
-
+        // Todo: Change to my custom updater. Remember that this is called in editor too.
         /// <summary>
         /// Update the rect based on the delayed update visuals.
         /// Got around issue of calling sendMessage from onValidate.
         /// </summary>
-        protected virtual void Update()
+        protected void Update()
         {
-            if (m_DelayedUpdateVisuals)
+            if (delayedUpdateVisuals)
             {
-                m_DelayedUpdateVisuals = false;
+                delayedUpdateVisuals = false;
                 UpdateVisuals();
             }
         }
 
-        void UpdateCachedReferences()
+        private void UpdateCachedReferences()
         {
-            if (m_HandleRect && m_HandleRect.parent != null)
-                m_ContainerRect = m_HandleRect.parent.GetComponent<RectTransform>();
+            if (handleRect && handleRect.parent != null)
+                containerRect = handleRect.parent.GetComponent<RectTransform>();
             else
-                m_ContainerRect = null;
+                containerRect = null;
         }
 
-        void Set(float input, bool sendCallback = true)
+        private void Set(float input, bool sendCallback = true)
         {
-            float currentValue = m_Value;
+            float currentValue = value;
 
             // bugfix (case 802330) clamp01 input in callee before calling this function, this allows inertia from dragging content to go past extremities without being clamped
-            m_Value = input;
+            value = input;
 
             // If the stepped value doesn't match the last one, it's time to update
-            if (currentValue == Value)
-                return;
+            if (Mathf.Approximately(currentValue, Value)) return;
 
             UpdateVisuals();
             if (sendCallback)
@@ -160,64 +155,51 @@ namespace UI
             }
         }
 
-        protected void OnRectTransformDimensionsChange()
+        protected override void OnRectTransformDimensionsChange()
         {
             //This can be invoked before OnEnabled is called. So we shouldn't be accessing other objects, before OnEnable is called.
-            if (!IsActive())
-                return;
+            if (!IsActive()) return;
 
             UpdateVisuals();
         }
-
-        enum Axis
-        {
-            Horizontal = 0,
-            Vertical = 1
-        }
-
-        Axis axis => m_Direction == Direction.LeftToRight || m_Direction == Direction.RightToLeft ? Axis.Horizontal : Axis.Vertical;
-        bool reverseValue => m_Direction == Direction.RightToLeft || m_Direction == Direction.TopToBottom;
 
         // Force-update the scroll bar. Useful if you've changed the properties and want it to update visually.
         private void UpdateVisuals()
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
-                UpdateCachedReferences();
-#endif
-            m_Tracker.Clear();
-
-            if (m_ContainerRect != null)
             {
-                m_Tracker.Add(this, m_HandleRect, DrivenTransformProperties.Anchors);
+                UpdateCachedReferences();
+            }
+#endif
+
+            if (containerRect != null)
+            {
                 Vector2 anchorMin = Vector2.zero;
                 Vector2 anchorMax = Vector2.one;
 
-                float movement = Mathf.Clamp01(Value) * (1 - m_Size);
-                if (reverseValue)
+                float movement = Mathf.Clamp01(Value) * (1 - size);
+                if (ReverseValue)
                 {
-                    anchorMin[(int)axis] = 1 - movement - m_Size;
-                    anchorMax[(int)axis] = 1 - movement;
+                    anchorMin[(int)Axis] = 1 - movement - size;
+                    anchorMax[(int)Axis] = 1 - movement;
                 }
                 else
                 {
-                    anchorMin[(int)axis] = movement;
-                    anchorMax[(int)axis] = movement + m_Size;
+                    anchorMin[(int)Axis] = movement;
+                    anchorMax[(int)Axis] = movement + size;
                 }
 
-                m_HandleRect.anchorMin = anchorMin;
-                m_HandleRect.anchorMax = anchorMax;
+                handleRect.anchorMin = anchorMin;
+                handleRect.anchorMax = anchorMax;
             }
         }
 
         // Update the scroll bar's position based on the mouse.
-        void UpdateDrag(PointerEventData eventData)
+        private void UpdateDrag(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
-                return;
-
-            if (m_ContainerRect == null)
-                return;
+            if (eventData.button != PointerEventData.InputButton.Left) return;
+            if (containerRect == null) return;
             
             // Doc states: Returns true except when the drag operation is not on the same display as it originated.
             // I don't want to figure it out now and don't know if it won't break some co-op functionality,
@@ -228,24 +210,25 @@ namespace UI
             //     return;
 
             Vector2 position = eventData.position;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(m_ContainerRect, position, eventData.pressEventCamera, out var localCursor))
-                return;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    containerRect,
+                    position,
+                    eventData.pressEventCamera,
+                    out Vector2 localCursor)) return;
 
-            Vector2 handleCenterRelativeToContainerCorner = localCursor - m_Offset - m_ContainerRect.rect.position;
-            Vector2 handleCorner = handleCenterRelativeToContainerCorner - (m_HandleRect.rect.size - m_HandleRect.sizeDelta) * 0.5f;
+            Vector2 handleCenterRelativeToContainerCorner = localCursor - offset - containerRect.rect.position;
+            Vector2 handleCorner = handleCenterRelativeToContainerCorner - (handleRect.rect.size - handleRect.sizeDelta) * 0.5f;
 
-            float parentSize = axis == 0 ? m_ContainerRect.rect.width : m_ContainerRect.rect.height;
-            float remainingSize = parentSize * (1 - m_Size);
-            if (remainingSize <= 0)
-                return;
+            float parentSize = Axis == 0 ? containerRect.rect.width : containerRect.rect.height;
+            float remainingSize = parentSize * (1 - size);
+            if (remainingSize <= 0) return;
 
             DoUpdateDrag(handleCorner, remainingSize);
         }
 
-        //this function is testable, it is found using reflection in ScrollbarClamp test
         private void DoUpdateDrag(Vector2 handleCorner, float remainingSize)
         {
-            switch (m_Direction)
+            switch (direction)
             {
                 case Direction.LeftToRight:
                     Set(Mathf.Clamp01(handleCorner.x / remainingSize));
@@ -262,43 +245,48 @@ namespace UI
             }
         }
 
-        private bool MayDrag(PointerEventData eventData)
-        {
-            return IsActive() && eventData.button == PointerEventData.InputButton.Left;
-        }
+        private bool MayDrag(PointerEventData eventData) => IsActive() && eventData.button == PointerEventData.InputButton.Left;
 
         /// <summary>
         /// Handling for when the scrollbar value is begin being dragged.
         /// </summary>
-        public virtual void OnBeginDrag(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData)
         {
             isPointerDownAndNotDragging = false;
 
             if (!MayDrag(eventData))
                 return;
 
-            if (m_ContainerRect == null)
+            if (containerRect == null)
                 return;
 
-            m_Offset = Vector2.zero;
-            if (RectTransformUtility.RectangleContainsScreenPoint(m_HandleRect, eventData.pointerPressRaycast.screenPosition, eventData.enterEventCamera))
+            offset = Vector2.zero;
+            if (!RectTransformUtility.RectangleContainsScreenPoint(
+                    handleRect,
+                    eventData.pointerPressRaycast.screenPosition,
+                    eventData.enterEventCamera)) return;
+            
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    handleRect,
+                    eventData.pointerPressRaycast.screenPosition,
+                    eventData.pressEventCamera,
+                    out Vector2 localMousePos))
             {
-                Vector2 localMousePos;
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(m_HandleRect, eventData.pointerPressRaycast.screenPosition, eventData.pressEventCamera, out localMousePos))
-                    m_Offset = localMousePos - m_HandleRect.rect.center;
+                offset = localMousePos - handleRect.rect.center;
             }
         }
 
         /// <summary>
         /// Handling for when the scrollbar value is dragged.
         /// </summary>
-        public virtual void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)
         {
-            if (!MayDrag(eventData))
-                return;
+            if (!MayDrag(eventData)) return;
 
-            if (m_ContainerRect != null)
+            if (containerRect != null)
+            {
                 UpdateDrag(eventData);
+            }
         }
 
         /// <summary>
@@ -306,13 +294,13 @@ namespace UI
         /// </summary>
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!MayDrag(eventData))
-                return;
+            if (!MayDrag(eventData)) return;
 
             isPointerDownAndNotDragging = true;
-            m_PointerDownRepeat = StartCoroutine(ClickRepeat(eventData.pointerPressRaycast.screenPosition, eventData.enterEventCamera));
+            pointerDownRepeat = StartCoroutine(ClickRepeat(eventData.pointerPressRaycast.screenPosition, eventData.enterEventCamera));
         }
 
+        // Todo: Change to custom coroutine.
         /// <summary>
         /// Coroutine function for handling continual press during Scrollbar.OnPointerDown.
         /// </summary>
@@ -320,47 +308,39 @@ namespace UI
         {
             while (isPointerDownAndNotDragging)
             {
-                if (!RectTransformUtility.RectangleContainsScreenPoint(m_HandleRect, screenPosition, camera))
+                if (!RectTransformUtility.RectangleContainsScreenPoint(handleRect, screenPosition, camera))
                 {
-                    Vector2 localMousePos;
-                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(m_HandleRect, screenPosition, camera, out localMousePos))
+                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(handleRect, screenPosition, camera, out Vector2 localMousePos))
                     {
-                        var axisCoordinate = axis == 0 ? localMousePos.x : localMousePos.y;
+                        float axisCoordinate = Axis == 0 ? localMousePos.x : localMousePos.y;
 
                         // modifying value depending on direction, fixes (case 925824)
 
-                        float change = axisCoordinate < 0 ? m_Size : -m_Size;
-                        Value += reverseValue ? change : -change;
+                        float change = axisCoordinate < 0 ? size : -size;
+                        Value += ReverseValue ? change : -change;
                     }
                 }
                 yield return new WaitForEndOfFrame();
             }
             
-            StopCoroutine(m_PointerDownRepeat);
-        }
-        
-        /// <summary>
-        /// Event triggered when pointer is released after pressing on the scrollbar.
-        /// </summary>
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            isPointerDownAndNotDragging = false;
+            StopCoroutine(pointerDownRepeat);
         }
 
-        /// <summary>
-        /// See: IInitializePotentialDragHandler.OnInitializePotentialDrag
-        /// </summary>
-        public virtual void OnInitializePotentialDrag(PointerEventData eventData)
+#region IHandlers
+        public void OnPointerUp(PointerEventData eventData) => isPointerDownAndNotDragging = false;
+        public void OnInitializePotentialDrag(PointerEventData eventData) => eventData.useDragThreshold = false;
+#endregion
+
+        private enum AxisEnum
         {
-            eventData.useDragThreshold = false;
+            Horizontal = 0,
+            Vertical = 1
         }
-        
-        
         
         /// <summary>
         /// Setting that indicates one of four directions the scrollbar will travel.
         /// </summary>
-        public enum Direction
+        private enum Direction
         {
             /// <summary>
             /// Starting position is the Left.
