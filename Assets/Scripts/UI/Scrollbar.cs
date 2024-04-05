@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,8 +13,6 @@ namespace UI
     [RequireComponent(typeof(RectTransform))]
     public class Scrollbar :
         UIBehaviour,
-        IPointerDownHandler,
-        IPointerUpHandler,
         IBeginDragHandler,
         IDragHandler,
         IInitializePotentialDragHandler,
@@ -29,8 +26,6 @@ namespace UI
         
         private RectTransform containerRect;
         private Vector2 offset = Vector2.zero; // The offset from handle position to mouse down position
-        private Coroutine pointerDownRepeat;
-        private bool isPointerDownAndNotDragging;
         private bool delayedUpdateVisuals; // This "delayed" mechanism is required for case 1037681.
         
         public event Action<float> OnValueChanged;
@@ -91,22 +86,7 @@ namespace UI
                 CanvasUpdateRegistry.RegisterCanvasElementForLayoutRebuild(this);
         }
 #endif
-
-        #region ICanvasElement
-
-        public void Rebuild(CanvasUpdate executing)
-        {
-#if UNITY_EDITOR
-            if (executing == CanvasUpdate.Prelayout)
-                OnValueChanged?.Invoke(Value);
-#endif
-        }
-
-        public void LayoutComplete() {}
-        public void GraphicUpdateComplete() {}
-
-        #endregion
-
+        
         protected override void OnEnable()
         {
             UpdateCachedReferences();
@@ -194,7 +174,66 @@ namespace UI
                 handleRect.anchorMax = anchorMax;
             }
         }
+        
+#region ICanvasElement
+        public void Rebuild(CanvasUpdate executing)
+        {
+#if UNITY_EDITOR
+            if (executing == CanvasUpdate.Prelayout)
+                OnValueChanged?.Invoke(Value);
+#endif
+        }
 
+        public void LayoutComplete() {}
+        public void GraphicUpdateComplete() {}
+#endregion
+        
+#region IHandlers
+        /// <summary>
+        /// Handling for when the scrollbar value is begin being dragged.
+        /// </summary>
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (!MayDrag(eventData))
+                return;
+
+            if (containerRect == null)
+                return;
+
+            offset = Vector2.zero;
+            if (!RectTransformUtility.RectangleContainsScreenPoint(
+                    handleRect,
+                    eventData.pointerPressRaycast.screenPosition,
+                    eventData.enterEventCamera)) return;
+            
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    handleRect,
+                    eventData.pointerPressRaycast.screenPosition,
+                    eventData.pressEventCamera,
+                    out Vector2 localMousePos))
+            {
+                offset = localMousePos - handleRect.rect.center;
+            }
+        }
+
+        /// <summary>
+        /// Handling for when the scrollbar value is dragged.
+        /// </summary>
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!MayDrag(eventData)) return;
+
+            if (containerRect != null)
+            {
+                UpdateDrag(eventData);
+            }
+        }
+
+        public void OnInitializePotentialDrag(PointerEventData eventData) => eventData.useDragThreshold = false;
+#endregion
+        
+        private bool MayDrag(PointerEventData eventData) => IsActive() && eventData.button == PointerEventData.InputButton.Left;
+        
         // Update the scroll bar's position based on the mouse.
         private void UpdateDrag(PointerEventData eventData)
         {
@@ -244,93 +283,7 @@ namespace UI
                     break;
             }
         }
-
-        private bool MayDrag(PointerEventData eventData) => IsActive() && eventData.button == PointerEventData.InputButton.Left;
-
-        /// <summary>
-        /// Handling for when the scrollbar value is begin being dragged.
-        /// </summary>
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            isPointerDownAndNotDragging = false;
-
-            if (!MayDrag(eventData))
-                return;
-
-            if (containerRect == null)
-                return;
-
-            offset = Vector2.zero;
-            if (!RectTransformUtility.RectangleContainsScreenPoint(
-                    handleRect,
-                    eventData.pointerPressRaycast.screenPosition,
-                    eventData.enterEventCamera)) return;
-            
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    handleRect,
-                    eventData.pointerPressRaycast.screenPosition,
-                    eventData.pressEventCamera,
-                    out Vector2 localMousePos))
-            {
-                offset = localMousePos - handleRect.rect.center;
-            }
-        }
-
-        /// <summary>
-        /// Handling for when the scrollbar value is dragged.
-        /// </summary>
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (!MayDrag(eventData)) return;
-
-            if (containerRect != null)
-            {
-                UpdateDrag(eventData);
-            }
-        }
-
-        /// <summary>
-        /// Event triggered when pointer is pressed down on the scrollbar.
-        /// </summary>
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (!MayDrag(eventData)) return;
-
-            isPointerDownAndNotDragging = true;
-            pointerDownRepeat = StartCoroutine(ClickRepeat(eventData.pointerPressRaycast.screenPosition, eventData.enterEventCamera));
-        }
-
-        // Todo: Change to custom coroutine.
-        /// <summary>
-        /// Coroutine function for handling continual press during Scrollbar.OnPointerDown.
-        /// </summary>
-        private IEnumerator ClickRepeat(Vector2 screenPosition, Camera camera)
-        {
-            while (isPointerDownAndNotDragging)
-            {
-                if (!RectTransformUtility.RectangleContainsScreenPoint(handleRect, screenPosition, camera))
-                {
-                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(handleRect, screenPosition, camera, out Vector2 localMousePos))
-                    {
-                        float axisCoordinate = Axis == 0 ? localMousePos.x : localMousePos.y;
-
-                        // modifying value depending on direction, fixes (case 925824)
-
-                        float change = axisCoordinate < 0 ? size : -size;
-                        Value += ReverseValue ? change : -change;
-                    }
-                }
-                yield return new WaitForEndOfFrame();
-            }
-            
-            StopCoroutine(pointerDownRepeat);
-        }
-
-#region IHandlers
-        public void OnPointerUp(PointerEventData eventData) => isPointerDownAndNotDragging = false;
-        public void OnInitializePotentialDrag(PointerEventData eventData) => eventData.useDragThreshold = false;
-#endregion
-
+        
         private enum AxisEnum
         {
             Horizontal = 0,
