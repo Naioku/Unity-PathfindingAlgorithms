@@ -12,7 +12,7 @@ namespace UI
     [ExecuteAlways]
     [RequireComponent(typeof(RectTransform))]
     public class Scrollbar :
-        UIBehaviour,
+        UIInteractable,
         IBeginDragHandler,
         IDragHandler,
         IInitializePotentialDragHandler,
@@ -71,6 +71,7 @@ namespace UI
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
+            base.OnValidate();
             size = Mathf.Clamp01(size);
 
             //This can be invoked before OnEnabled is called. So we shouldn't be accessing other objects, before OnEnable is called.
