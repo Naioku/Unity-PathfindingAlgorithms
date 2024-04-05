@@ -84,7 +84,9 @@ namespace UI
             }
 
             if (!UnityEditor.PrefabUtility.IsPartOfPrefabAsset(this) && !Application.isPlaying)
+            {
                 CanvasUpdateRegistry.RegisterCanvasElementForLayoutRebuild(this);
+            }
         }
 #endif
         
@@ -113,9 +115,13 @@ namespace UI
         private void UpdateCachedReferences()
         {
             if (handleRect && handleRect.parent != null)
+            {
                 containerRect = handleRect.parent.GetComponent<RectTransform>();
+            }
             else
+            {
                 containerRect = null;
+            }
         }
 
         private void Set(float input, bool sendCallback = true)
