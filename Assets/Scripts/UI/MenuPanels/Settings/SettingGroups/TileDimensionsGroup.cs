@@ -10,12 +10,14 @@ namespace UI.MenuPanels.Settings.SettingGroups
     [Serializable]
     public class TileDimensionsGroup : SettingGroupInGame<TileDimensionsGroup.SettingNameTileDimensions, TilesGroupPanel.SettingGroupName>
     {
-        private const string SettingGroupName = "Tile dimensions";
+        private const string DisplayName = "Tile dimensions";
 
-        private SettingEntry<float> length = new SettingEntry<float>(SettingGroupName, "Length");
-        private SettingEntry<float> height = new SettingEntry<float>(SettingGroupName, "Height");
+        private SettingEntry<float> length = new SettingEntry<float>(DisplayName, "Length");
+        private SettingEntry<float> height = new SettingEntry<float>(DisplayName, "Height");
             
         public override TilesGroupPanel.SettingGroupName Name => TilesGroupPanel.SettingGroupName.TileDimensions;
+        protected override string SettingGroupName => DisplayName;
+
         public TileDimensions Setting
         {
             get =>
@@ -30,8 +32,6 @@ namespace UI.MenuPanels.Settings.SettingGroups
                 height.Value = value.Height;
             }
         }
-
-        public override void InitUI(Transform uiParent) => InitUI(uiParent, SettingGroupName);
 
         public override void BuildLookup()
         {

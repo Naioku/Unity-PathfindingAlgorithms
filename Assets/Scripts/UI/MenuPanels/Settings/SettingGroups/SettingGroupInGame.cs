@@ -5,7 +5,7 @@ using UI.MenuPanels.Settings.SettingEntries;
 using UI.MenuPanels.Settings.View;
 using UnityEngine;
 
-namespace UI.MenuPanels.Settings
+namespace UI.MenuPanels.Settings.SettingGroups
 {
     [Serializable]
     public abstract class SettingGroupInGame<TSetting, TSettingGroup> : SettingGroupInGame where TSetting : Enum where TSettingGroup : Enum
@@ -13,9 +13,11 @@ namespace UI.MenuPanels.Settings
         [SerializeField] private List<TSetting> settingsOrder;
         
         protected Dictionary<TSetting, ISettingEntry> settingsLookup;
+        
         public abstract TSettingGroup Name { get; } // Todo: Is it necessary?
         public override ISettingEntry FirstSetting => settingsLookup[settingsOrder.First()];
         public override ISettingEntry LastSetting => settingsLookup[settingsOrder.Last()];
+        protected abstract string SettingGroupName { get; }
 
         public override bool AnyValueChanged()
         {
@@ -26,13 +28,22 @@ namespace UI.MenuPanels.Settings
             return true;
         }
 
-        protected void InitUI(Transform uiParent, string settingGroupName)
+        public override void InitUI(RectTransform uiParent, Action<EntryPosition> onSelect)
         {
-            ViewSettingGroup viewSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSettingGroup>(Enums.UISpawned.SettingGroupEntry);
-            viewSettingGroup.Initialize(uiParent, settingGroupName);
-            foreach (TSetting key in settingsOrder)
+            ViewSettingGroup viewSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSettingGroup>(Enums.UISpawned.SettingGroupEntry, uiParent);
+            viewSettingGroup.Initialize(SettingGroupName);
+            foreach (TSetting setting in settingsOrder)
             {
-                viewSettingGroup.AddChild(settingsLookup[key].InitializeUI());
+                settingsLookup[setting].InitUI(viewSettingGroup.UIParent);
+                settingsLookup[setting].OnSelect += onSelect;
+            }
+        }
+        
+        public override void CalcEntryPosRelatedTo(RectTransform contentRoot)
+        {
+            foreach (TSetting setting in settingsOrder)
+            {
+                settingsLookup[setting].CalcEntryPosRelatedTo(contentRoot);
             }
         }
 
@@ -87,7 +98,8 @@ namespace UI.MenuPanels.Settings
         public abstract ISettingEntry FirstSetting { get; }
         public abstract ISettingEntry LastSetting { get; }
         public abstract void BuildLookup();
-        public abstract void InitUI(Transform uiParent);
+        public abstract void InitUI(RectTransform uiParent, Action<EntryPosition> onSelect);
+        public abstract void CalcEntryPosRelatedTo(RectTransform contentRoot);
         public abstract void InitButtonsNavigation(SettingGroupInGame prevGroupSetting, SettingGroupInGame nextGroupSetting);
         public abstract bool AnyValueChanged();
     }

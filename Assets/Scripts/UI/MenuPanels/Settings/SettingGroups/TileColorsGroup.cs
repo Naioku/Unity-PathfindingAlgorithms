@@ -10,18 +10,20 @@ namespace UI.MenuPanels.Settings.SettingGroups
     [Serializable]
     public class TileColorsGroup : SettingGroupInGame<TileColorsGroup.SettingNameTileColors, TilesGroupPanel.SettingGroupName>
     {
-        private const string SettingGroupName = "Tile colors";
+        private const string DisplayName = "Tile colors";
         
         private Dictionary<Enums.TileType, SettingEntry<Color>> colors = new Dictionary<Enums.TileType, SettingEntry<Color>>
         {
-            { Enums.TileType.Default, new SettingEntry<Color>(SettingGroupName, "Default") },
-            { Enums.TileType.Start, new SettingEntry<Color>(SettingGroupName, "Start") },
-            { Enums.TileType.Destination, new SettingEntry<Color>(SettingGroupName, "Destination") },
-            { Enums.TileType.Blocked, new SettingEntry<Color>(SettingGroupName, "Blocked") }
+            { Enums.TileType.Default, new SettingEntry<Color>(DisplayName, "Default") },
+            { Enums.TileType.Start, new SettingEntry<Color>(DisplayName, "Start") },
+            { Enums.TileType.Destination, new SettingEntry<Color>(DisplayName, "Destination") },
+            { Enums.TileType.Blocked, new SettingEntry<Color>(DisplayName, "Blocked") }
         };
-        private readonly SettingEntry<float> highlight = new SettingEntry<float>(SettingGroupName, "Cursor highlight");
+        private readonly SettingEntry<float> highlight = new SettingEntry<float>(DisplayName, "Cursor highlight");
         
         public override TilesGroupPanel.SettingGroupName Name => TilesGroupPanel.SettingGroupName.TileColors;
+        protected override string SettingGroupName => DisplayName;
+
         public TileColors Setting
         {
             get
@@ -46,8 +48,6 @@ namespace UI.MenuPanels.Settings.SettingGroups
             }
         }
         
-        public override void InitUI(Transform uiParent) => InitUI(uiParent, SettingGroupName);
-
         public override void BuildLookup()
         {
             if (settingsLookup != null) return;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Settings;
+using UI.MenuPanels.Settings.SettingEntries;
 using UI.MenuPanels.Settings.SettingGroupPanels;
 using UnityEngine;
 using Button = UI.Buttons.Button;
@@ -12,12 +13,14 @@ namespace UI.MenuPanels.Settings
         private const string ResetToDefaultPopupHeader = "Reset to default?";
         private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
         
+        [SerializeField] private float scrollingDisplacementMargin = 30;
+        
         [SerializeField] private Button resetButton;
         [SerializeField] private Button resetToDefaultButton;
         [SerializeField] private Button saveButton;
-
         [SerializeField] private TilesGroupPanel tilesGroupPanel;
         [SerializeField] private AlgorithmsGroupPanel algorithmsGroupPanel;
+        [SerializeField] private ScrollRect scrollRect;
         
         // Todo: Temporary.
         private Enums.PermittedDirection[] permittedDirections = {
@@ -44,11 +47,13 @@ namespace UI.MenuPanels.Settings
             saveButton.OnPressAction += Save;
             BuildLookups();
             InitUIs();
+            CalcEntryPosRelatedToRoot();
             InitButtonsNavigation();
             LoadInputValues();
         }
 
         protected override void SelectDefaultButton() => backButton.Select();
+
         protected override void ResetPanel() => LoadInputValues();
 
         private void BuildLookups()
@@ -59,8 +64,37 @@ namespace UI.MenuPanels.Settings
 
         private void InitUIs()
         {
-            tilesGroupPanel.InitUI();
-            algorithmsGroupPanel.InitUI();
+            tilesGroupPanel.InitUI(OnSelectEntry);
+            algorithmsGroupPanel.InitUI(OnSelectEntry);
+            
+            // Hack for Unity's odd UI working... It has to be called twice.
+            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+        }
+        
+        private void OnSelectEntry(EntryPosition position)
+        {
+            float yOffset = 0;
+
+            float offsetFromTop = scrollRect.CalcOffsetFromViewEdgeTop(position.Max);
+            float offsetFromBottom = scrollRect.CalcOffsetFromViewEdgeBottom(position.Min);
+
+            if (offsetFromTop > 0)
+            {
+                yOffset = offsetFromTop + scrollingDisplacementMargin;
+            }
+            else if (offsetFromBottom < 0)
+            {
+                yOffset = offsetFromBottom - scrollingDisplacementMargin;
+            }
+            
+            scrollRect.MoveScrollViewBy(new Vector2(0, yOffset));
+        }
+
+        private void CalcEntryPosRelatedToRoot()
+        {
+            tilesGroupPanel.CalcEntryPosRelatedTo(scrollRect.Content);
+            algorithmsGroupPanel.CalcEntryPosRelatedTo(scrollRect.Content);
         }
 
         private void InitButtonsNavigation()

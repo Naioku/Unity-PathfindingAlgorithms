@@ -63,6 +63,14 @@ namespace UI
         private RectTransform horizontalScrollbarRect;
         private RectTransform verticalScrollbarRect;
 
+        public RectTransform Content => content;
+
+        public void MoveScrollViewBy(Vector2 displacement)
+        {
+            HorizontalNormalizedPosition += displacement.x / (contentBounds.size.x - viewBounds.size.x);
+            VerticalNormalizedPosition += displacement.y / (contentBounds.size.y - viewBounds.size.y);
+        }
+        
         /// <summary>
         /// The scroll position as a Vector2 between (0,0) and (1,1) with (0,0) being the lower left corner.
         /// </summary>
@@ -83,6 +91,7 @@ namespace UI
 
                 return (viewBounds.min.x - contentBounds.min.x) / (contentBounds.size.x - viewBounds.size.x);
             }
+            set => SetNormalizedPosition(value, 0);
         }
 
         /// <summary>
@@ -100,6 +109,7 @@ namespace UI
 
                 return (viewBounds.min.y - contentBounds.min.y) / (contentBounds.size.y - viewBounds.size.y);
             }
+            set => SetNormalizedPosition(value, 1);
         }
 
         private bool HScrollingNeeded => !Application.isPlaying || contentBounds.size.x > viewBounds.size.x + 0.01f;
@@ -148,6 +158,41 @@ namespace UI
 
         /// <inheritdoc cref="UIBehaviour.IsActive()"/>
         public override bool IsActive() => base.IsActive() && content != null;
+
+        /// <summary>
+        /// Calculates offset from the top edge of the view bounding to the passed point.
+        /// </summary>
+        /// <param name="position">Position, which You want to calculate offset to.</param>
+        /// <returns><b>Positive</b> value if point is <b>above</b> the edge.</returns>
+        public float CalcOffsetFromViewEdgeTop(Vector2 position) => CorrectedPosition(position).y - viewBounds.max.y;
+
+        /// <summary>
+        /// Calculates offset from the bottom edge of the view bounding to the passed point.
+        /// </summary>
+        /// <param name="position">Position, which You want to calculate offset to.</param>
+        /// <returns><b>Positive</b> value if point is <b>above</b> the edge.</returns>
+        public float CalcOffsetFromViewEdgeBottom(Vector2 position) => CorrectedPosition(position).y - viewBounds.min.y;
+        
+        /// <summary>
+        /// Calculates offset from the right edge of the view bounding to the passed point.
+        /// </summary>
+        /// <param name="position">Position, which You want to calculate offset to.</param>
+        /// <returns><b>Positive</b> value if point is to the <b>right</b> of the edge.</returns>
+        public float CalcOffsetFromViewEdgeRight(Vector2 position) => CorrectedPosition(position).x - viewBounds.max.x;
+        
+        /// <summary>
+        /// Calculates offset from the left edge of the view bounding to the passed point.
+        /// </summary>
+        /// <param name="position">Position, which You want to calculate offset to.</param>
+        /// <returns><b>Positive</b> value if point is to the <b>right</b> of the edge.</returns>
+        public float CalcOffsetFromViewEdgeLeft(Vector2 position) => CorrectedPosition(position).x - viewBounds.min.x;
+        
+        /// <summary>
+        /// Calculates position corrected according to the scroll displacement.
+        /// </summary>
+        /// <param name="position">Position for correction.</param>
+        /// <returns>Corrected position.</returns>
+        private Vector2 CorrectedPosition(Vector2 position) => position + content.anchoredPosition;
 
         protected override void OnEnable()
         {
@@ -229,7 +274,7 @@ namespace UI
                             velocity[axis] = 0;
                         position[axis] += velocity[axis] * deltaTime;
                     }
-                    // If we have neither elaticity or friction, there shouldn't be any velocity.
+                    // If we have neither elasticity or friction, there shouldn't be any velocity.
                     else
                     {
                         velocity[axis] = 0;

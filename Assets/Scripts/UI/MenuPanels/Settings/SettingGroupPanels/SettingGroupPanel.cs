@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using UI.MenuPanels.Settings.SettingEntries;
+using UI.MenuPanels.Settings.SettingGroups;
 using UnityEngine;
 
 namespace UI.MenuPanels.Settings.SettingGroupPanels
 {
     public abstract class SettingGroupPanel<T> : SettingGroupPanel
     {
-        [SerializeField] private Transform uiParent;
+        [SerializeField] private RectTransform uiParent;
         [SerializeField] private List<T> settingGroupsOrder;
         
         protected Dictionary<T, SettingGroupInGame> settingGroupsLookup;
@@ -39,14 +42,23 @@ namespace UI.MenuPanels.Settings.SettingGroupPanels
             }
         }
 
-        public void InitUI()
+        public void InitUI(Action<EntryPosition> onSelect)
         {
             foreach (T groupName in settingGroupsOrder)
             {
-                settingGroupsLookup[groupName].InitUI(uiParent);
+                settingGroupsLookup[groupName].InitUI(uiParent, onSelect);
             }
         }
 
+        // Todo: Can be in the parent class. Proper order is not necessary. 
+        public void CalcEntryPosRelatedTo(RectTransform contentRoot)
+        {
+            foreach (T groupName in settingGroupsOrder)
+            {
+                settingGroupsLookup[groupName].CalcEntryPosRelatedTo(contentRoot);
+            }
+        }
+        
         public void InitButtonsNavigation(SettingGroupPanel prevPanel, SettingGroupPanel nextPanel)
         {
             List<SettingGroupInGame> settingGroups = new List<SettingGroupInGame>();

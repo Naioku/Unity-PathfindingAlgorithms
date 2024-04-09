@@ -10,18 +10,20 @@ namespace UI.MenuPanels.Settings.SettingGroups
     [Serializable]
     public class MarkerColorsGroup : SettingGroupInGame<MarkerColorsGroup.SettingNameMarkerColors, TilesGroupPanel.SettingGroupName>
     {
-        private const string SettingGroupName = "Marker colors";
+        private const string DisplayName = "Marker colors";
         
         private Dictionary<Enums.MarkerType, SettingEntry<Color>> colors = new Dictionary<Enums.MarkerType, SettingEntry<Color>>
         {
-            { Enums.MarkerType.None, new SettingEntry<Color>(SettingGroupName, "None") },
-            { Enums.MarkerType.ReadyToCheck, new SettingEntry<Color>(SettingGroupName, "Ready to check") },
-            { Enums.MarkerType.Checked, new SettingEntry<Color>(SettingGroupName, "Checked") },
-            { Enums.MarkerType.Path, new SettingEntry<Color>(SettingGroupName, "Path") },
+            { Enums.MarkerType.None, new SettingEntry<Color>(DisplayName, "None") },
+            { Enums.MarkerType.ReadyToCheck, new SettingEntry<Color>(DisplayName, "Ready to check") },
+            { Enums.MarkerType.Checked, new SettingEntry<Color>(DisplayName, "Checked") },
+            { Enums.MarkerType.Path, new SettingEntry<Color>(DisplayName, "Path") },
         };
-        private readonly SettingEntry<float> alpha = new SettingEntry<float>(SettingGroupName, "Opacity");
+        private readonly SettingEntry<float> alpha = new SettingEntry<float>(DisplayName, "Opacity");
         
         public override TilesGroupPanel.SettingGroupName Name => TilesGroupPanel.SettingGroupName.MarkerColors;
+        protected override string SettingGroupName => DisplayName;
+
         public MarkerColors Setting
         {
             get
@@ -45,8 +47,6 @@ namespace UI.MenuPanels.Settings.SettingGroups
 
             }
         }
-
-        public override void InitUI(Transform uiParent) => InitUI(uiParent, SettingGroupName);
 
         public override void BuildLookup()
         {

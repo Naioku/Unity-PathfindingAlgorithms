@@ -9,12 +9,13 @@ namespace UI.MenuPanels.Settings.SettingGroups
     [Serializable]
     public class BoardSizeGroup : SettingGroupInGame<BoardSizeGroup.SettingNameSize, TilesGroupPanel.SettingGroupName>
     {
-        private const string SettingGroupName = "Board size";
+        private const string DisplayName = "Board size";
 
-        private SettingEntry<int> width = new SettingEntry<int>(SettingGroupName, "Width");
-        private SettingEntry<int> length = new SettingEntry<int>(SettingGroupName, "Length");
+        private SettingEntry<int> width = new SettingEntry<int>(DisplayName, "Width");
+        private SettingEntry<int> length = new SettingEntry<int>(DisplayName, "Length");
 
         public override TilesGroupPanel.SettingGroupName Name => TilesGroupPanel.SettingGroupName.Size;
+        protected override string SettingGroupName => DisplayName;
 
         public Vector2Int Setting
         {
@@ -25,8 +26,6 @@ namespace UI.MenuPanels.Settings.SettingGroups
                 length.Value = value.y;
             }
         }
-
-        public override void InitUI(Transform uiParent) => InitUI(uiParent, SettingGroupName);
 
         public override void BuildLookup()
         {

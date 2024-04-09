@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using UI.MenuPanels.Settings.View;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace UI.MenuPanels.Settings.SettingEntries
 
         public bool ChangedThroughPopup { get; private set; }
         public ViewSetting ViewSetting { get; private set; }
+        public event Action<EntryPosition> OnSelect;
 
         public SettingEntry(string groupName, string name)
         {
@@ -29,12 +31,15 @@ namespace UI.MenuPanels.Settings.SettingEntries
             }
         }
 
-        public ViewSetting InitializeUI()
+        public void InitUI(RectTransform uiParent)
         {
-            ViewSetting = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSetting>(Enums.UISpawned.SettingEntry);
-            ViewSetting.Initialize(name, ButtonAction);
-            
-            return ViewSetting;
+            ViewSetting = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSetting>(Enums.UISpawned.SettingEntry, uiParent);
+            ViewSetting.Initialize(name, OnButtonPress, OnButtonSelect);
+        }
+        
+        public void CalcEntryPosRelatedTo(RectTransform contentRoot)
+        {
+            ViewSetting.CalcEntryPosRelatedTo(contentRoot);
         }
 
         public void SetNavigation(SettingNavigation navigation) => ViewSetting.SetNavigation(new ViewSettingNavigation
@@ -43,14 +48,14 @@ namespace UI.MenuPanels.Settings.SettingEntries
             OnDown = navigation.OnDown?.ViewSetting
         });
 
-        public bool IsInteractable() => ViewSetting.IsInteractable();
-
-        private void ButtonAction() => AllManagers.Instance.UIManager.OpenPopupInput
+        private void OnButtonPress() => AllManagers.Instance.UIManager.OpenPopupInput
         (
             popupHeader,
             value,
             OnClosePanel
         );
+
+        private void OnButtonSelect(EntryPosition position) => OnSelect?.Invoke(position);
 
         private void OnClosePanel(T value)
         {

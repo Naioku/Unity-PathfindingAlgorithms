@@ -1,33 +1,49 @@
 ﻿using System;
 using TMPro;
-using UI.Buttons;
+using UI.MenuPanels.Settings.SettingEntries;
 using UnityEngine;
+using Button = UI.Buttons.Button;
 
 namespace UI.MenuPanels.Settings.View
 {
     public class ViewSetting : MonoBehaviour
     {
-        [Header("Programmer")]
+        [Header("Programmer:")]
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private Button button;
         
         private RectTransform rectTransform;
+        private Action<EntryPosition> onButtonSelect;
+        private EntryPosition entryPosition;
 
         public Button Button => button;
         
         private void Awake() => rectTransform = transform.GetComponent<RectTransform>();
         
-        public void Initialize(string inputText, Action buttonAction)
+        public void Initialize(string inputText, Action onButtonPress, Action<EntryPosition> onButtonSelect)
         {
             name = inputText;
             label.text = inputText;
-            button.OnPressAction += buttonAction;
+            button.OnPressAction += onButtonPress;
+            this.onButtonSelect = onButtonSelect;
+            button.OnSelectAction += OnButtonSelect;
         }
-        
-        public void SetParent(Transform parent)
+
+        public void CalcEntryPosRelatedTo(RectTransform contentRoot)
         {
-            transform.SetParent(parent);
-            rectTransform.localScale = new Vector3(1, 1, 1);
+            RectTransform currentRectTrans = rectTransform;
+            float yPositionRelatedToRoot = 0;
+            while (currentRectTrans != contentRoot)
+            {
+                yPositionRelatedToRoot += currentRectTrans.anchoredPosition.y;
+                currentRectTrans = (RectTransform)currentRectTrans.parent;
+            }
+
+            entryPosition = new EntryPosition
+            {
+                Min = new Vector2(0, yPositionRelatedToRoot - rectTransform.sizeDelta.y),
+                Max = new Vector2(0, yPositionRelatedToRoot)
+            };
         }
 
         public void SetNavigation(ViewSettingNavigation navigation)
@@ -47,6 +63,10 @@ namespace UI.MenuPanels.Settings.View
             button.SetNavigation(selectableNavigation);
         }
 
-        public bool IsInteractable() => button.IsInteractable();
+        private void OnButtonSelect()
+        {
+            // Todo: You need to find a way to get to know where, in normalized vertical position, is the specific entry regarding the Content object.
+            onButtonSelect.Invoke(entryPosition);
+        }
     }
 }

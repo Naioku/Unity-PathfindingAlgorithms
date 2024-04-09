@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Settings;
 using UI.MenuPanels.Settings.SettingEntries;
 using UI.MenuPanels.Settings.SettingGroupPanels;
-using UnityEngine;
 
 namespace UI.MenuPanels.Settings.SettingGroups
 {
@@ -43,7 +42,7 @@ namespace UI.MenuPanels.Settings.SettingGroups
             }
         }
 
-        public override void InitUI(Transform uiParent) => InitUI(uiParent, DisplayName);
+        protected override string SettingGroupName => DisplayName;
 
         public override void BuildLookup()
         {

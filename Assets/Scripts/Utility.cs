@@ -2,11 +2,22 @@
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Utility
 {
     #region UI
 
+    public static void RefreshLayoutGroupsImmediate(RectTransform root)
+    {
+        foreach (LayoutGroup layoutGroup in root.GetComponentsInChildren<LayoutGroup>(true))
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layoutGroup.transform);
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(root);
+    }
+    
     public static string ColorToHexString(Color value, bool startWithHash)
     {
         int red = Convert.ToInt32(value.r * 255);
