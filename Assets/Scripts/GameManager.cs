@@ -10,12 +10,11 @@ using UnityEngine;
 [Serializable]
 public class GameManager
 {
-    [SerializeField] private DefaultSettingsSO defaultSettingsSO;
+    [SerializeField] private GameSettings gameSettings;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
-    private Maze maze;
-    private GameSettings gameSettings;
+    private Maze.Maze maze;
     private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
@@ -24,8 +23,7 @@ public class GameManager
 
     public void Awake()
     {
-        defaultSettingsSO.Initialize();
-        gameSettings = defaultSettingsSO.Settings;
+        AllManagers.Instance.SavingManager.LoadSettings(gameSettings);
         menuController = AllManagers.Instance.UIManager.MenuController;
         menuController.Initialize
         (
@@ -51,7 +49,7 @@ public class GameManager
         inputManager.GlobalMap.Enable();
         cameraController.Initialize(Camera.main);
         interactionController.Initialize(Camera.main);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
     }
     
@@ -100,7 +98,7 @@ public class GameManager
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
     private void ResetSettingsToDefault()
     {
-        gameSettings = defaultSettingsSO.Settings;
+        gameSettings.LoadDefault();
         ReloadMaze();
     }
 
@@ -117,6 +115,8 @@ public class GameManager
                 ReloadTileColors();
                 break;
         }
+        
+        AllManagers.Instance.SavingManager.SaveSettings();
     }
 
     private void Quit()
@@ -131,7 +131,7 @@ public class GameManager
     private void ReloadMaze()
     {
         AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
         stageMachine.Maze = maze;
     }
 

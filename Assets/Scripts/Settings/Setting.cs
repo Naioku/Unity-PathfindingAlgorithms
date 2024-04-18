@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using UI.MenuPanels.Settings.Logic;
 
 namespace Settings
 {
-    public class Setting<TKey, TValue> where TKey : Enum
+    public class Setting<T> : ISetting
     {
-        private readonly Dictionary<TKey, TValue> valuesLookup = new Dictionary<TKey, TValue>();
-    
-        public TValue GetValue(TKey tileType) => valuesLookup[tileType];
-        public void SetValue(TKey tileType, TValue color) => valuesLookup[tileType] = color;
+        private T value;
+
+        public T Value => value;
+        public object SerializableValue
+        {
+            get => typeof(T).IsSerializable ? value : Utility.Utility.ConvertToSerializableValue(value);
+            set => this.value = typeof(T).IsSerializable ? (T)value : Utility.Utility.ConvertFromSerializableValue<T>(value);
+        }
+        
+        public IUILogicSetting UILogicSetting => new UILogicSetting<T>();
+        
+        public void SetValue(IUILogicSetting uiLogicSetting) => value = ((UILogicSetting<T>)uiLogicSetting).Value;
+
+        public Setting(Enums.SettingName name, T value) => this.value = value;
     }
 }

@@ -1,118 +1,89 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Settings
 {
+    // Todo: Ideally it would be, if inspector would be filled width settings dependently from enum SettingName. If enum entry would be added, then it would be shown in the inspector of this class.
     [CreateAssetMenu(fileName = "DefaultSettings", menuName = "Default settings/Create new", order = 0)]
     public class DefaultSettingsSO : ScriptableObject
     {
+        [Header("Board")]
+        [SerializeField] private SettingDefault<int> boardWidth;
+        [SerializeField] private SettingDefault<int> boardLength;
+        
         [Header("Tile")]
-        [SerializeField] private Vector2Int size;
-        [SerializeField] private TileDimensionsDefault tileDimensions;
-        [SerializeField] private TileColorsDefault tileColors;
-        [SerializeField] private MarkerColorsDefault markerColors;
-    
-        [Header("Miscellaneous")]
-        [SerializeField] private AlgorithmStagesDelayDefault algorithmStagesDelay;
-        [SerializeField] private Enums.PermittedDirection[] permittedDirections;
-
-        public GameSettings Settings =>
-            new GameSettings
-            (
-                size,
-                tileDimensions.Setting,
-                tileColors.Setting,
-                markerColors.Setting,
-                algorithmStagesDelay.Setting,
-                permittedDirections
-            );
-
-        public void Initialize()
-        {
-            tileColors.Initialize();
-            markerColors.Initialize();
-            algorithmStagesDelay.Initialize();
-        }
-
-        private void OnValidate()
-        {
-            algorithmStagesDelay.ManageForcingGeneralValue();
-        }
+        [SerializeField] private SettingDefault<float> tileLength;
+        [SerializeField] private SettingDefault<float> tileHeight;
+        [SerializeField] private SettingDefault<Color> tileColorDefault;
+        [SerializeField] private SettingDefault<Color> tileColorStart;
+        [SerializeField] private SettingDefault<Color> tileColorDestination;
+        [SerializeField] private SettingDefault<Color> tileColorBlocked;
+        [SerializeField] private SettingDefault<float> tileColorHighlightValue;
         
-        [Serializable]
-        private class TileDimensionsDefault
-        {
-            [SerializeField] private float Length = 1;
-            [SerializeField] private float Height = 0.5f;
-
-            public TileDimensions Setting => new TileDimensions
-            {
-                Length = Length,
-                Height = Height
-            };
-        }
+        [Header("Marker")]
+        [SerializeField] private SettingDefault<Color> markerColorNone;
+        [SerializeField] private SettingDefault<Color> markerColorReadyToCheck;
+        [SerializeField] private SettingDefault<Color> markerColorChecked;
+        [SerializeField] private SettingDefault<Color> markerColorPath;
+        [SerializeField] private SettingDefault<float> tileColorAlpha;
         
-        [Serializable]
-        private class TileColorsDefault : SettingGroupChangeDefault<Enums.TileType, Color>
+        [Header("Algorithms")]
+        [SerializeField] private SettingDefault<float> algorithmStageDelayAfterNewNodeEnqueuing;
+        [SerializeField] private SettingDefault<float> algorithmStageDelayAfterNodeChecking;
+        [SerializeField] private SettingDefault<float> algorithmStageDelayAfterCursorPositionChange;
+        [SerializeField] private SettingDefault<float> algorithmStageDelayAfterPathNodeSetting;
+        [SerializeField] private SettingDefault<Enums.PermittedDirection[]> permittedDirectionsSetting;
+
+        public Dictionary<Enums.SettingName, ISetting> Settings
         {
-            public float HighlightValue = 0.2f;
-            public TileColors Setting
+            get
             {
-                get
+                Dictionary<Enums.SettingName, ISetting> result = new Dictionary<Enums.SettingName, ISetting>();
+                
+                InitSetting(boardWidth, Enums.SettingName.BoardWidth);
+                InitSetting(boardLength, Enums.SettingName.BoardLength);
+                InitSetting(tileLength, Enums.SettingName.TileDimensionLength);
+                InitSetting(tileHeight, Enums.SettingName.TileDimensionHeight);
+                InitSetting(tileColorDefault, Enums.SettingName.TileColorDefault);
+                InitSetting(tileColorStart, Enums.SettingName.TileColorStart);
+                InitSetting(tileColorDestination, Enums.SettingName.TileColorDestination);
+                InitSetting(tileColorBlocked, Enums.SettingName.TileColorBlocked);
+                InitSetting(tileColorHighlightValue, Enums.SettingName.TileColorHighlightValue);
+                InitSetting(markerColorNone, Enums.SettingName.MarkerColorNone);
+                InitSetting(markerColorReadyToCheck, Enums.SettingName.MarkerColorReadyToCheck);
+                InitSetting(markerColorChecked, Enums.SettingName.MarkerColorChecked);
+                InitSetting(markerColorPath, Enums.SettingName.MarkerColorPath);
+                InitSetting(tileColorAlpha, Enums.SettingName.MarkerColorAlpha);
+                InitSetting(algorithmStageDelayAfterNewNodeEnqueuing, Enums.SettingName.AlgorithmStageDelayAfterNewNodeEnqueuing);
+                InitSetting(algorithmStageDelayAfterNodeChecking, Enums.SettingName.AlgorithmStageDelayAfterNodeChecking);
+                InitSetting(algorithmStageDelayAfterCursorPositionChange, Enums.SettingName.AlgorithmStageDelayAfterCursorPositionChange);
+                InitSetting(algorithmStageDelayAfterPathNodeSetting, Enums.SettingName.AlgorithmStageDelayAfterPathNode);
+                InitSetting(permittedDirectionsSetting, Enums.SettingName.PermittedDirections);
+
+                return result;
+
+                void InitSetting(ISettingDefault setting, Enums.SettingName name)
                 {
-                    TileColors setting = new TileColors();
-                    SetLookupValues(setting);
-                    setting.HighlightValue = HighlightValue;
-    
-                    return setting;
+                    result.Add(name, setting.Setting);
                 }
             }
         }
-    
+
         [Serializable]
-        private class MarkerColorsDefault : SettingGroupChangeDefault<Enums.MarkerType, Color>
+        private class SettingDefault<T> : ISettingDefault
         {
-            public float Alpha;
-            public MarkerColors Setting
-            {
-                get
-                {
-                    MarkerColors setting = new MarkerColors();
-                    SetLookupValues(setting);
-                    setting.Alpha = Alpha;
-    
-                    return setting;
-                }
-            }
-        }
-    
-        [Serializable]
-        private class AlgorithmStagesDelayDefault : SettingGroupChangeDefault<Enums.AlgorithmStageDelay, float>
-        {
-            [Header("General value")]
-            [SerializeField] private bool forceGeneralValue;
-            [SerializeField] private float value;
-        
-            public AlgorithmStagesDelay Setting
-            {
-                get
-                {
-                    AlgorithmStagesDelay setting = new AlgorithmStagesDelay();
-                    SetLookupValues(setting);
-    
-                    return setting;
-                }
-            }
-        
-            public void ManageForcingGeneralValue()
-            {
-                if (!forceGeneralValue) return;
+            [SerializeField] private T value;
             
-                foreach (Entry entry in entries)
-                {
-                    entry.Value = value;
-                }
-            }
+            public Enums.SettingName Name { get; set; }
+            public ISetting Setting => new Setting<T>(Name, value);
+
+        }
+
+        private interface ISettingDefault
+        {
+            Enums.SettingName Name { get; set; }
+            ISetting Setting { get; }
         }
     }
 }

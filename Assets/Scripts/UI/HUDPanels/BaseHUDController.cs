@@ -69,8 +69,8 @@ namespace UI.HUDPanels
             {
                 buttons[i].SetNavigation(new SelectableNavigation
                 {
-                    OnUp = Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
-                    OnDown = Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
+                    OnUp = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    OnDown = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
                 });
             }
         }

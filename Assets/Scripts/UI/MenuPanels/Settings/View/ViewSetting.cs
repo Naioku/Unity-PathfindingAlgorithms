@@ -1,6 +1,5 @@
 ﻿using System;
 using TMPro;
-using UI.MenuPanels.Settings.SettingEntries;
 using UnityEngine;
 using Button = UI.Buttons.Button;
 
@@ -11,19 +10,28 @@ namespace UI.MenuPanels.Settings.View
         [Header("Programmer:")]
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private Button button;
-        
+
+        private StaticTextManager staticTextManager;
         private RectTransform rectTransform;
+        private Enums.SettingName displayedNameStaticKey;
         private Action<EntryPosition> onButtonSelect;
         private EntryPosition entryPosition;
 
         public Button Button => button;
         
-        private void Awake() => rectTransform = transform.GetComponent<RectTransform>();
+        private string DisplayedName => staticTextManager.GetValue(displayedNameStaticKey);
         
-        public void Initialize(string inputText, Action onButtonPress, Action<EntryPosition> onButtonSelect)
+        private void Awake()
         {
-            name = inputText;
-            label.text = inputText;
+            staticTextManager = AllManagers.Instance.StaticTextManager;
+            rectTransform = transform.GetComponent<RectTransform>();
+        }
+
+        public void Initialize(Enums.SettingName displayedName, Action onButtonPress, Action<EntryPosition> onButtonSelect)
+        {
+            displayedNameStaticKey = displayedName;
+            name = DisplayedName;
+            label.text = DisplayedName;
             button.OnPressAction += onButtonPress;
             this.onButtonSelect = onButtonSelect;
             button.OnSelectAction += OnButtonSelect;
@@ -65,7 +73,6 @@ namespace UI.MenuPanels.Settings.View
 
         private void OnButtonSelect()
         {
-            // Todo: You need to find a way to get to know where, in normalized vertical position, is the specific entry regarding the Content object.
             onButtonSelect.Invoke(entryPosition);
         }
     }

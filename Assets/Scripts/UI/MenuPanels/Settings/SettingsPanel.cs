@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Settings;
-using UI.MenuPanels.Settings.SettingEntries;
-using UI.MenuPanels.Settings.SettingGroupPanels;
+using UI.MenuPanels.Settings.Logic;
 using UnityEngine;
 using Button = UI.Buttons.Button;
 
@@ -18,21 +17,12 @@ namespace UI.MenuPanels.Settings
         [SerializeField] private Button resetButton;
         [SerializeField] private Button resetToDefaultButton;
         [SerializeField] private Button saveButton;
-        [SerializeField] private TilesGroupPanel tilesGroupPanel;
-        [SerializeField] private AlgorithmsGroupPanel algorithmsGroupPanel;
         [SerializeField] private ScrollRect scrollRect;
-        
-        // Todo: Temporary.
-        private Enums.PermittedDirection[] permittedDirections = {
-            Enums.PermittedDirection.UpRight,
-            Enums.PermittedDirection.Up,
-            Enums.PermittedDirection.UpLeft,
-            Enums.PermittedDirection.Left,
-            Enums.PermittedDirection.DownLeft,
-            Enums.PermittedDirection.Down,
-            Enums.PermittedDirection.DownRight,
-            Enums.PermittedDirection.Right
-        };
+        [SerializeField] private RectTransform panelsUIParent;
+
+        [SerializeField] private UILogicSettingGroupPanel[] panels;
+
+        private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new Dictionary<Enums.SettingName, IUILogicSetting>();
 
         private Action onResetToDefault;
         private Action<GameSettings, Enums.SettingsReloadingParam> onSave;
@@ -43,10 +33,11 @@ namespace UI.MenuPanels.Settings
             this.onResetToDefault = onResetToDefault;
             this.onSave = onSave;
             resetToDefaultButton.OnPressAction += OnResetValuesToDefault;
-            resetButton.OnPressAction += LoadInputValues;
+            resetButton.OnPressAction += ResetPanel;
             saveButton.OnPressAction += Save;
-            BuildLookups();
-            InitUIs();
+            Init();
+            BuildLookup();
+            InitUI();
             CalcEntryPosRelatedToRoot();
             InitButtonsNavigation();
             LoadInputValues();
@@ -56,20 +47,37 @@ namespace UI.MenuPanels.Settings
 
         protected override void ResetPanel() => LoadInputValues();
 
-        private void BuildLookups()
+        private void Init()
         {
-            tilesGroupPanel.BuildLookup();
-            algorithmsGroupPanel.BuildLookup();
+            GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+            
+            foreach (UILogicSettingGroupPanel panel in panels)
+            {
+                panel.Init(gameSettings);
+            }
         }
 
-        private void InitUIs()
+        private void BuildLookup()
         {
-            tilesGroupPanel.InitUI(OnSelectEntry);
-            algorithmsGroupPanel.InitUI(OnSelectEntry);
+            foreach (UILogicSettingGroupPanel panel in panels)
+            {
+                foreach (IUILogicSetting setting in panel.Settings)
+                {
+                    settingEntries.Add(setting.Name, setting);
+                }
+            }
+        }
+
+        private void InitUI()
+        {
+            foreach (UILogicSettingGroupPanel panel in panels)
+            {
+                panel.InitUI(panelsUIParent, OnSelectEntry);
+            }
             
             // Hack for Unity's odd UI working... It has to be called twice.
-            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
-            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+            Utility.Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+            Utility.Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
         }
         
         private void OnSelectEntry(EntryPosition position)
@@ -93,35 +101,42 @@ namespace UI.MenuPanels.Settings
 
         private void CalcEntryPosRelatedToRoot()
         {
-            tilesGroupPanel.CalcEntryPosRelatedTo(scrollRect.Content);
-            algorithmsGroupPanel.CalcEntryPosRelatedTo(scrollRect.Content);
+            foreach (UILogicSettingGroupPanel panel in panels)
+            {
+                panel.CalcEntryPosRelatedTo(scrollRect.Content);
+            }
         }
 
         private void InitButtonsNavigation()
         {
-            backButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
-            resetButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
-            resetToDefaultButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
-            saveButton.SetNavigation(Enums.ButtonsNaviDirection.Down, tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button);
-            
-            tilesGroupPanel.InitButtonsNavigation(null, algorithmsGroupPanel);
-            algorithmsGroupPanel.InitButtonsNavigation(tilesGroupPanel, null);
-            
+            UILogicSettingGroupPanel firstPanel = panels[0];
+            backButton.SetNavigation(Enums.ButtonsNaviDirection.Down, firstPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            resetButton.SetNavigation(Enums.ButtonsNaviDirection.Down, firstPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            resetToDefaultButton.SetNavigation(Enums.ButtonsNaviDirection.Down, firstPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+            saveButton.SetNavigation(Enums.ButtonsNaviDirection.Down, firstPanel.FirstGroup.FirstSetting.ViewSetting.Button);
+
+            for (var i = 0; i < panels.Length; i++)
+            {
+                var panel = panels[i];
+                
+                if (i == 0)
+                {
+                    panel.InitButtonsNavigation(null, panels[i + 1]);
+                }
+                else if (i == panels.Length - 1)
+                {
+                    panel.InitButtonsNavigation(panels[i - 1], null);
+                }
+                else
+                {
+                    panel.InitButtonsNavigation(panels[i - 1], panels[i + 1]);
+                }
+            }
+
             // Todo: When You delete upper buttons, delete also this line.
-            tilesGroupPanel.FirstGroup.FirstSetting.ViewSetting.Button.SetNavigation(Enums.ButtonsNaviDirection.Up, saveButton);
+            firstPanel.FirstGroup.FirstSetting.ViewSetting.Button.SetNavigation(Enums.ButtonsNaviDirection.Up, saveButton);
         }
 
-        private void LoadInputValues()
-        {
-            GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
-
-            tilesGroupPanel.SizeSetting = gameSettings.Size;
-            tilesGroupPanel.TileDimensionsSetting = gameSettings.TileDimensions;
-            tilesGroupPanel.TileColorsSetting = gameSettings.TileColors;
-            tilesGroupPanel.MarkerColorsSetting = gameSettings.MarkerColors;
-            algorithmsGroupPanel.StagesDelaySetting = gameSettings.AlgorithmStagesDelay;
-        }
-        
         private void OnResetValuesToDefault() =>
             AllManagers.Instance.UIManager.OpenPopupConfirmation
             (
@@ -133,30 +148,46 @@ namespace UI.MenuPanels.Settings
         private void ResetValuesToDefault()
         {
             onResetToDefault.Invoke();
-            LoadInputValues();
+            LoadInputValues(true);
+        }
+
+        private void LoadInputValues(bool loadDefault = false)
+        {
+            GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+
+            if (loadDefault)
+            {
+                gameSettings.LoadDefault();
+            }
+            
+            foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
+            {
+                entry.Value.SetValue(gameSettings.GetSetting(entry.Key));
+            }
         }
 
         private void Save()
         {
-            GameSettings gameSettings = new GameSettings
-            (
-                tilesGroupPanel.SizeSetting,
-                tilesGroupPanel.TileDimensionsSetting,
-                tilesGroupPanel.TileColorsSetting,
-                tilesGroupPanel.MarkerColorsSetting,
-                algorithmsGroupPanel.StagesDelaySetting,
-                permittedDirections
-            );
+            GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
+            foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
+            {
+                gameSettings.GetSetting(entry.Key).SetValue(entry.Value);
+            }
 
             Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
-            List<TilesGroupPanel.SettingGroupName> settingGroupChangedValues = tilesGroupPanel.ChangedValues;
+            List<Enums.SettingGroupStaticKey> settingGroupChangedValues = new List<Enums.SettingGroupStaticKey>();
+
+            foreach (UILogicSettingGroupPanel panel in panels)
+            {
+                settingGroupChangedValues.AddRange(panel.ChangedValues);
+            }
             
-            if (settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.Size) ||
-                settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.TileDimensions))
+            if (settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.BoardSize) ||
+                settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.TileDimensions))
             {
                 reloadingParam = Enums.SettingsReloadingParam.Maze;
             }
-            else if (settingGroupChangedValues.Contains(TilesGroupPanel.SettingGroupName.Size))
+            else if (settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.TileColors))
             {
                 reloadingParam = Enums.SettingsReloadingParam.TileColors;
             }

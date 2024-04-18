@@ -61,6 +61,7 @@ public static class Enums
         Menu,
         HUDMazeModification,
         HUDAlgorithm,
+        SettingGroupPanel,
         SettingGroupEntry,
         SettingEntry
     }
@@ -122,6 +123,45 @@ public static class Enums
         AfterNodeChecking = 1,
         AfterCursorPositionChange = 2,
         AfterPathNodeSetting = 3
+    }
+
+    public enum SettingName
+    {
+        BoardWidth,
+        BoardLength,
+        TileDimensionLength,
+        TileDimensionHeight,
+        TileColorDefault,
+        TileColorStart,
+        TileColorDestination,
+        TileColorBlocked,
+        TileColorHighlightValue,
+        MarkerColorNone,
+        MarkerColorReadyToCheck,
+        MarkerColorChecked,
+        MarkerColorPath,
+        MarkerColorAlpha,
+        AlgorithmStageDelayAfterNewNodeEnqueuing,
+        AlgorithmStageDelayAfterNodeChecking,
+        AlgorithmStageDelayAfterCursorPositionChange,
+        AlgorithmStageDelayAfterPathNode,
+        PermittedDirections
+    }
+    
+    public enum SettingGroupStaticKey
+    {
+        BoardSize,
+        TileDimensions,
+        TileColors,
+        MarkerColors,
+        AlgorithmStageDelays,
+        PermittedDirections
+    }
+
+    public enum SettingGroupPanelStaticKey
+    {
+        Tiles,
+        Algorithms
     }
     
     public enum PermittedDirection

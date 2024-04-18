@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace UI.MenuPanels.Settings.View
 {
-    public class ViewSettingGroup : MonoBehaviour
+    public class ViewSettingGroupPanel : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private RectTransform inputEntries;
 
         private StaticTextManager staticTextManager;
-        private Enums.SettingGroupStaticKey displayedNameStaticKey;
+        private Enums.SettingGroupPanelStaticKey displayedNameStaticKey;
             
         public RectTransform UIParent => inputEntries;
         
@@ -17,7 +17,7 @@ namespace UI.MenuPanels.Settings.View
 
         private void Awake() => staticTextManager = AllManagers.Instance.StaticTextManager;
 
-        public void Initialize(Enums.SettingGroupStaticKey displayedName)
+        public void Initialize(Enums.SettingGroupPanelStaticKey displayedName)
         {
             displayedNameStaticKey = displayedName;
             name = DisplayedName;

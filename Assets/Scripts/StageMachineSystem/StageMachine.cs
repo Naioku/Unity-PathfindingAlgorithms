@@ -12,12 +12,12 @@ namespace StageMachineSystem
         private BaseStage currentStage;
         private SharedData SharedData { get; } = new SharedData();
 
-        public Maze Maze
+        public Maze.Maze Maze
         {
             set => SharedData.Maze = value;
         }
 
-        public StageMachine(Maze maze)
+        public StageMachine(Maze.Maze maze)
         {
             SharedData.Maze = maze;
         }

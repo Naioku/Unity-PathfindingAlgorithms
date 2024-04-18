@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 781bcecd675348a58effd8d90a6bb37d, type: 3}
-  m_Name: UISetting
+  m_Name: UISettingGroupPanel
   m_EditorClassIdentifier: 
-  uiName: 5
-  prefab: {fileID: 3944169206648738369, guid: 7611a60b17ba6c24091092241d04b344, type: 3}
+  uiName: 3
+  prefab: {fileID: 5298747048965646480, guid: 91095ea92ba0f3943aec1702fadc99e5, type: 3}
