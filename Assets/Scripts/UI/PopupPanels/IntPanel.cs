@@ -10,6 +10,14 @@ namespace UI.PopupPanels
         public override GameObject SelectableOnOpen => inputField.gameObject;
         
         protected override void SetInitialValue(int initialValue) => inputField.text = initialValue.ToString();
-        protected override void Confirm() => onConfirm.Invoke(int.Parse(inputField.text));
+        protected override void Confirm()
+        {
+            if (string.IsNullOrEmpty(inputField.text))
+            {
+                inputField.text = default(int).ToString();
+            }
+            
+            onConfirm.Invoke(int.Parse(inputField.text));
+        }
     }
 }

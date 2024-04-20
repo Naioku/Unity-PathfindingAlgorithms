@@ -11,6 +11,14 @@ namespace UI.PopupPanels
         public override GameObject SelectableOnOpen => inputField.gameObject;
         
         protected override void SetInitialValue(float initialValue) => inputField.text = initialValue.ToString(CultureInfo.CurrentCulture);
-        protected override void Confirm() => onConfirm.Invoke(float.Parse(inputField.text));
+        protected override void Confirm()
+        {
+            if (string.IsNullOrEmpty(inputField.text))
+            {
+                inputField.text = default(float).ToString(CultureInfo.CurrentCulture);
+            }
+            
+            onConfirm.Invoke(float.Parse(inputField.text));
+        }
     }
 }

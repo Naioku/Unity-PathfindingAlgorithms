@@ -41,7 +41,9 @@ namespace UI.PopupPanels
             headerLabel.text = header;
             this.onClose = onClose;
             confirmationButton.OnPressAction += Confirm;
+            confirmationButton.Label = confirmationButtonText;
             closeButton.OnPressAction += Close;
+            closeButton.Label = closingButtonText;
         }
 
         protected abstract void Confirm();
