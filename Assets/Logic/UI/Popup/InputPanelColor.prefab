@@ -849,11 +849,67 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6143273970288033254, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073796441900203958, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
---- !u!114 &2462872143028090987 stripped
+--- !u!114 &7170958414878506175 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2628645867878165058, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7337330230667226774, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
   m_PrefabInstance: {fileID: 456889236835652137}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -862,9 +918,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c66a561cbd465ca0c7df343a2895dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &688211250886212569 stripped
+--- !u!114 &5416016458434985711 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1142285016289913328, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5584107369620991174, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
   m_PrefabInstance: {fileID: 456889236835652137}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -906,9 +962,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab81294be29a4fd0832e1bf88ea72e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  confirmationButton: {fileID: 5416016458434985711}
+  closeButton: {fileID: 7170958414878506175}
   headerLabel: {fileID: 8000202689302729359}
-  confirmationButton: {fileID: 2462872143028090987}
-  closeButton: {fileID: 688211250886212569}
   satValUIController: {fileID: 8937570453105946002}
   hueImage: {fileID: 3029875607282670636}
   satValImage: {fileID: 8240030332277747762}

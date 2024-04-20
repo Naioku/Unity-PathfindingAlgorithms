@@ -9,7 +9,12 @@ namespace UI.Buttons
 {
     public class Button : Selectable, IPointerClickHandler, ISubmitHandler, ISelectableElement
     {
+        private const string BackgroundPath = "BACKGROUND";
+        private const string TextLabelPath = "TEXT";
+        
+        private Image background;
         private TextMeshProUGUI textLabel;
+        private Color backgroundNormalColor;
         
         public event Action OnSelectAction;
         public event Action OnClickAction;
@@ -31,9 +36,8 @@ namespace UI.Buttons
                 
                 void SetBackgroundColor()
                 {
-                    ColorBlock newBlock = colors;
-                    newBlock.normalColor = value;
-                    colors = newBlock;
+                    background.color = value;
+                    backgroundNormalColor = value;
                 }
                 
                 void SetLabelColor()
@@ -73,18 +77,6 @@ namespace UI.Buttons
             this.navigation = navigation;
         }
         
-        // public void SetNavigation(Dictionary<Enums.ButtonsNaviDirection, Selectable> data)
-        // {
-        //     navigation = new Navigation
-        //     {
-        //         selectOnUp = data[Enums.ButtonsNaviDirection.Up],
-        //         selectOnDown = data[Enums.ButtonsNaviDirection.Down],
-        //         selectOnLeft = data[Enums.ButtonsNaviDirection.Left],
-        //         selectOnRight = data[Enums.ButtonsNaviDirection.Right],
-        //         mode = Navigation.Mode.Explicit
-        //     };
-        // }
-        
         public void SetNavigation(SelectableNavigation navigation)
         {
             this.navigation = new Navigation
@@ -100,7 +92,9 @@ namespace UI.Buttons
         protected override void Awake()
         {
             base.Awake();
-            textLabel = GetComponentInChildren<TextMeshProUGUI>();
+            background = transform.Find(BackgroundPath).GetComponent<Image>();
+            textLabel = transform.Find(TextLabelPath).GetComponent<TextMeshProUGUI>();
+            backgroundNormalColor = background.color;
         }
 
         public void ResetObj()
@@ -133,6 +127,17 @@ namespace UI.Buttons
             StartCoroutine(OnFinishSubmit());
             
             OnSubmitAction?.Invoke();
+        }
+
+        protected override void DoStateTransition(SelectionState state, bool instant)
+        {
+            // Color disabledColor = colors.disabledColor;
+            // ColorBlock newBlock = colors;
+            // newBlock.disabledColor = new Color();
+            // colors = newBlock;
+            base.DoStateTransition(state, instant);
+            
+            background.color = state == SelectionState.Disabled ? colors.disabledColor : backgroundNormalColor;
         }
 
         public override void OnSelect(BaseEventData eventData)
