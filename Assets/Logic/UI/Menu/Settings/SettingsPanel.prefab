@@ -696,6 +696,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6876413651611807141}
     m_Modifications:
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 6733705892088789993}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 3805768857021606373}
     - target: {fileID: 337282466311938506, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
       propertyPath: m_text
       value: 'Reset
@@ -815,6 +827,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 715082744799838526}
     m_Modifications:
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4879420208721962177}
     - target: {fileID: 337282466311938506, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
       propertyPath: m_text
       value: 'Back
@@ -1185,6 +1205,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6876413651611807141}
     m_Modifications:
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 3805768857021606373}
     - target: {fileID: 337282466311938506, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
       propertyPath: m_text
       value: Save
@@ -1455,6 +1483,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6876413651611807141}
     m_Modifications:
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 4879420208721962177}
+    - target: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 4150295269114999254}
     - target: {fileID: 337282466311938506, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
       propertyPath: m_text
       value: 'Default
