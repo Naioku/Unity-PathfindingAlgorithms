@@ -2,7 +2,7 @@
 {
     public class HelpPanel : BasePanel
     {
-        public override void SelectDefaultButton()
+        protected override void SelectDefaultButton()
         {
             
         }

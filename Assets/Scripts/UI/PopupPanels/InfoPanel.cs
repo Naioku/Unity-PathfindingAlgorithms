@@ -1,6 +1,5 @@
 ﻿using System;
 using TMPro;
-using UI.Buttons;
 using UnityEngine;
 
 namespace UI.PopupPanels
@@ -8,19 +7,16 @@ namespace UI.PopupPanels
     public class InfoPanel : PopupPanel
     {
         [SerializeField] private TextMeshProUGUI infoLabel;
-        [SerializeField] private Button confirmationButton;
 
         private Action onConfirm;
-        
-        public void Initialize(string header, string info, Action onConfirm)
+
+        public void Initialize(string header, Action onCloseAndConfirm, string info)
         {
-            base.Initialize(header);
+            base.Initialize(header, onCloseAndConfirm);
             infoLabel.text = info;
-            this.onConfirm = onConfirm;
-            confirmationButton.OnPressAction += Confirm;
-            confirmationButton.Select();
+            onConfirm = onCloseAndConfirm;
         }
 
-        private void Confirm() => onConfirm.Invoke();
+        protected override void Confirm() => onConfirm.Invoke();
     }
 }

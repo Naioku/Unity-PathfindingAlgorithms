@@ -10,7 +10,7 @@ namespace StageMachineSystem
     public class MazeModificationStage : BaseStage
     {
         private InputManager inputManager;
-        private Maze maze;
+        private Maze.Maze maze;
         private readonly HUDControllerMazeModification hudController;
         
         private Enums.TileType currentTileTypeToSet;

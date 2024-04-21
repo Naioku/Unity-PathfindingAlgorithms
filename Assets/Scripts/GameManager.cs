@@ -2,6 +2,7 @@
 using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
 using InteractionSystem;
+using Settings;
 using StageMachineSystem;
 using UI;
 using UnityEngine;
@@ -9,24 +10,28 @@ using UnityEngine;
 [Serializable]
 public class GameManager
 {
-    [SerializeField] private GameDataSO gameDataSO;
+    [SerializeField] private GameSettings gameSettings;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
+    private Maze.Maze maze;
     private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
     
-    public GameDataSO GameDataSO => gameDataSO;
+    public GameSettings GameSettings => gameSettings;
 
-    public void Initialize()
+    public void Awake()
     {
+        AllManagers.Instance.SavingManager.LoadSettings(gameSettings);
         menuController = AllManagers.Instance.UIManager.MenuController;
         menuController.Initialize
         (
             StartMazeModification,
             StartBFS,
             StartAStar,
+            ResetSettingsToDefault,
+            UpdateGameSettings,
             Quit
         );
         inputManager = AllManagers.Instance.InputManager;
@@ -44,7 +49,7 @@ public class GameManager
         inputManager.GlobalMap.Enable();
         cameraController.Initialize(Camera.main);
         interactionController.Initialize(Camera.main);
-        Maze maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze>(Enums.SpawnedUtils.Maze);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
     }
     
@@ -91,7 +96,29 @@ public class GameManager
     private void StartMazeModification() => EnterStage(new MazeModificationStage());
     private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
-    
+    private void ResetSettingsToDefault()
+    {
+        gameSettings.LoadDefault();
+        ReloadMaze();
+    }
+
+    private void UpdateGameSettings(GameSettings settings, Enums.SettingsReloadingParam reloadParam)
+    {
+        gameSettings = settings;
+        switch (reloadParam)
+        {
+            case Enums.SettingsReloadingParam.Maze:
+                ReloadMaze();
+                break;
+            
+            case Enums.SettingsReloadingParam.TileColors:
+                ReloadTileColors();
+                break;
+        }
+        
+        AllManagers.Instance.SavingManager.SaveSettings();
+    }
+
     private void Quit()
     {
 #if UNITY_EDITOR
@@ -100,4 +127,13 @@ public class GameManager
         Application.Quit();
 #endif
     }
+
+    private void ReloadMaze()
+    {
+        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
+        stageMachine.Maze = maze;
+    }
+
+    private void ReloadTileColors() => maze.RefreshTiles();
 }

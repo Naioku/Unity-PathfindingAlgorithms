@@ -12,7 +12,12 @@ namespace StageMachineSystem
         private BaseStage currentStage;
         private SharedData SharedData { get; } = new SharedData();
 
-        public StageMachine(Maze maze)
+        public Maze.Maze Maze
+        {
+            set => SharedData.Maze = value;
+        }
+
+        public StageMachine(Maze.Maze maze)
         {
             SharedData.Maze = maze;
         }
@@ -54,7 +59,7 @@ namespace StageMachineSystem
             {
                 if (!AreUniqueTilesSet())
                 {
-                    AllManagers.Instance.UIManager.OpenInfoPanel("Algorithm", "You can't enter the algorithm with Start and Destination tiles not selected.");
+                    AllManagers.Instance.UIManager.OpenPopupInfo("Algorithm", "You can't enter the algorithm with Start and Destination tiles not selected.");
                     Debug.LogError("You can't enter Algorithm Stage with Start and Destination tiles not selected.");
                     return false;
                 }

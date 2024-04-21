@@ -13,9 +13,9 @@ namespace StageMachineSystem.Algorithm
         #region StaticValues
 
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-        protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameDataSO.GetPermittedDirections();
-        private readonly GameDataSO gameDataSO = AllManagers.Instance.GameManager.GameDataSO;
-        protected Maze maze;
+        protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameSettings.GetPermittedDirections();
+        private readonly GameManager gameManager = AllManagers.Instance.GameManager;
+        protected Maze.Maze maze;
         private Vector2Int startCoords;
         private Vector2Int destinationCoords;
 
@@ -53,7 +53,7 @@ namespace StageMachineSystem.Algorithm
 
         protected Action onFinish;
         
-        protected IWait GetWaitObject(Enums.WaitingTime waitingTime)
+        protected IWait GetWaitObject(Enums.AlgorithmStageDelay algorithmStageDelay)
         {
             if (performingStep)
             {
@@ -67,11 +67,11 @@ namespace StageMachineSystem.Algorithm
             }
             else
             {
-                return new WaitForSeconds(gameDataSO.GetWaitingTimeData(waitingTime));
+                return new WaitForSeconds(gameManager.GameSettings.GetDelay(algorithmStageDelay));
             }
         }
 
-        public void Initialize(Maze maze, Vector2Int startCoords, Vector2Int destinationCoords, Action onFinish)
+        public void Initialize(Maze.Maze maze, Vector2Int startCoords, Vector2Int destinationCoords, Action onFinish)
         {
             this.maze = maze;
             this.startCoords = startCoords;
@@ -116,7 +116,7 @@ namespace StageMachineSystem.Algorithm
         {
             currentNode = null;
             CursorPosition = null;
-            maze.Refresh();
+            maze.RefreshMarkers();
             nodesToCheck.Clear();
         }
 
@@ -164,7 +164,7 @@ namespace StageMachineSystem.Algorithm
             while (path.Count > 0)
             {
                 maze.SetMarkerType(path.Pop().Coords, Enums.MarkerType.Path);
-                yield return GetWaitObject(Enums.WaitingTime.AfterPathNodeSetting);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterPathNodeSetting);
             }
         }
         

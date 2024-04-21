@@ -6,18 +6,18 @@ public static class Enums
 
     public enum TileType
     {
-        Default,
-        Blocked,
-        Start,
-        Destination
+        Default = 0,
+        Start = 1,
+        Destination = 2,
+        Blocked = 3
     }
     
     public enum MarkerType
     {
-        None,
-        ReadyToCheck,
-        Checked,
-        Path
+        None = 0,
+        ReadyToCheck = 1,
+        Checked = 2,
+        Path = 3
     }
     
     [Flags]
@@ -56,11 +56,19 @@ public static class Enums
         Tile, Maze
     }
     
-    public enum SpawnedUI
+    public enum UISpawned
     {
         Menu,
         HUDMazeModification,
-        HUDAlgorithm
+        HUDAlgorithm,
+        SettingGroupPanel,
+        SettingGroupEntry,
+        SettingEntry
+    }
+    
+    public enum UIPopupType
+    {
+        Info, InputFloat, InputInt, InputColor, InputChoice, Confirmation
     }
 
     #endregion
@@ -87,7 +95,21 @@ public static class Enums
         Backward = -1,
         Forward = 1,
     }
+    
+    public enum ButtonsNaviDirection
+    {
+        Up, Down, Left, Right
+    }
 
+    #endregion
+
+    #region Settings
+
+    public enum SettingsReloadingParam
+    {
+        None, Maze, TileColors
+    }
+    
     #endregion
     
     public enum CameraMovementMode
@@ -95,12 +117,51 @@ public static class Enums
         Border, Key
     }
 
-    public enum WaitingTime
+    public enum AlgorithmStageDelay
     {
-        AfterNewNodeEnqueuing,
-        AfterNodeChecking,
-        AfterCursorPositionChange,
-        AfterPathNodeSetting
+        AfterNewNodeEnqueuing = 0,
+        AfterNodeChecking = 1,
+        AfterCursorPositionChange = 2,
+        AfterPathNodeSetting = 3
+    }
+
+    public enum SettingName
+    {
+        BoardWidth,
+        BoardLength,
+        TileDimensionLength,
+        TileDimensionHeight,
+        TileColorDefault,
+        TileColorStart,
+        TileColorDestination,
+        TileColorBlocked,
+        TileColorHighlightValue,
+        MarkerColorNone,
+        MarkerColorReadyToCheck,
+        MarkerColorChecked,
+        MarkerColorPath,
+        MarkerColorAlpha,
+        AlgorithmStageDelayAfterNewNodeEnqueuing,
+        AlgorithmStageDelayAfterNodeChecking,
+        AlgorithmStageDelayAfterCursorPositionChange,
+        AlgorithmStageDelayAfterPathNode,
+        PermittedDirections
+    }
+    
+    public enum SettingGroupStaticKey
+    {
+        BoardSize,
+        TileDimensions,
+        TileColors,
+        MarkerColors,
+        AlgorithmStageDelays,
+        PermittedDirections
+    }
+
+    public enum SettingGroupPanelStaticKey
+    {
+        Tiles,
+        Algorithms
     }
     
     public enum PermittedDirection

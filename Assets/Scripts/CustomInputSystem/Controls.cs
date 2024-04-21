@@ -548,6 +548,65 @@ namespace CustomInputSystem
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Popup"",
+            ""id"": ""59d57059-7028-424f-a848-9ade27b8d5ad"",
+            ""actions"": [
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d962d7ef-778c-4ce7-a698-95a4b24ea9f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Close"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7778be0-28d0-4a78-8a24-eeab60263fc8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d856519b-89f6-4cda-b71d-83c6ea909170"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef0327af-134b-4239-8e44-30990c48b5fc"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""340af6d1-0c5b-4733-a220-1d5042088a3a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Close"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -601,6 +660,10 @@ namespace CustomInputSystem
             m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
             m_UI_MiddleClick = m_UI.FindAction("MiddleClick", throwIfNotFound: true);
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
+            // Popup
+            m_Popup = asset.FindActionMap("Popup", throwIfNotFound: true);
+            m_Popup_Confirm = m_Popup.FindAction("Confirm", throwIfNotFound: true);
+            m_Popup_Close = m_Popup.FindAction("Close", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -957,6 +1020,47 @@ namespace CustomInputSystem
             }
         }
         public UIActions @UI => new UIActions(this);
+
+        // Popup
+        private readonly InputActionMap m_Popup;
+        private IPopupActions m_PopupActionsCallbackInterface;
+        private readonly InputAction m_Popup_Confirm;
+        private readonly InputAction m_Popup_Close;
+        public struct PopupActions
+        {
+            private @Controls m_Wrapper;
+            public PopupActions(@Controls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Confirm => m_Wrapper.m_Popup_Confirm;
+            public InputAction @Close => m_Wrapper.m_Popup_Close;
+            public InputActionMap Get() { return m_Wrapper.m_Popup; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PopupActions set) { return set.Get(); }
+            public void SetCallbacks(IPopupActions instance)
+            {
+                if (m_Wrapper.m_PopupActionsCallbackInterface != null)
+                {
+                    @Confirm.started -= m_Wrapper.m_PopupActionsCallbackInterface.OnConfirm;
+                    @Confirm.performed -= m_Wrapper.m_PopupActionsCallbackInterface.OnConfirm;
+                    @Confirm.canceled -= m_Wrapper.m_PopupActionsCallbackInterface.OnConfirm;
+                    @Close.started -= m_Wrapper.m_PopupActionsCallbackInterface.OnClose;
+                    @Close.performed -= m_Wrapper.m_PopupActionsCallbackInterface.OnClose;
+                    @Close.canceled -= m_Wrapper.m_PopupActionsCallbackInterface.OnClose;
+                }
+                m_Wrapper.m_PopupActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Confirm.started += instance.OnConfirm;
+                    @Confirm.performed += instance.OnConfirm;
+                    @Confirm.canceled += instance.OnConfirm;
+                    @Close.started += instance.OnClose;
+                    @Close.performed += instance.OnClose;
+                    @Close.canceled += instance.OnClose;
+                }
+            }
+        }
+        public PopupActions @Popup => new PopupActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -1002,6 +1106,11 @@ namespace CustomInputSystem
             void OnScrollWheel(InputAction.CallbackContext context);
             void OnMiddleClick(InputAction.CallbackContext context);
             void OnRightClick(InputAction.CallbackContext context);
+        }
+        public interface IPopupActions
+        {
+            void OnConfirm(InputAction.CallbackContext context);
+            void OnClose(InputAction.CallbackContext context);
         }
     }
 }

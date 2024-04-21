@@ -8,12 +8,20 @@ namespace UI.MenuPanels
     {
         [SerializeField] protected Button backButton;
 
-        protected void Initialize(Action onBack) => backButton.OnPressAction += onBack;
-
-        public override void Show()
+        private Action onBack;
+        
+        protected void Initialize(Action onBack)
         {
-            base.Show();
-            SelectDefaultButton();
+            this.onBack = onBack;
+            backButton.OnPressAction += OnBack;
+        }
+
+        protected virtual void ResetPanel() {}
+
+        private void OnBack()
+        {
+            ResetPanel();
+            onBack.Invoke();
         }
     }
 }

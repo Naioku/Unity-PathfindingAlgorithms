@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpawningSystem;
 using UI.HUDPanels;
 using UI.PopupPanels;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
 namespace UI
@@ -10,41 +12,90 @@ namespace UI
     [Serializable]
     public class UIManager
     {
-        [SerializeField] private MenuController menuPrefab;
-        [SerializeField] private HUDControllerMazeModification hudPrefabMazeModification;
-        [SerializeField] private HUDControllerAlgorithm hudPrefabAlgorithm;
-        [SerializeField] private InfoPanel infoPanelPrefab;
+        [SerializeField] private SpawnManager<Enums.UISpawned> uiSpawner;
+        [SerializeField] private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
         
+        private PopupPanel currentPopupPanel;
+        private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new Dictionary<Type, Enums.UIPopupType>
+        {
+            { typeof(int), Enums.UIPopupType.InputInt },
+            { typeof(float), Enums.UIPopupType.InputFloat },
+            { typeof(Color), Enums.UIPopupType.InputColor },
+            // { typeof(float), Enums.UIPopupType.InputChoice }
+        };
+
+        public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
         public MenuController MenuController { get; private set; }
         public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
         public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
-        public UIStaticPanel CurrentStaticPanel { set; private get; }
-        
-        private PopupPanel currentPopupPanel;
 
-        public void Initialize() => CreatePanels();
+        private GameObject lastStaticPanelGameObject;
+        
+        public void Awake()
+        {
+            uiSpawner.Awake();
+            uiPopupSpawner.Awake();
+            CreatePanels();
+        }
 
         public void CreatePanels()
         {
-            SpawnManager<Enums.SpawnedUI> uiSpawner = AllManagers.Instance.UISpawner;
-            MenuController = uiSpawner.CreateObject<MenuController>(Enums.SpawnedUI.Menu);
-            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.SpawnedUI.HUDMazeModification);
-            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.SpawnedUI.HUDAlgorithm);
+            MenuController = uiSpawner.CreateObject<MenuController>(Enums.UISpawned.Menu);
+            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.UISpawned.HUDMazeModification);
+            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.UISpawned.HUDAlgorithm);
         }
         
-        public void OpenInfoPanel(string header, string info)
+        public void OpenPopupInfo(string header, string message)
         {
-            AllManagers.Instance.InputManager.DisableInput();
-            InfoPanel infoPanel = Object.Instantiate(infoPanelPrefab);
-            infoPanel.Initialize(header, info, CloseCurrentPopupPanel);
-            currentPopupPanel = infoPanel;
+            InfoPanel infoPanel = uiPopupSpawner.CreateObject<InfoPanel>(Enums.UIPopupType.Info);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, message);
+            OpenPanel(infoPanel);
+        }
+
+        public void OpenPopupInput<TReturn>(
+            string header,
+            TReturn initialValue,
+            Action<TReturn> onClose)
+        {
+            if (!inputPopupsLookup.ContainsKey(typeof(TReturn)))
+            {
+                Debug.LogError("Input popup type not supported, yet.");
+                return;
+            }
+            
+            InputPanel<TReturn> infoPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
+            {
+                onClose.Invoke(result);
+                CloseCurrentPopupPanel();
+            });
+            OpenPanel(infoPanel);
+        }
+        
+        public void OpenPopupConfirmation(string header, string message, Action onConfirm)
+        {
+            ConfirmationPanel infoPanel = uiPopupSpawner.CreateObject<ConfirmationPanel>(Enums.UIPopupType.Confirmation);
+            infoPanel.Initialize(header, CloseCurrentPopupPanel, message, () =>
+            {
+                onConfirm.Invoke();
+                CloseCurrentPopupPanel();
+            });
+            OpenPanel(infoPanel);
+        }
+
+        private void OpenPanel(PopupPanel createdPanel)
+        {
+            AllManagers.Instance.InputManager.EnablePopupMode();
+            currentPopupPanel = createdPanel;
+            lastStaticPanelGameObject = EventSystem.current.currentSelectedGameObject;
+            EventSystem.current.SetSelectedGameObject(currentPopupPanel.SelectableOnOpen);
         }
 
         private void CloseCurrentPopupPanel()
         {
-            AllManagers.Instance.InputManager.EnableInput();
             Object.Destroy(currentPopupPanel.gameObject);
-            CurrentStaticPanel.SelectDefaultButton();
+            AllManagers.Instance.InputManager.DisablePopupMode();
+            EventSystem.current.SetSelectedGameObject(lastStaticPanelGameObject);
         }
     }
 }

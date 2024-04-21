@@ -13,7 +13,7 @@ namespace UI.HUDPanels
         private Dictionary<T, TaggedButton<T>> buttonsLookup;
 
         private void Awake() => BuildButtonsLookup();
-        private void Start() => Hide(false);
+        private void Start() => Hide();
         
         public void Initialize(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
@@ -35,16 +35,10 @@ namespace UI.HUDPanels
             }
             backButton.ResetObj();
         }
-        
-        public override void Show()
-        {
-            base.Show();
-            SelectDefaultButton();
-        }
 
         public void SelectButton(T type) => buttonsLookup[type].Select();
 
-        public override void SelectDefaultButton() => SelectButton(0);
+        protected override void SelectDefaultButton() => SelectButton(0);
 
         private void InitButtonsData(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
         {
@@ -73,11 +67,11 @@ namespace UI.HUDPanels
             int buttonsCount = buttons.Count;
             for (int i = 0; i < buttonsCount; i++)
             {
-                buttons[i].SetNavigation
-                (
-                    onUp: Utility.CalculateButtonForNavigation(i, Enums.Direction.Backward, buttonsCount, buttons),
-                    onDown: Utility.CalculateButtonForNavigation(i, Enums.Direction.Forward, buttonsCount, buttons)
-                );
+                buttons[i].SetNavigation(new SelectableNavigation
+                {
+                    OnUp = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    OnDown = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
+                });
             }
         }
         

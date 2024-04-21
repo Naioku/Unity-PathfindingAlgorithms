@@ -15,7 +15,7 @@ namespace UI.HUDPanels
 
         public void UpdateCurrentNodeLabel(Enums.TileType tileType)
         {
-            Color color = AllManagers.Instance.GameManager.GameDataSO.GetPermanentColor(tileType);
+            Color color = AllManagers.Instance.GameManager.GameSettings.GetTileColor(tileType);
             currentNodeLabel.text = tileType.ToString();
             currentNodeLabel.color = color;
         }

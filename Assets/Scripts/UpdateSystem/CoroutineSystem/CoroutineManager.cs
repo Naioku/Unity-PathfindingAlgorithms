@@ -14,7 +14,7 @@ namespace UpdateSystem.CoroutineSystem
 
         public CoroutineCaller GenerateCoroutineCaller() => new CoroutineCaller(this);
         
-        public void Initialize()
+        public void Awake()
         {
             updateManager = AllManagers.Instance.UpdateManager;
             updateManager.RegisterOnUpdate(PerformUpdate);

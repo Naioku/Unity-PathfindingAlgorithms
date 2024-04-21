@@ -20,7 +20,7 @@ namespace UI.MenuPanels
             InitButtonActions(actionsData);
         }
         
-        public override void SelectDefaultButton() => buttons[0].Select();
+        protected override void SelectDefaultButton() => buttons[0].Select();
 
         private void BuildButtonsLookup()
         {
@@ -42,11 +42,11 @@ namespace UI.MenuPanels
             int buttonsCount = buttons.Count;
             for (int i = 0; i < buttonsCount; i++)
             {
-                buttons[i].SetNavigation
-                (
-                    onUp: Utility.CalculateButtonForNavigation(i, Enums.Direction.Backward, buttonsCount, buttons),
-                    onDown: Utility.CalculateButtonForNavigation(i, Enums.Direction.Forward, buttonsCount, buttons)
-                );
+                buttons[i].SetNavigation(new SelectableNavigation
+                {
+                    OnUp = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    OnDown = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
+                });
             }
         }
         
