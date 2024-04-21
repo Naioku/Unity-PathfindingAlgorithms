@@ -48,6 +48,7 @@ public class GameManager
     {
         inputManager.GlobalMap.Enable();
         cameraController.Initialize(Camera.main);
+        cameraController.UpdateScreenLimits(gameSettings);
         interactionController.Initialize(Camera.main);
         maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
@@ -116,6 +117,7 @@ public class GameManager
                 break;
         }
         
+        cameraController.UpdateScreenLimits(gameSettings);
         AllManagers.Instance.SavingManager.SaveSettings();
     }
 

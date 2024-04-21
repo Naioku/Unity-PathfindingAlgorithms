@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using CustomInputSystem;
+using Settings;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 
@@ -10,8 +11,12 @@ public class CameraController
     [SerializeField] private float speed = 20;
     [SerializeField] private float keyModeMovementSpeed = 0.05f;
     [SerializeField] private float screenBorderThickness = 10;
-    [SerializeField] private Vector2 screenXLimits; // Todo: Set limits depending on the game board's size.
-    [SerializeField] private Vector2 screenZLimits;
+    [SerializeField] private float screenXMaxMargin;
+    [SerializeField] private float screenXMinMargin;
+    [SerializeField] private float screenZMaxMargin;
+    [SerializeField] private float screenZMinMargin;
+    private Vector2 screenXLimits;
+    private Vector2 screenZLimits;
 
     private Camera mainCamera;
     private Vector2 keyModeMovementCursorLockPosition;
@@ -37,6 +42,25 @@ public class CameraController
         StopMovement();
     }
 
+    public void StartMovement()
+    {
+        movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement());
+    }
+
+    public void StopMovement()
+    {
+        coroutineCaller.StopCoroutine(ref movementCoroutineId);
+    }
+
+    public void UpdateScreenLimits(GameSettings settings)
+    {
+        float boardRealWidth = settings.BoardWidth * settings.TileLength;
+        float boardRealLength = settings.BoardLength * settings.TileLength;
+
+        screenXLimits = new Vector2(0 - screenXMinMargin, boardRealWidth + screenXMaxMargin);
+        screenZLimits = new Vector2(0 - screenZMinMargin, boardRealLength + screenZMaxMargin);
+    }
+
     private void StartKeyModeMovement()
     {
         keyModeMovementCursorLockPosition = AllManagers.Instance.InputManager.CursorPosition;
@@ -47,16 +71,6 @@ public class CameraController
     {
         keyModeMovementCursorLockPosition = Vector2.zero;
         movementMode = Enums.CameraMovementMode.Border;
-    }
-
-    public void StartMovement()
-    {
-        movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement());
-    }
-
-    public void StopMovement()
-    {
-        coroutineCaller.StopCoroutine(ref movementCoroutineId);
     }
 
     private IEnumerator PerformMovement()

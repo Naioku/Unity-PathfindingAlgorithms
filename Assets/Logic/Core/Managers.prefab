@@ -50,8 +50,10 @@ MonoBehaviour:
       speed: 20
       keyModeMovementSpeed: 0.05
       screenBorderThickness: 10
-      screenXLimits: {x: -5, y: 15}
-      screenZLimits: {x: -5, y: 5}
+      screenXMaxMargin: 0
+      screenXMinMargin: 0
+      screenZMaxMargin: -8
+      screenZMinMargin: 4
     interactionController:
       interactionRange: 99
   <UtilsSpawner>k__BackingField:
