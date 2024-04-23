@@ -11,6 +11,8 @@ namespace UI.MenuPanels.Settings
     {
         private const string ResetToDefaultPopupHeader = "Reset to default?";
         private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
+        private const string SavedPopupHeader = "Completed";
+        private const string SavedPopupMessage = "Settings has been saved.";
         
         [SerializeField] private float scrollingDisplacementMargin = 30;
         
@@ -193,6 +195,12 @@ namespace UI.MenuPanels.Settings
             }
             
             onSave.Invoke(gameSettings, reloadingParam);
+            
+            AllManagers.Instance.UIManager.OpenPopupInfo
+            (
+                SavedPopupHeader,
+                SavedPopupMessage
+            );
         }
     }
 }
