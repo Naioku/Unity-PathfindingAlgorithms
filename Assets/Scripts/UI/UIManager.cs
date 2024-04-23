@@ -62,14 +62,36 @@ namespace UI
                 Debug.LogError("Input popup type not supported, yet.");
                 return;
             }
-            
-            InputPanel<TReturn> infoPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
-            infoPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
+
+            InputPanel<TReturn> inputPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
+            inputPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
             {
                 onClose.Invoke(result);
                 CloseCurrentPopupPanel();
             });
-            OpenPanel(infoPanel);
+            OpenPanel(inputPanel);
+        }
+        
+        public void OpenPopupInput<TReturn>(
+            string header,
+            TReturn initialValue,
+            Action<TReturn> onClose,
+            TReturn minValue,
+            TReturn maxValue)
+        {
+            if (!inputPopupsLookup.ContainsKey(typeof(TReturn)))
+            {
+                Debug.LogError("Input popup type not supported, yet.");
+                return;
+            }
+
+            InputPanelLimited<TReturn> inputPanel = uiPopupSpawner.CreateObject<InputPanelLimited<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
+            inputPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, minValue, maxValue, result =>
+            {
+                onClose.Invoke(result);
+                CloseCurrentPopupPanel();
+            });
+            OpenPanel(inputPanel);
         }
         
         public void OpenPopupConfirmation(string header, string message, Action onConfirm)

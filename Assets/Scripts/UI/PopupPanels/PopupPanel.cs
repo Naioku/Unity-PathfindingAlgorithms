@@ -1,8 +1,8 @@
 ﻿using System;
 using CustomInputSystem;
 using TMPro;
+using UI.Buttons;
 using UnityEngine;
-using Button = UI.Buttons.Button;
 
 namespace UI.PopupPanels
 {

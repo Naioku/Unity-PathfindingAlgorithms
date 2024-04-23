@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI.PopupPanels
 {
-    public class IntPanel : InputPanel<int>
+    public class IntPanel : InputPanelLimited<int>
     {
         [SerializeField] private TMP_InputField inputField;
 
@@ -12,12 +12,9 @@ namespace UI.PopupPanels
         protected override void SetInitialValue(int initialValue) => inputField.text = initialValue.ToString();
         protected override void Confirm()
         {
-            if (string.IsNullOrEmpty(inputField.text))
-            {
-                inputField.text = default(int).ToString();
-            }
-            
-            onConfirm.Invoke(int.Parse(inputField.text));
+            int result = string.IsNullOrEmpty(inputField.text) ? default : int.Parse(inputField.text);
+            result = Mathf.Clamp(result, minValue, maxValue);
+            onConfirm.Invoke(result);
         }
     }
 }

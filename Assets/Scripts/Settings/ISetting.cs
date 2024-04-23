@@ -7,6 +7,5 @@ namespace Settings
         object SerializableValue { get; set; }
         IUILogicSetting UILogicSetting { get; }
         void SetValue(IUILogicSetting uiLogicSetting);
-        
     }
 }

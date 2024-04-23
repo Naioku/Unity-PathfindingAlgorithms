@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Settings;
+using UI.Buttons;
 using UI.MenuPanels.Settings.Logic;
 using UnityEngine;
-using Button = UI.Buttons.Button;
 
 namespace UI.MenuPanels.Settings
 {

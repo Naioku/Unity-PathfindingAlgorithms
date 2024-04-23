@@ -24,8 +24,8 @@ namespace UpdateSystem.CoroutineSystem
         {
             updateManager.UnregisterFromUpdate(PerformUpdate);
         }
-        
-        public void PerformUpdate()
+
+        private void PerformUpdate()
         {
             foreach (CoroutinesItem data in coroutinesItems)
             {

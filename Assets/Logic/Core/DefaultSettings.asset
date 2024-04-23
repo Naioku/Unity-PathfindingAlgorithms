@@ -14,12 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardWidth:
     value: 10
+    maxValue: 100
+    minValue: 1
   boardLength:
     value: 10
+    maxValue: 100
+    minValue: 1
   tileLength:
     value: 1
+    maxValue: 10
+    minValue: 0.1
   tileHeight:
     value: 1
+    maxValue: 10
+    minValue: 0.1
   tileColorDefault:
     value: {r: 0.56078434, g: 0.81960785, b: 0.65882355, a: 1}
   tileColorStart:
@@ -30,6 +38,8 @@ MonoBehaviour:
     value: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
   tileColorHighlightValue:
     value: 0.2
+    maxValue: 0.8
+    minValue: 0.1
   markerColorNone:
     value: {r: 1, g: 1, b: 1, a: 1}
   markerColorReadyToCheck:
@@ -40,13 +50,23 @@ MonoBehaviour:
     value: {r: 0.2901961, g: 0.39215687, b: 0.6784314, a: 1}
   tileColorAlpha:
     value: 0.7
+    maxValue: 1
+    minValue: 0.4
   algorithmStageDelayAfterNewNodeEnqueuing:
     value: 0.1
+    maxValue: 10
+    minValue: 0
   algorithmStageDelayAfterNodeChecking:
     value: 0.1
+    maxValue: 10
+    minValue: 0
   algorithmStageDelayAfterCursorPositionChange:
     value: 0.1
+    maxValue: 10
+    minValue: 0
   algorithmStageDelayAfterPathNodeSetting:
     value: 0.1
+    maxValue: 10
+    minValue: 0
   permittedDirectionsSetting:
     value: 0000000004000000030000000500000001000000060000000200000007000000
