@@ -10,6 +10,9 @@ using UnityEngine;
 [Serializable]
 public class GameManager
 {
+    private const string QuitHeader = "Do You want to quit?";
+    private const string QuitMessage = "Are You sure You want to quit the app?";
+    
     [SerializeField] private GameSettings gameSettings;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
@@ -35,12 +38,10 @@ public class GameManager
             Quit
         );
         inputManager = AllManagers.Instance.InputManager;
-        InitInput();
     }
 
     public void Destroy()
     {
-        RemoveInput();
         cameraController.Destroy();
     }
     
@@ -61,25 +62,6 @@ public class GameManager
         menuController.Open();
         cameraController.StopMovement();
         interactionController.StopInteracting();
-        inputManager.StageSelectionMap.Enable();
-    }
-
-    private void InitInput()
-    {
-        inputManager.StageSelectionMap.OnMazeModificationData.Performed += StartMazeModification;
-        inputManager.StageSelectionMap.OnBFSData.Performed += StartBFS;
-        inputManager.StageSelectionMap.OnAStarData.Performed += StartAStar;
-        
-        inputManager.StageSelectionMap.Enable();
-    }
-
-    private void RemoveInput()
-    {
-        inputManager.StageSelectionMap.Disable();
-        
-        inputManager.StageSelectionMap.OnMazeModificationData.Performed -= StartMazeModification;
-        inputManager.StageSelectionMap.OnBFSData.Performed -= StartBFS;
-        inputManager.StageSelectionMap.OnAStarData.Performed -= StartAStar;
     }
 
     private void EnterStage(BaseStage stage)
@@ -120,7 +102,12 @@ public class GameManager
         AllManagers.Instance.SavingManager.SaveSettings();
     }
 
-    private void Quit()
+    private void Quit() => AllManagers.Instance.UIManager.OpenPopupConfirmation(
+        QuitHeader,
+        QuitMessage,
+        QuitInternal);
+
+    private void QuitInternal()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

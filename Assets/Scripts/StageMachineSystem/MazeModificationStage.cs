@@ -33,7 +33,6 @@ namespace StageMachineSystem
         public MazeModificationStage()
         {
             hudController = AllManagers.Instance.UIManager.HUDControllerMazeModification;
-            InitInput();
         }
 
         public override void Enter()
@@ -46,7 +45,7 @@ namespace StageMachineSystem
         
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
                 new Dictionary<Enums.TileType, ButtonData>
                 {
                     { Enums.TileType.Default, new ButtonData { Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})" } },

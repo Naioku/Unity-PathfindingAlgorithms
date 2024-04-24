@@ -48,7 +48,7 @@ namespace CustomInputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ExitStage"",
+                    ""name"": ""Back"",
                     ""type"": ""Button"",
                     ""id"": ""fd179ee1-f408-4171-b203-92fb7c4105d9"",
                     ""expectedControlType"": ""Button"",
@@ -87,75 +87,7 @@ namespace CustomInputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""ExitStage"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""StageSelection"",
-            ""id"": ""ddee2105-5b18-4b65-99e5-7942a24b838f"",
-            ""actions"": [
-                {
-                    ""name"": ""MazeModification"",
-                    ""type"": ""Button"",
-                    ""id"": ""888444ae-8b80-4d45-96a9-ae33bebf4945"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""BFS"",
-                    ""type"": ""Button"",
-                    ""id"": ""8c97ffda-092f-44f4-b5fb-598079b94eca"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""AStar"",
-                    ""type"": ""Button"",
-                    ""id"": ""471032e5-62c3-4879-9711-0319c0ccee0b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""c6b8bab7-8411-4b7c-bcf8-c3b32fd88f4a"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""MazeModification"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3e25eb64-ee82-406a-b0f2-371daf9a84f2"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""BFS"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""16e58c4d-eb7a-4cc7-8634-372b45e8785e"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""AStar"",
+                    ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -632,12 +564,7 @@ namespace CustomInputSystem
             m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
             m_Global_ClickInteraction = m_Global.FindAction("ClickInteraction", throwIfNotFound: true);
             m_Global_CameraMovement = m_Global.FindAction("CameraMovement", throwIfNotFound: true);
-            m_Global_ExitStage = m_Global.FindAction("ExitStage", throwIfNotFound: true);
-            // StageSelection
-            m_StageSelection = asset.FindActionMap("StageSelection", throwIfNotFound: true);
-            m_StageSelection_MazeModification = m_StageSelection.FindAction("MazeModification", throwIfNotFound: true);
-            m_StageSelection_BFS = m_StageSelection.FindAction("BFS", throwIfNotFound: true);
-            m_StageSelection_AStar = m_StageSelection.FindAction("AStar", throwIfNotFound: true);
+            m_Global_Back = m_Global.FindAction("Back", throwIfNotFound: true);
             // MazeModification
             m_MazeModification = asset.FindActionMap("MazeModification", throwIfNotFound: true);
             m_MazeModification_SetDefaultNode = m_MazeModification.FindAction("SetDefaultNode", throwIfNotFound: true);
@@ -725,14 +652,14 @@ namespace CustomInputSystem
         private IGlobalActions m_GlobalActionsCallbackInterface;
         private readonly InputAction m_Global_ClickInteraction;
         private readonly InputAction m_Global_CameraMovement;
-        private readonly InputAction m_Global_ExitStage;
+        private readonly InputAction m_Global_Back;
         public struct GlobalActions
         {
             private @Controls m_Wrapper;
             public GlobalActions(@Controls wrapper) { m_Wrapper = wrapper; }
             public InputAction @ClickInteraction => m_Wrapper.m_Global_ClickInteraction;
             public InputAction @CameraMovement => m_Wrapper.m_Global_CameraMovement;
-            public InputAction @ExitStage => m_Wrapper.m_Global_ExitStage;
+            public InputAction @Back => m_Wrapper.m_Global_Back;
             public InputActionMap Get() { return m_Wrapper.m_Global; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -748,9 +675,9 @@ namespace CustomInputSystem
                     @CameraMovement.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
                     @CameraMovement.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
                     @CameraMovement.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnCameraMovement;
-                    @ExitStage.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
-                    @ExitStage.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
-                    @ExitStage.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnExitStage;
+                    @Back.started -= m_Wrapper.m_GlobalActionsCallbackInterface.OnBack;
+                    @Back.performed -= m_Wrapper.m_GlobalActionsCallbackInterface.OnBack;
+                    @Back.canceled -= m_Wrapper.m_GlobalActionsCallbackInterface.OnBack;
                 }
                 m_Wrapper.m_GlobalActionsCallbackInterface = instance;
                 if (instance != null)
@@ -761,62 +688,13 @@ namespace CustomInputSystem
                     @CameraMovement.started += instance.OnCameraMovement;
                     @CameraMovement.performed += instance.OnCameraMovement;
                     @CameraMovement.canceled += instance.OnCameraMovement;
-                    @ExitStage.started += instance.OnExitStage;
-                    @ExitStage.performed += instance.OnExitStage;
-                    @ExitStage.canceled += instance.OnExitStage;
+                    @Back.started += instance.OnBack;
+                    @Back.performed += instance.OnBack;
+                    @Back.canceled += instance.OnBack;
                 }
             }
         }
         public GlobalActions @Global => new GlobalActions(this);
-
-        // StageSelection
-        private readonly InputActionMap m_StageSelection;
-        private IStageSelectionActions m_StageSelectionActionsCallbackInterface;
-        private readonly InputAction m_StageSelection_MazeModification;
-        private readonly InputAction m_StageSelection_BFS;
-        private readonly InputAction m_StageSelection_AStar;
-        public struct StageSelectionActions
-        {
-            private @Controls m_Wrapper;
-            public StageSelectionActions(@Controls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @MazeModification => m_Wrapper.m_StageSelection_MazeModification;
-            public InputAction @BFS => m_Wrapper.m_StageSelection_BFS;
-            public InputAction @AStar => m_Wrapper.m_StageSelection_AStar;
-            public InputActionMap Get() { return m_Wrapper.m_StageSelection; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(StageSelectionActions set) { return set.Get(); }
-            public void SetCallbacks(IStageSelectionActions instance)
-            {
-                if (m_Wrapper.m_StageSelectionActionsCallbackInterface != null)
-                {
-                    @MazeModification.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
-                    @MazeModification.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
-                    @MazeModification.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnMazeModification;
-                    @BFS.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
-                    @BFS.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
-                    @BFS.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnBFS;
-                    @AStar.started -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
-                    @AStar.performed -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
-                    @AStar.canceled -= m_Wrapper.m_StageSelectionActionsCallbackInterface.OnAStar;
-                }
-                m_Wrapper.m_StageSelectionActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @MazeModification.started += instance.OnMazeModification;
-                    @MazeModification.performed += instance.OnMazeModification;
-                    @MazeModification.canceled += instance.OnMazeModification;
-                    @BFS.started += instance.OnBFS;
-                    @BFS.performed += instance.OnBFS;
-                    @BFS.canceled += instance.OnBFS;
-                    @AStar.started += instance.OnAStar;
-                    @AStar.performed += instance.OnAStar;
-                    @AStar.canceled += instance.OnAStar;
-                }
-            }
-        }
-        public StageSelectionActions @StageSelection => new StageSelectionActions(this);
 
         // MazeModification
         private readonly InputActionMap m_MazeModification;
@@ -1074,13 +952,7 @@ namespace CustomInputSystem
         {
             void OnClickInteraction(InputAction.CallbackContext context);
             void OnCameraMovement(InputAction.CallbackContext context);
-            void OnExitStage(InputAction.CallbackContext context);
-        }
-        public interface IStageSelectionActions
-        {
-            void OnMazeModification(InputAction.CallbackContext context);
-            void OnBFS(InputAction.CallbackContext context);
-            void OnAStar(InputAction.CallbackContext context);
+            void OnBack(InputAction.CallbackContext context);
         }
         public interface IMazeModificationActions
         {

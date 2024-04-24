@@ -37,7 +37,7 @@ namespace StageMachineSystem
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
                 new Dictionary<Enums.AlgorithmAction, ButtonData>
                 {
                     { Enums.AlgorithmAction.Play , new ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})" } },

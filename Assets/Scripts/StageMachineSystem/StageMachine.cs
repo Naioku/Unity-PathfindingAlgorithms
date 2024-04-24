@@ -31,7 +31,6 @@ namespace StageMachineSystem
         {
             if (!SanityCheck(newStage)) return false;
             
-            AllManagers.Instance.InputManager.StageSelectionMap.Disable();
             currentStage?.Exit();
             currentStage = newStage;
             if (currentStage == null)
