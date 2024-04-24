@@ -12,7 +12,7 @@ namespace UI.MenuPanels.Settings
         private const string ResetToDefaultPopupHeader = "Reset to default?";
         private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
         private const string SavedPopupHeader = "Completed";
-        private const string SavedPopupMessage = "Settings has been saved.";
+        private const string SavedPopupMessage = "Settings have been saved.";
         
         [SerializeField] private float scrollingDisplacementMargin = 30;
         
@@ -36,7 +36,7 @@ namespace UI.MenuPanels.Settings
             this.onSave = onSave;
             resetToDefaultButton.OnPressAction += OnResetValuesToDefault;
             resetButton.OnPressAction += ResetPanel;
-            saveButton.OnPressAction += Save;
+            saveButton.OnPressAction += OnSave;
             Init();
             BuildLookup();
             InitUI();
@@ -151,6 +151,7 @@ namespace UI.MenuPanels.Settings
         {
             onResetToDefault.Invoke();
             LoadInputValues(true);
+            Save(false);
         }
 
         private void LoadInputValues(bool loadDefault = false)
@@ -168,7 +169,9 @@ namespace UI.MenuPanels.Settings
             }
         }
 
-        private void Save()
+        private void OnSave() => Save(true);
+        
+        private void Save(bool openPopup)
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
             foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
@@ -195,12 +198,15 @@ namespace UI.MenuPanels.Settings
             }
             
             onSave.Invoke(gameSettings, reloadingParam);
-            
-            AllManagers.Instance.UIManager.OpenPopupInfo
-            (
-                SavedPopupHeader,
-                SavedPopupMessage
-            );
+
+            if (openPopup)
+            {
+                AllManagers.Instance.UIManager.OpenPopupInfo
+                (
+                    SavedPopupHeader,
+                    SavedPopupMessage
+                );
+            }
         }
     }
 }
