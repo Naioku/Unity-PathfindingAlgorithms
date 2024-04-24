@@ -27,9 +27,9 @@ namespace UI.MenuPanels.Settings
         private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new Dictionary<Enums.SettingName, IUILogicSetting>();
 
         private Action onResetToDefault;
-        private Action<GameSettings, Enums.SettingsReloadingParam> onSave;
+        private Action<Enums.SettingsReloadingParam> onSave;
         
-        public void Initialize(Action onBack, Action onResetToDefault, Action<GameSettings, Enums.SettingsReloadingParam> onSave)
+        public void Initialize(Action onBack, Action onResetToDefault, Action<Enums.SettingsReloadingParam> onSave)
         {
             base.Initialize(onBack);
             this.onResetToDefault = onResetToDefault;
@@ -42,12 +42,12 @@ namespace UI.MenuPanels.Settings
             InitUI();
             CalcEntryPosRelatedToRoot();
             InitButtonsNavigation();
-            LoadInputValues();
+            LoadInputValues(Enums.SettingLoadingParam.Init);
         }
 
         protected override void SelectDefaultButton() => backButton.Select();
 
-        protected override void ResetPanel() => LoadInputValues();
+        protected override void ResetPanel() => LoadInputValues(Enums.SettingLoadingParam.Reset);
 
         private void Init()
         {
@@ -150,22 +150,22 @@ namespace UI.MenuPanels.Settings
         private void ResetValuesToDefault()
         {
             onResetToDefault.Invoke();
-            LoadInputValues(true);
+            LoadInputValues(Enums.SettingLoadingParam.Standard);
             Save(false);
         }
 
-        private void LoadInputValues(bool loadDefault = false)
+        private void LoadInputValues(Enums.SettingLoadingParam param)
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
 
-            if (loadDefault)
+            if (param == Enums.SettingLoadingParam.Standard)
             {
                 gameSettings.LoadDefault();
             }
             
             foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
             {
-                entry.Value.SetValue(gameSettings.GetSetting(entry.Key));
+                entry.Value.SetValue(gameSettings.GetSetting(entry.Key), param);
             }
         }
 
@@ -174,19 +174,22 @@ namespace UI.MenuPanels.Settings
         private void Save(bool openPopup)
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
-            foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
-            {
-                gameSettings.GetSetting(entry.Key).SetValue(entry.Value);
-            }
-
-            Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
             List<Enums.SettingGroupStaticKey> settingGroupChangedValues = new List<Enums.SettingGroupStaticKey>();
 
-            foreach (UILogicSettingGroupPanel panel in panels)
+            foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
             {
-                settingGroupChangedValues.AddRange(panel.ChangedValues);
+                IUILogicSetting setting = entry.Value;
+                if (!setting.ChangedThroughPopup) continue;
+                
+                gameSettings.GetSetting(entry.Key).SetValue(setting);
+                if (!settingGroupChangedValues.Contains(setting.SettingGroup))
+                {
+                    settingGroupChangedValues.Add(setting.SettingGroup);
+                    setting.ChangedThroughPopup = false;
+                }
             }
             
+            Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
             if (settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.BoardSize) ||
                 settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.TileDimensions))
             {
@@ -197,7 +200,7 @@ namespace UI.MenuPanels.Settings
                 reloadingParam = Enums.SettingsReloadingParam.TileColors;
             }
             
-            onSave.Invoke(gameSettings, reloadingParam);
+            onSave.Invoke(reloadingParam);
 
             if (openPopup)
             {

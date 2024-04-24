@@ -13,7 +13,8 @@ namespace UI.MenuPanels.Settings.Logic
         protected StaticTextManager staticTextManager;
 
         public Enums.SettingName Name { get; private set; }
-        public bool ChangedThroughPopup { get; private set; }
+        public Enums.SettingGroupStaticKey SettingGroup => groupNameStaticKey;
+        public bool ChangedThroughPopup { get; set; }
         public ViewSetting ViewSetting { get; private set; }
 
         public event Action<EntryPosition> OnSelect;
@@ -21,9 +22,19 @@ namespace UI.MenuPanels.Settings.Logic
         public T Value => value;
 
         // Todo: Consider moving ChangedThroughPopup into the SetValueInternal().
-        public virtual void SetValue(ISetting setting)
+        public virtual void SetValue(ISetting setting, Enums.SettingLoadingParam param)
         {
-            ChangedThroughPopup = false;
+            switch (param)
+            {
+                case Enums.SettingLoadingParam.Standard:
+                    ChangedThroughPopup = true;
+                    break;
+                
+                case Enums.SettingLoadingParam.Reset:
+                    ChangedThroughPopup = false;
+                    break;
+            }
+            
             SetValueInternal(((Setting<T>)setting).Value);
         }
 

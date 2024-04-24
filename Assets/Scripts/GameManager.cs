@@ -103,13 +103,13 @@ public class GameManager
         ReloadMaze();
     }
 
-    private void UpdateGameSettings(GameSettings settings, Enums.SettingsReloadingParam reloadParam)
+    private void UpdateGameSettings(Enums.SettingsReloadingParam reloadParam)
     {
-        gameSettings = settings;
         switch (reloadParam)
         {
             case Enums.SettingsReloadingParam.Maze:
                 ReloadMaze();
+                cameraController.UpdateScreenLimits(gameSettings);
                 break;
             
             case Enums.SettingsReloadingParam.TileColors:
@@ -117,7 +117,6 @@ public class GameManager
                 break;
         }
         
-        cameraController.UpdateScreenLimits(gameSettings);
         AllManagers.Instance.SavingManager.SaveSettings();
     }
 

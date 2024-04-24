@@ -22,7 +22,7 @@ namespace UI
             Action bfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
-            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction,
+            Action<Enums.SettingsReloadingParam> saveSettingsAction,
             Action onExit)
         {
             InitializePanels(mazeModificationAction, bfsAction, aStarAction, resetToDefaultAction, saveSettingsAction);
@@ -37,7 +37,7 @@ namespace UI
             Action bfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
-            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction)
+            Action<Enums.SettingsReloadingParam> saveSettingsAction)
         {
             mainPanel.Initialize
             (

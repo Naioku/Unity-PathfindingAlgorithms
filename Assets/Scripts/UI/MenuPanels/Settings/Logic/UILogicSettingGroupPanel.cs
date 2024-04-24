@@ -30,23 +30,6 @@ namespace UI.MenuPanels.Settings.Logic
             }
         }
 
-        public List<Enums.SettingGroupStaticKey> ChangedValues
-        {
-            get
-            {
-                List<Enums.SettingGroupStaticKey> result = new List<Enums.SettingGroupStaticKey>();
-                foreach (UILogicSettingGroup group in groups)
-                {
-                    if (group.AnyValueChanged())
-                    {
-                        result.Add(group.NameStaticKey);
-                    }
-                }
-        
-                return result;
-            }
-        }
-
         public void Init(GameSettings gameSettings)
         {
             foreach (UILogicSettingGroup group in groups)

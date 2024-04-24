@@ -8,9 +8,9 @@ namespace UI.MenuPanels.Settings.Logic
         private T minValue;
         private T maxValue;
 
-        public override void SetValue(ISetting setting)
+        public override void SetValue(ISetting setting, Enums.SettingLoadingParam param)
         {
-            base.SetValue(setting);
+            base.SetValue(setting, param);
             SettingNumeric<T> settingNumeric = (SettingNumeric<T>)setting;
 
             minValue = settingNumeric.MinValue;
