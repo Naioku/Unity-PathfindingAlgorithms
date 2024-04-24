@@ -70,7 +70,7 @@ namespace StageMachineSystem
 
         private bool AreUniqueTilesSet()
         {
-            var values = SharedData.UniqueTilesCoordsLookup.Values;
+            var values = SharedData.Maze.UniqueTilesCoordsLookup.Values;
             foreach (Vector2Int? value in values)
             {
                 if (!value.HasValue) return false;

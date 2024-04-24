@@ -30,8 +30,8 @@ namespace StageMachineSystem
             AddInput();
             algorithm.Initialize(
                 sharedData.Maze,
-                sharedData.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
-                sharedData.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
+                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
+                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
                 () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
             
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
