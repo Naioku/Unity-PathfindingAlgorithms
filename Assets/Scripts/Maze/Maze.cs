@@ -11,7 +11,13 @@ namespace Maze
         private Transform tilesParent;
         private readonly List<Tile> tileInstances = new List<Tile>();
         private Interaction cursorInteraction;
-
+        
+        public Dictionary<Enums.TileType, Vector2Int?> UniqueTilesCoordsLookup { get; set; } = new Dictionary<Enums.TileType, Vector2Int?>
+        {
+            { Enums.TileType.Start, null },
+            { Enums.TileType.Destination, null }
+        };
+        
         public event Action<Vector2Int> OnHoverTick;
         public event Action OnHoverExitInteraction;
         

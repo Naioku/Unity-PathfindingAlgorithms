@@ -109,6 +109,11 @@ public static class Enums
     {
         None, Maze, TileColors
     }
+
+    public enum SettingLoadingParam
+    {
+        Standard, Init, Reset
+    }
     
     #endregion
     

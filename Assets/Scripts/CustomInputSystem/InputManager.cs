@@ -12,7 +12,6 @@ namespace CustomInputSystem
         private readonly List<ActionMap> savedState = new List<ActionMap>();
         
         public GlobalMap GlobalMap { get; private set; }
-        public StageSelectionMap StageSelectionMap { get; private set; }
         public MazeModificationMap MazeModificationMap { get; private set; }
         public AlgorithmMap AlgorithmMap { get; private set; }
         public PopupMap PopupMap { get; private set; }
@@ -71,7 +70,6 @@ namespace CustomInputSystem
         private void InitializeMaps()
         {
             GlobalMap = new GlobalMap(controls.Global);
-            StageSelectionMap = new StageSelectionMap(controls.StageSelection);
             MazeModificationMap = new MazeModificationMap(controls.MazeModification);
             AlgorithmMap = new AlgorithmMap(controls.Algorithm);
             PopupMap = new PopupMap(controls.Popup);
@@ -80,7 +78,6 @@ namespace CustomInputSystem
         private void BuildMapsList()
         {
             mapsList.Add(GlobalMap);
-            mapsList.Add(StageSelectionMap);
             mapsList.Add(MazeModificationMap);
             mapsList.Add(AlgorithmMap);
             mapsList.Add(PopupMap);

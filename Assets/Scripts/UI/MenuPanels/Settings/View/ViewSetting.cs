@@ -1,7 +1,7 @@
 ﻿using System;
 using TMPro;
+using UI.Buttons;
 using UnityEngine;
-using Button = UI.Buttons.Button;
 
 namespace UI.MenuPanels.Settings.View
 {

@@ -7,24 +7,24 @@ namespace StageMachineSystem
     public abstract class BaseStage
     {
         protected SharedData sharedData;
-        protected ActionMap.ActionData inputOnExitStageData;
+        protected ActionMap.ActionData inputOnBackData;
 
         public void Initialize(SharedData sharedData)
         {
             this.sharedData = sharedData;
-            inputOnExitStageData = AllManagers.Instance.InputManager.GlobalMap.OnExitStageData;
+            inputOnBackData = AllManagers.Instance.InputManager.GlobalMap.OnBackData;
         }
 
         public virtual void Enter()
         {
-            inputOnExitStageData.Performed += ExitStage;
+            inputOnBackData.Performed += ExitStage;
         }
 
         public virtual void Tick() {}
 
         public virtual void Exit()
         {
-            inputOnExitStageData.Performed -= ExitStage;
+            inputOnBackData.Performed -= ExitStage;
         }
 
         protected void ExitStage()

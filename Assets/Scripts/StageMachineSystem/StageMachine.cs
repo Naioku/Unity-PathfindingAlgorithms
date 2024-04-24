@@ -31,7 +31,6 @@ namespace StageMachineSystem
         {
             if (!SanityCheck(newStage)) return false;
             
-            AllManagers.Instance.InputManager.StageSelectionMap.Disable();
             currentStage?.Exit();
             currentStage = newStage;
             if (currentStage == null)
@@ -70,7 +69,7 @@ namespace StageMachineSystem
 
         private bool AreUniqueTilesSet()
         {
-            var values = SharedData.UniqueTilesCoordsLookup.Values;
+            var values = SharedData.Maze.UniqueTilesCoordsLookup.Values;
             foreach (Vector2Int? value in values)
             {
                 if (!value.HasValue) return false;

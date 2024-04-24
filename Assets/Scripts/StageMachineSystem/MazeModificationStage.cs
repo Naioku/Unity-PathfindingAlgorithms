@@ -33,7 +33,6 @@ namespace StageMachineSystem
         public MazeModificationStage()
         {
             hudController = AllManagers.Instance.UIManager.HUDControllerMazeModification;
-            InitInput();
         }
 
         public override void Enter()
@@ -46,7 +45,7 @@ namespace StageMachineSystem
         
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
                 new Dictionary<Enums.TileType, ButtonData>
                 {
                     { Enums.TileType.Default, new ButtonData { Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})" } },
@@ -191,7 +190,7 @@ namespace StageMachineSystem
 
             void ManageUniqueTileTypesData()
             {
-                Enums.TileType[] keys = sharedData.UniqueTilesCoordsLookup.Keys.ToArray();
+                Enums.TileType[] keys = sharedData.Maze.UniqueTilesCoordsLookup.Keys.ToArray();
                 foreach (var key in keys)
                 {
                     ManageUniqueOneTileTypeData(key);
@@ -200,7 +199,7 @@ namespace StageMachineSystem
 
             void ManageUniqueOneTileTypeData(Enums.TileType tileType)
             {
-                Vector2Int? coords = sharedData.UniqueTilesCoordsLookup[tileType];
+                Vector2Int? coords = sharedData.Maze.UniqueTilesCoordsLookup[tileType];
                 if (CurrentTileTypeToSet == tileType)
                 {
                     if (coords.HasValue)
@@ -208,11 +207,11 @@ namespace StageMachineSystem
                         maze.SetTileType(coords.Value, Enums.TileType.Default);
                     }
                 
-                    sharedData.UniqueTilesCoordsLookup[tileType] = currentCoords;
+                    sharedData.Maze.UniqueTilesCoordsLookup[tileType] = currentCoords;
                 }
                 else if (coords.HasValue && coords.Value == currentCoords.Value)
                 {
-                    sharedData.UniqueTilesCoordsLookup[tileType] = null;
+                    sharedData.Maze.UniqueTilesCoordsLookup[tileType] = null;
                 }
             }
         }

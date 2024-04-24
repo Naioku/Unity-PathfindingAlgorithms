@@ -16,16 +16,6 @@ namespace UI.MenuPanels.Settings.Logic
         public List<IUILogicSetting> Settings { get; } = new List<IUILogicSetting>();
         public IUILogicSetting FirstSetting => Settings.First();
         public IUILogicSetting LastSetting => Settings.Last();
-        public Enums.SettingGroupStaticKey NameStaticKey => nameStaticKey;
-        
-        public bool AnyValueChanged()
-        {
-            foreach (IUILogicSetting setting in Settings)
-            {
-                if (setting.ChangedThroughPopup) return false;
-            }
-            return true;
-        }
 
         public void Init(GameSettings gameSettings)
         {

@@ -8,12 +8,13 @@ namespace UI.MenuPanels.Settings.Logic
 {
     public class UILogicSetting<T> : IUILogicSetting
     {
-        private T value;
-        private Enums.SettingGroupStaticKey groupNameStaticKey;
-        private StaticTextManager staticTextManager;
+        protected T value;
+        protected Enums.SettingGroupStaticKey groupNameStaticKey;
+        protected StaticTextManager staticTextManager;
 
         public Enums.SettingName Name { get; private set; }
-        public bool ChangedThroughPopup { get; private set; }
+        public Enums.SettingGroupStaticKey SettingGroup => groupNameStaticKey;
+        public bool ChangedThroughPopup { get; set; }
         public ViewSetting ViewSetting { get; private set; }
 
         public event Action<EntryPosition> OnSelect;
@@ -21,9 +22,19 @@ namespace UI.MenuPanels.Settings.Logic
         public T Value => value;
 
         // Todo: Consider moving ChangedThroughPopup into the SetValueInternal().
-        public void SetValue(ISetting setting)
+        public virtual void SetValue(ISetting setting, Enums.SettingLoadingParam param)
         {
-            ChangedThroughPopup = false;
+            switch (param)
+            {
+                case Enums.SettingLoadingParam.Standard:
+                    ChangedThroughPopup = true;
+                    break;
+                
+                case Enums.SettingLoadingParam.Reset:
+                    ChangedThroughPopup = false;
+                    break;
+            }
+            
             SetValueInternal(((Setting<T>)setting).Value);
         }
 
@@ -51,7 +62,7 @@ namespace UI.MenuPanels.Settings.Logic
             OnDown = navigation.OnDown?.ViewSetting
         });
 
-        private void OnButtonPress()
+        protected virtual void OnButtonPress()
         {
             AllManagers.Instance.UIManager.OpenPopupInput
             (
@@ -61,13 +72,13 @@ namespace UI.MenuPanels.Settings.Logic
             );
         }
 
-        private void OnButtonSelect(EntryPosition position) => OnSelect?.Invoke(position);
-
-        private void OnClosePanel(T value)
+        protected void OnClosePanel(T value)
         {
             SetValueInternal(value);
             ChangedThroughPopup = true;
         }
+
+        private void OnButtonSelect(EntryPosition position) => OnSelect?.Invoke(position);
 
         private void SetValueInternal(T value)
         {

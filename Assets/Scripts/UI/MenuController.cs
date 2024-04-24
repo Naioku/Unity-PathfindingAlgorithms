@@ -22,7 +22,7 @@ namespace UI
             Action bfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
-            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction,
+            Action<Enums.SettingsReloadingParam> saveSettingsAction,
             Action onExit)
         {
             InitializePanels(mazeModificationAction, bfsAction, aStarAction, resetToDefaultAction, saveSettingsAction);
@@ -37,7 +37,7 @@ namespace UI
             Action bfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
-            Action<GameSettings, Enums.SettingsReloadingParam> saveSettingsAction)
+            Action<Enums.SettingsReloadingParam> saveSettingsAction)
         {
             mainPanel.Initialize
             (
@@ -53,19 +53,26 @@ namespace UI
             );
             settingsPanel.Initialize(Back, resetToDefaultAction, saveSettingsAction);
             // helpPanel.Initialize(initData);
+            
+            AddInput();
         }
 
         public void Open()
         {
             gameObject.SetActive(true);
             Back();
+            AddInput();
         }
 
         public void Close()
         {
             gameObject.SetActive(false);
             OpenPanel(null);
+            RemoveInput();
         }
+
+        private void AddInput() => AllManagers.Instance.InputManager.GlobalMap.OnBackData.Performed += Back;
+        private void RemoveInput() => AllManagers.Instance.InputManager.GlobalMap.OnBackData.Performed -= Back;
 
         private void Back()
         {

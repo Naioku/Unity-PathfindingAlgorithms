@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI.PopupPanels
 {
-    public class FloatPanel : InputPanel<float>
+    public class FloatPanel : InputPanelLimited<float>
     {
         [SerializeField] private TMP_InputField inputField;
 
@@ -13,12 +13,9 @@ namespace UI.PopupPanels
         protected override void SetInitialValue(float initialValue) => inputField.text = initialValue.ToString(CultureInfo.CurrentCulture);
         protected override void Confirm()
         {
-            if (string.IsNullOrEmpty(inputField.text))
-            {
-                inputField.text = default(float).ToString(CultureInfo.CurrentCulture);
-            }
-            
-            onConfirm.Invoke(float.Parse(inputField.text));
+            float result = string.IsNullOrEmpty(inputField.text) ? default : float.Parse(inputField.text);
+            result = Mathf.Clamp(result, minValue, maxValue);
+            onConfirm.Invoke(result);
         }
     }
 }

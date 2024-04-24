@@ -6,7 +6,7 @@ namespace CustomInputSystem.ActionMaps
     {
         public ActionData OnClickInteractionData { get; }
         public ActionData OnCameraMovementData { get; }
-        public ActionData OnExitStageData { get; }
+        public ActionData OnBackData { get; }
         
         public GlobalMap(Controls.GlobalActions actionMap)
         {
@@ -15,11 +15,11 @@ namespace CustomInputSystem.ActionMaps
 
             OnClickInteractionData = new ActionData(actionMap.ClickInteraction);
             OnCameraMovementData = new ActionData(actionMap.CameraMovement);
-            OnExitStageData = new ActionData(actionMap.ExitStage);
+            OnBackData = new ActionData(actionMap.Back);
         }
 
         public void OnClickInteraction(InputAction.CallbackContext context) => OnClickInteractionData.Invoke(context.phase);
         public void OnCameraMovement(InputAction.CallbackContext context) => OnCameraMovementData.Invoke(context.phase);
-        public void OnExitStage(InputAction.CallbackContext context) => OnExitStageData.Invoke(context.phase);
+        public void OnBack(InputAction.CallbackContext context) => OnBackData.Invoke(context.phase);
     }
 }

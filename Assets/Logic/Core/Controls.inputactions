@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ExitStage",
+                    "name": "Back",
                     "type": "Button",
                     "id": "fd179ee1-f408-4171-b203-92fb7c4105d9",
                     "expectedControlType": "Button",
@@ -63,75 +63,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ExitStage",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "StageSelection",
-            "id": "ddee2105-5b18-4b65-99e5-7942a24b838f",
-            "actions": [
-                {
-                    "name": "MazeModification",
-                    "type": "Button",
-                    "id": "888444ae-8b80-4d45-96a9-ae33bebf4945",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "BFS",
-                    "type": "Button",
-                    "id": "8c97ffda-092f-44f4-b5fb-598079b94eca",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "AStar",
-                    "type": "Button",
-                    "id": "471032e5-62c3-4879-9711-0319c0ccee0b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "c6b8bab7-8411-4b7c-bcf8-c3b32fd88f4a",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MazeModification",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3e25eb64-ee82-406a-b0f2-371daf9a84f2",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "BFS",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "16e58c4d-eb7a-4cc7-8634-372b45e8785e",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "AStar",
+                    "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

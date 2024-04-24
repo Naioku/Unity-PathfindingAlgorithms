@@ -30,14 +30,14 @@ namespace StageMachineSystem
             AddInput();
             algorithm.Initialize(
                 sharedData.Maze,
-                sharedData.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
-                sharedData.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
+                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
+                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
                 () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
             
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnExitStageData.Binding})" },
+                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
                 new Dictionary<Enums.AlgorithmAction, ButtonData>
                 {
                     { Enums.AlgorithmAction.Play , new ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})" } },

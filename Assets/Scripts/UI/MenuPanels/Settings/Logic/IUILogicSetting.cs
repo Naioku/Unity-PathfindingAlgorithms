@@ -8,10 +8,11 @@ namespace UI.MenuPanels.Settings.Logic
     public interface IUILogicSetting
     {
         Enums.SettingName Name { get; }
-        bool ChangedThroughPopup { get; }
+        Enums.SettingGroupStaticKey SettingGroup { get; }
+        bool ChangedThroughPopup { get; set; }
         ViewSetting ViewSetting { get; }
         event Action<EntryPosition> OnSelect;
-        void SetValue(ISetting setting);
+        void SetValue(ISetting setting, Enums.SettingLoadingParam param);
         void Init(Enums.SettingName name, Enums.SettingGroupStaticKey groupNameStaticKey);
         void InitUI(RectTransform uiParent);
         void CalcEntryPosRelatedTo(RectTransform contentRoot);
