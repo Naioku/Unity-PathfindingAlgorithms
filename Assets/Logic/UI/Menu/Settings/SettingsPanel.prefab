@@ -1466,8 +1466,6 @@ MonoBehaviour:
     groups:
     - nameStaticKey: 0
       settingNames: 0000000001000000
-    - nameStaticKey: 1
-      settingNames: 0200000003000000
     - nameStaticKey: 2
       settingNames: 0400000005000000060000000700000008000000
     - nameStaticKey: 3
