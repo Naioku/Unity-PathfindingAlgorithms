@@ -23,7 +23,7 @@ namespace StageMachineSystem.Algorithm
 
         #region VariableValues
 
-        protected readonly Queue<Node> nodesToCheck = new Queue<Node>();
+        protected readonly Queue<Node> nodesToCheck = new();
         protected Node currentNode;
         private Vector2Int? cursorPosition;
         private Guid processCoroutineId;

@@ -5,9 +5,9 @@ namespace UpdateSystem
 {
     public class UpdateManager
     {
-        private readonly List<Action> objectsToUpdate = new List<Action>();
-        private readonly List<Action> objectsToFixedUpdate = new List<Action>();
-        private readonly List<Action> objectsToLateUpdate = new List<Action>();
+        private readonly List<Action> objectsToUpdate = new();
+        private readonly List<Action> objectsToFixedUpdate = new();
+        private readonly List<Action> objectsToLateUpdate = new();
         private int currentIndex;
 
         // Todo: Add execution priority management - use List<> and Sort(). After that You must handle adding 
@@ -23,7 +23,7 @@ namespace UpdateSystem
         public void FixedUpdate() => InvokeActions(objectsToFixedUpdate);
         public void LateUpdate() => InvokeActions(objectsToLateUpdate);
 
-        private void AddAction(Action what, List<Action> where)
+        private void AddAction(Action what, IList<Action> where)
         {
             where.Add(what);
             int index = where.IndexOf(what);
@@ -33,7 +33,7 @@ namespace UpdateSystem
             }
         }
         
-        private void RemoveAction(Action what, List<Action> from)
+        private void RemoveAction(Action what, IList<Action> from)
         {
             int index = from.IndexOf(what);
             from.RemoveAt(index);
@@ -43,7 +43,7 @@ namespace UpdateSystem
             }
         }
         
-        private void InvokeActions(List<Action> actionsList)
+        private void InvokeActions(IReadOnlyList<Action> actionsList)
         {
             for (currentIndex = 0; currentIndex < actionsList.Count; currentIndex++)
             {

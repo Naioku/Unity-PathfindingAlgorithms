@@ -7,9 +7,9 @@ namespace CustomInputSystem
 {
     public class InputManager
     {
-        private readonly Controls controls = new Controls();
-        private readonly List<ActionMap> mapsList = new List<ActionMap>();
-        private readonly List<ActionMap> savedState = new List<ActionMap>();
+        private readonly Controls controls = new();
+        private readonly List<ActionMap> mapsList = new();
+        private readonly List<ActionMap> savedState = new();
         
         public GlobalMap GlobalMap { get; private set; }
         public MazeModificationMap MazeModificationMap { get; private set; }

@@ -9,10 +9,10 @@ namespace Maze
     public class Maze : MonoBehaviour, IInteractable
     {
         private Transform tilesParent;
-        private readonly List<Tile> tileInstances = new List<Tile>();
+        private readonly List<Tile> tileInstances = new();
         private Interaction cursorInteraction;
         
-        public Dictionary<Enums.TileType, Vector2Int?> UniqueTilesCoordsLookup { get; set; } = new Dictionary<Enums.TileType, Vector2Int?>
+        public Dictionary<Enums.TileType, Vector2Int?> UniqueTilesCoordsLookup { get; set; } = new()
         {
             { Enums.TileType.Start, null },
             { Enums.TileType.Destination, null }

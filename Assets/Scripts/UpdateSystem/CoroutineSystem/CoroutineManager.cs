@@ -8,11 +8,11 @@ namespace UpdateSystem.CoroutineSystem
     public class CoroutineManager
     {
         private UpdateManager updateManager;
-        private readonly Dictionary<CoroutineCaller, CoroutinesItem> coroutinesItemsLookup = new Dictionary<CoroutineCaller, CoroutinesItem>();
-        private readonly List<CoroutinesItem> coroutinesItems = new List<CoroutinesItem>();
-        private readonly List<StopCoroutineData> coroutinesToRemove = new List<StopCoroutineData>();
+        private readonly Dictionary<CoroutineCaller, CoroutinesItem> coroutinesItemsLookup = new();
+        private readonly List<CoroutinesItem> coroutinesItems = new();
+        private readonly List<StopCoroutineData> coroutinesToRemove = new();
 
-        public CoroutineCaller GenerateCoroutineCaller() => new CoroutineCaller(this);
+        public CoroutineCaller GenerateCoroutineCaller() => new(this);
         
         public void Awake()
         {
@@ -122,8 +122,8 @@ namespace UpdateSystem.CoroutineSystem
         
         private class CoroutinesItem : IComparable<CoroutinesItem>
         {
-            private readonly Dictionary<Guid, CoroutineData> coroutinesLookup = new Dictionary<Guid, CoroutineData>();
-            private readonly List<CoroutineData> coroutines = new List<CoroutineData>();
+            private readonly Dictionary<Guid, CoroutineData> coroutinesLookup = new();
+            private readonly List<CoroutineData> coroutines = new();
             
             public int Priority { get; set; }
             

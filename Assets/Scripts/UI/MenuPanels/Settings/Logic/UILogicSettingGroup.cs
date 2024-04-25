@@ -13,7 +13,7 @@ namespace UI.MenuPanels.Settings.Logic
         [SerializeField] private Enums.SettingGroupStaticKey nameStaticKey;
         [SerializeField] private Enums.SettingName[] settingNames;
         
-        public List<IUILogicSetting> Settings { get; } = new List<IUILogicSetting>();
+        public List<IUILogicSetting> Settings { get; } = new();
         public IUILogicSetting FirstSetting => Settings.First();
         public IUILogicSetting LastSetting => Settings.Last();
 

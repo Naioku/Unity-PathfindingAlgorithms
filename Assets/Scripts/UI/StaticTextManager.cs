@@ -5,9 +5,9 @@ namespace UI
 {
     public class StaticTextManager
     {
-        private readonly Dictionary<Enums.SettingName, Dictionary<Languages, string>> settingNameEntries = new Dictionary<Enums.SettingName, Dictionary<Languages, string>>();
-        private readonly Dictionary<Enums.SettingGroupStaticKey, Dictionary<Languages, string>> settingGroupNameEntries = new Dictionary<Enums.SettingGroupStaticKey, Dictionary<Languages, string>>();
-        private readonly Dictionary<Enums.SettingGroupPanelStaticKey, Dictionary<Languages, string>> settingGroupPanelNameEntries = new Dictionary<Enums.SettingGroupPanelStaticKey, Dictionary<Languages, string>>();
+        private readonly Dictionary<Enums.SettingName, Dictionary<Languages, string>> settingNameEntries = new();
+        private readonly Dictionary<Enums.SettingGroupStaticKey, Dictionary<Languages, string>> settingGroupNameEntries = new();
+        private readonly Dictionary<Enums.SettingGroupPanelStaticKey, Dictionary<Languages, string>> settingGroupPanelNameEntries = new();
 
         private Languages currentLanguage = Languages.English;
         

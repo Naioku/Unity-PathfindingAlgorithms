@@ -16,7 +16,7 @@ namespace UI
         [SerializeField] private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
         
         private PopupPanel currentPopupPanel;
-        private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new Dictionary<Type, Enums.UIPopupType>
+        private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new()
         {
             { typeof(int), Enums.UIPopupType.InputInt },
             { typeof(float), Enums.UIPopupType.InputFloat },

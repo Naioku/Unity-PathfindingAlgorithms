@@ -6,8 +6,7 @@ namespace InteractionSystem
 {
     public class Interaction
     {
-        private readonly Dictionary<Enums.InteractionType, Dictionary<Enums.InteractionState, Action<InteractionDataArgs>>> interactionTypeLookup =
-            new Dictionary<Enums.InteractionType, Dictionary<Enums.InteractionState, Action<InteractionDataArgs>>>();
+        private readonly Dictionary<Enums.InteractionType, Dictionary<Enums.InteractionState, Action<InteractionDataArgs>>> interactionTypeLookup = new();
         private Transform interactionCollider;
 
         public Interaction(

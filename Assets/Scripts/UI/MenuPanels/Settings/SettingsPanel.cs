@@ -24,7 +24,7 @@ namespace UI.MenuPanels.Settings
 
         [SerializeField] private UILogicSettingGroupPanel[] panels;
 
-        private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new Dictionary<Enums.SettingName, IUILogicSetting>();
+        private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new();
 
         private Action onResetToDefault;
         private Action<Enums.SettingsReloadingParam> onSave;

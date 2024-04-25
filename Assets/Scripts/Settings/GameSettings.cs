@@ -11,7 +11,7 @@ namespace Settings
 
         private Dictionary<Enums.SettingName, ISetting> settings;
     
-        private readonly Dictionary<Enums.PermittedDirection, Vector2Int> permittedDirectionsLookup = new Dictionary<Enums.PermittedDirection, Vector2Int>
+        private readonly Dictionary<Enums.PermittedDirection, Vector2Int> permittedDirectionsLookup = new()
         {
             {Enums.PermittedDirection.Up, Vector2Int.up}, 
             {Enums.PermittedDirection.Down, Vector2Int.down}, 

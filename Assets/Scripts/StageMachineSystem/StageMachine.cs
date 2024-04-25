@@ -10,7 +10,7 @@ namespace StageMachineSystem
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         private Guid tickCoroutineId;
         private BaseStage currentStage;
-        private SharedData SharedData { get; } = new SharedData();
+        private SharedData SharedData { get; } = new();
 
         public Maze.Maze Maze
         {

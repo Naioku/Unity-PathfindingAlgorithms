@@ -14,7 +14,7 @@ namespace UI
         // [SerializeField] private HelpPanel helpPanel;
 
         private BasePanel currentPanel;
-        private readonly Stack<BasePanel> openedPanelsHistory = new Stack<BasePanel>();
+        private readonly Stack<BasePanel> openedPanelsHistory = new();
         private Action onExit;
 
         public void Initialize(

@@ -8,9 +8,9 @@ namespace UI.MenuPanels
     [Serializable]
     public class MainPanel : BasePanel
     {
-        [SerializeField] private List<MainMenuPanelButton> buttons = new List<MainMenuPanelButton>();
+        [SerializeField] private List<MainMenuPanelButton> buttons = new();
         
-        private Dictionary<Enums.MainMenuPanelButtonTag, MainMenuPanelButton> buttonsLookup = new Dictionary<Enums.MainMenuPanelButtonTag, MainMenuPanelButton>();
+        private Dictionary<Enums.MainMenuPanelButtonTag, MainMenuPanelButton> buttonsLookup = new();
         
         public void Initialize(Action onBack, Dictionary<Enums.MainMenuPanelButtonTag, Action> actionsData)
         {

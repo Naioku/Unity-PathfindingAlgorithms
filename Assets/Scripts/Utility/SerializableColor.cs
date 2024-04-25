@@ -19,6 +19,6 @@ namespace Utility
             a = color.a;
         }
 
-        public Color GetValue() => new Color(r, g, b, a);
+        public Color GetValue() => new(r, g, b, a);
     }
 }

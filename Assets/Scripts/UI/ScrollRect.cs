@@ -74,7 +74,7 @@ namespace UI
         /// <summary>
         /// The scroll position as a Vector2 between (0,0) and (1,1) with (0,0) being the lower left corner.
         /// </summary>
-        public Vector2 NormalizedPosition => new Vector2(HorizontalNormalizedPosition, VerticalNormalizedPosition);
+        public Vector2 NormalizedPosition => new(HorizontalNormalizedPosition, VerticalNormalizedPosition);
 
         /// <summary>
         /// The horizontal scroll position as a value between 0 and 1, with 0 being at the left.

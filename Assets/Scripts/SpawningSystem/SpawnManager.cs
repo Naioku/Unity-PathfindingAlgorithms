@@ -15,7 +15,7 @@ namespace SpawningSystem
     {
         [SerializeField] private List<Spawnable<TKey, TType>> spawnableItems;
 
-        private readonly Dictionary<TKey, Spawnable<TKey, TType>> entityItemsLookup = new Dictionary<TKey, Spawnable<TKey, TType>>();
+        private readonly Dictionary<TKey, Spawnable<TKey, TType>> entityItemsLookup = new();
         
         /// <summary>
         /// Initializes the manager. Should be used in MonoBehaviour's Awake() methods.
