@@ -150,7 +150,7 @@ public static class Enums
 
     public enum SettingGroupPanelName
     {
-        Tiles,
+        Maze,
         Algorithms
     }
     

@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4296179712
-    m_Localized: Tiles
+    m_Localized: Maze
     m_Metadata:
       m_Items: []
   references:

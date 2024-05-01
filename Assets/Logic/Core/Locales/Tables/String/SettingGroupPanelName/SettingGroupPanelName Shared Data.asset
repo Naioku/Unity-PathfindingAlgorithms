@@ -16,7 +16,7 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 34a98a38e92f75a4fbdba6a2dd572551
   m_Entries:
   - m_Id: 4296179712
-    m_Key: Tiles
+    m_Key: Maze
     m_Metadata:
       m_Items: []
   - m_Id: 9966878720
