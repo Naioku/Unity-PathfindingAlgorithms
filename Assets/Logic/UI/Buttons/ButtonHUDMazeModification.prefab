@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 720610594986365411, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
@@ -96,12 +97,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 720610594986365411, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 597005412434041187}
   m_SourcePrefab: {fileID: 100100000, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
---- !u!1 &5397861500040295572 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 720610594986365411, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+--- !u!114 &337282466311938506 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4919995085205963965, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
   m_PrefabInstance: {fileID: 4677289392491144567}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1361889033020078008 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5913075917819368143, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
@@ -113,6 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5397861500040295572 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 720610594986365411, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+  m_PrefabInstance: {fileID: 4677289392491144567}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &597005412434041187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,4 +172,18 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1361889033020078008}
+  background: {fileID: 9157959201377300709}
+  localizedLabel:
+    label: {fileID: 337282466311938506}
   buttonTag: 0
+--- !u!114 &9157959201377300709 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4611275576970188178, guid: 3513788e2d6030c4dbefe77f11b0e216, type: 3}
+  m_PrefabInstance: {fileID: 4677289392491144567}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -4,13 +4,14 @@ using System.Linq;
 using Settings;
 using UI.MenuPanels.Settings.View;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.MenuPanels.Settings.Logic
 {
     [Serializable]
     public class UILogicSettingGroupPanel
     {
-        [SerializeField] private Enums.SettingGroupPanelStaticKey nameStaticKey;
+        [FormerlySerializedAs("nameStaticKey")] [SerializeField] private Enums.SettingGroupPanelName name;
         [SerializeField] private UILogicSettingGroup[] groups;
 
         public UILogicSettingGroup FirstGroup => groups.First();
@@ -30,18 +31,18 @@ namespace UI.MenuPanels.Settings.Logic
             }
         }
 
-        public void Init(GameSettings gameSettings)
+        public void InitBaseLogic(GameSettings gameSettings)
         {
             foreach (UILogicSettingGroup group in groups)
             {
-                group.Init(gameSettings);
+                group.InitBaseLogic(gameSettings);
             }
         }
         
         public void InitUI(RectTransform uiParent, Action<EntryPosition> onSelect)
         {
             ViewSettingGroupPanel viewSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSettingGroupPanel>(Enums.UISpawned.SettingGroupPanel, uiParent);
-            viewSettingGroup.Initialize(nameStaticKey);
+            viewSettingGroup.Initialize(name);
             foreach (UILogicSettingGroup group in groups)
             {
                 group.InitUI(viewSettingGroup.UIParent, onSelect);

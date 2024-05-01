@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UI.Buttons;
+using UI.Localization;
 using UnityEngine;
 
 namespace UI.MenuPanels
@@ -8,18 +9,22 @@ namespace UI.MenuPanels
     [Serializable]
     public class MainPanel : BasePanel
     {
+        [SerializeField] private LocalizedTextMeshPro header;
         [SerializeField] private List<MainMenuPanelButton> buttons = new();
         
         private Dictionary<Enums.MainMenuPanelButtonTag, MainMenuPanelButton> buttonsLookup = new();
         
         public void Initialize(Action onBack, Dictionary<Enums.MainMenuPanelButtonTag, Action> actionsData)
         {
-            base.Initialize(onBack);
+            base.Initialize(onBack, Enums.GeneralText.MainMenuButtonQuit);
+            header.Initialize(Enums.GeneralText.MainMenuHeader);
             BuildButtonsLookup();
             SetupButtonsNavigation();
             InitButtonActions(actionsData);
         }
-        
+
+        private void OnDestroy() => header.Destroy();
+
         protected override void SelectDefaultButton() => buttons[0].Select();
 
         private void BuildButtonsLookup()
@@ -27,12 +32,13 @@ namespace UI.MenuPanels
             foreach (MainMenuPanelButton button in buttons)
             {
                 buttonsLookup.Add(button.Tag, button);
+                button.Initialize(button.Tag);
             }
         }
 
         private void SetupButtonsNavigation()
         {
-            List<Button> buttons = new List<Button>();
+            List<ButtonLocalized> buttons = new List<ButtonLocalized>();
             foreach (MainMenuPanelButton menuButton in this.buttons)
             {
                 buttons.Add(menuButton);

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Globalization;
 using Settings;
+using UI.Localization;
 using UI.MenuPanels.Settings.View;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace UI.MenuPanels.Settings.Logic
 {
     public class UILogicSetting<T> : IUILogicSetting
     {
         protected T value;
-        protected Enums.SettingGroupStaticKey groupNameStaticKey;
-        protected StaticTextManager staticTextManager;
+        protected LocalizedString nameText;
+        protected LocalizedString groupNameText;
 
         public Enums.SettingName Name { get; private set; }
-        public Enums.SettingGroupStaticKey SettingGroup => groupNameStaticKey;
+        public Enums.SettingGroupName GroupName { get; private set; }
         public bool ChangedThroughPopup { get; set; }
         public ViewSetting ViewSetting { get; private set; }
 
@@ -38,11 +40,13 @@ namespace UI.MenuPanels.Settings.Logic
             SetValueInternal(((Setting<T>)setting).Value);
         }
 
-        public void Init(Enums.SettingName name, Enums.SettingGroupStaticKey groupNameStaticKey)
+        public void InitBaseLogic(Enums.SettingName name, Enums.SettingGroupName groupName)
         {
             Name = name;
-            this.groupNameStaticKey = groupNameStaticKey;
-            staticTextManager = AllManagers.Instance.StaticTextManager;
+            GroupName = groupName;
+            LocalizedTextManager localizedTextManager = AllManagers.Instance.LocalizedTextManager;
+            nameText = localizedTextManager.GetLocalizedString(name);
+            groupNameText = localizedTextManager.GetLocalizedString(groupName);
         }
 
         public void InitUI(RectTransform uiParent)
@@ -66,7 +70,7 @@ namespace UI.MenuPanels.Settings.Logic
         {
             AllManagers.Instance.UIManager.OpenPopupInput
             (
-                $"{staticTextManager.GetValue(groupNameStaticKey)}: {staticTextManager.GetValue(Name)}",
+                $"{groupNameText.GetLocalizedString()}: {nameText.GetLocalizedString()}",
                 value,
                 OnClosePanel
             );

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CustomInputSystem;
+﻿using CustomInputSystem;
 using CustomInputSystem.ActionMaps;
 using StageMachineSystem.Algorithm;
 using UI.HUDPanels;
@@ -28,25 +27,25 @@ namespace StageMachineSystem
             base.Enter();
             InitInput();
             AddInput();
-            algorithm.Initialize(
+            algorithm.Initialize
+            (
                 sharedData.Maze,
-                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Start].Value,
-                sharedData.Maze.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value,
-                () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm)));
+                () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm))
+            );
             
-            SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
-                new Dictionary<Enums.AlgorithmAction, ButtonData>
+                new ButtonData{ Action = ExitStage, Binding = inputOnBackData.Binding },
+                new ButtonDataTagged<Enums.AlgorithmAction>[]
                 {
-                    { Enums.AlgorithmAction.Play , new ButtonData{ Action = Play, Label = $"Play ({inputOnPlayData.Binding})" } },
-                    { Enums.AlgorithmAction.Pause , new ButtonData{ Action = Pause, Label = $"Pause ({inputOnPauseData.Binding})" } },
-                    { Enums.AlgorithmAction.Step , new ButtonData{ Action = Step, Label = $"Step ({inputOnStepData.Binding})" } },
-                    { Enums.AlgorithmAction.Stop, new ButtonData{ Action = Stop, Label = $"Stop ({inputOnStopData.Binding})" } },
+                    new(){ Tag = Enums.AlgorithmAction.Play, Action = Play, Binding = inputOnPlayData.Binding },
+                    new(){ Tag = Enums.AlgorithmAction.Pause, Action = Pause, Binding = inputOnPauseData.Binding },
+                    new(){ Tag = Enums.AlgorithmAction.Step, Action = Step, Binding = inputOnStepData.Binding },
+                    new(){ Tag = Enums.AlgorithmAction.Stop, Action = Stop, Binding = inputOnStopData.Binding }
                 }
             );
             hudController.Show();
+            SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
         }
 
         public override void Exit()
@@ -125,7 +124,6 @@ namespace StageMachineSystem
                 SwitchAlgorithmState(new AlgorithmStatePlaying(algorithm));
             }
         }
-
 
         private void Pause()
         {

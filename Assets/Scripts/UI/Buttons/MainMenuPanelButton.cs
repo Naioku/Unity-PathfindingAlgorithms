@@ -1,4 +1,4 @@
 ﻿namespace UI.Buttons
 {
-    public class MainMenuPanelButton : TaggedButton<Enums.MainMenuPanelButtonTag> {}
+    public class MainMenuPanelButton : TaggedButtonLocalized<Enums.MainMenuPanelButtonTag> {}
 }

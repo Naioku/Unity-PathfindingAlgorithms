@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using UI;
+using UI.Localization;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
 
@@ -10,6 +12,8 @@ namespace StageMachineSystem
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         private Guid tickCoroutineId;
         private BaseStage currentStage;
+        private readonly LocalizedContentCache localizedContentCache;
+        
         private SharedData SharedData { get; } = new();
 
         public Maze.Maze Maze
@@ -20,6 +24,11 @@ namespace StageMachineSystem
         public StageMachine(Maze.Maze maze)
         {
             SharedData.Maze = maze;
+            localizedContentCache = new LocalizedContentCache
+            (
+                Enums.PopupText.AlgorithmCannotEnterHeader,
+                Enums.PopupText.AlgorithmCannotEnterMessage
+            );
         }
         
         /// <summary>
@@ -58,7 +67,11 @@ namespace StageMachineSystem
             {
                 if (!AreUniqueTilesSet())
                 {
-                    AllManagers.Instance.UIManager.OpenPopupInfo("Algorithm", "You can't enter the algorithm with Start and Destination tiles not selected.");
+                    AllManagers.Instance.UIManager.OpenPopupInfo
+                    (
+                        localizedContentCache.GetValue(Enums.PopupText.AlgorithmCannotEnterHeader),
+                        localizedContentCache.GetValue(Enums.PopupText.AlgorithmCannotEnterMessage)
+                    );
                     Debug.LogError("You can't enter Algorithm Stage with Start and Destination tiles not selected.");
                     return false;
                 }

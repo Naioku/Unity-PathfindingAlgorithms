@@ -5,14 +5,12 @@ using InteractionSystem;
 using Settings;
 using StageMachineSystem;
 using UI;
+using UI.Localization;
 using UnityEngine;
 
 [Serializable]
 public class GameManager
 {
-    private const string QuitHeader = "Do You want to quit?";
-    private const string QuitMessage = "Are You sure You want to quit the app?";
-    
     [SerializeField] private GameSettings gameSettings;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
@@ -21,7 +19,8 @@ public class GameManager
     private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
-    
+    private LocalizedContentCache localizedContentCache;
+
     public GameSettings GameSettings => gameSettings;
 
     public void Awake()
@@ -38,6 +37,7 @@ public class GameManager
             Quit
         );
         inputManager = AllManagers.Instance.InputManager;
+        localizedContentCache = new LocalizedContentCache(Enums.PopupText.QuitGameHeader, Enums.PopupText.QuitGameMessage);
     }
 
     public void Destroy()
@@ -101,11 +101,14 @@ public class GameManager
         
         AllManagers.Instance.SavingManager.SaveSettings();
     }
-
-    private void Quit() => AllManagers.Instance.UIManager.OpenPopupConfirmation(
-        QuitHeader,
-        QuitMessage,
-        QuitInternal);
+    
+    private void Quit()
+    {
+        AllManagers.Instance.UIManager.OpenPopupConfirmation(
+            localizedContentCache.GetValue(Enums.PopupText.QuitGameHeader),
+            localizedContentCache.GetValue(Enums.PopupText.QuitGameMessage),
+            QuitInternal);
+    }
 
     private void QuitInternal()
     {

@@ -1,27 +1,19 @@
-﻿using TMPro;
+﻿using UI.Localization;
 using UnityEngine;
 
 namespace UI.MenuPanels.Settings.View
 {
     public class ViewSettingGroupPanel : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI label;
+        [SerializeField] private LocalizedTextMeshPro label;
         [SerializeField] private RectTransform inputEntries;
 
-        private StaticTextManager staticTextManager;
-        private Enums.SettingGroupPanelStaticKey displayedNameStaticKey;
-            
         public RectTransform UIParent => inputEntries;
         
-        private string DisplayedName => staticTextManager.GetValue(displayedNameStaticKey);
-
-        private void Awake() => staticTextManager = AllManagers.Instance.StaticTextManager;
-
-        public void Initialize(Enums.SettingGroupPanelStaticKey displayedName)
+        public void Initialize(Enums.SettingGroupPanelName displayedName)
         {
-            displayedNameStaticKey = displayedName;
-            name = DisplayedName;
-            label.text = DisplayedName;
+            name = displayedName.ToString();
+            label.Initialize(displayedName);
         }
     }
 }

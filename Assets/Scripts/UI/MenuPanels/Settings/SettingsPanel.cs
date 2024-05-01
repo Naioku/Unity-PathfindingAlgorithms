@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Settings;
 using UI.Buttons;
+using UI.Localization;
 using UI.MenuPanels.Settings.Logic;
 using UnityEngine;
 
@@ -9,26 +10,30 @@ namespace UI.MenuPanels.Settings
 {
     public class SettingsPanel : BasePanel
     {
-        private const string ResetToDefaultPopupHeader = "Reset to default?";
-        private const string ResetToDefaultPopupMessage = "Are You sure You want reset all settings to default?";
-        private const string SavedPopupHeader = "Completed";
-        private const string SavedPopupMessage = "Settings have been saved.";
-        
         [SerializeField] private float scrollingDisplacementMargin = 30;
         
-        [SerializeField] private Button resetButton;
-        [SerializeField] private Button resetToDefaultButton;
-        [SerializeField] private Button saveButton;
+        [SerializeField] private LocalizedTextMeshPro header;
+        [SerializeField] private ButtonLocalized resetButton;
+        [SerializeField] private ButtonLocalized resetToDefaultButton;
+        [SerializeField] private ButtonLocalized saveButton;
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform panelsUIParent;
-
         [SerializeField] private UILogicSettingGroupPanel[] panels;
 
+        private LocalizedContentCache localizedContentCache;
         private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new();
 
         private Action onResetToDefault;
         private Action<Enums.SettingsReloadingParam> onSave;
-        
+
+        private void Awake() => localizedContentCache = new LocalizedContentCache
+        (
+            Enums.PopupText.SettingsResetToDefaultHeader,
+            Enums.PopupText.SettingsResetToDefaultMessage,
+            Enums.PopupText.SettingsSavedHeader,
+            Enums.PopupText.SettingsSavedMessage
+        );
+
         public void Initialize(Action onBack, Action onResetToDefault, Action<Enums.SettingsReloadingParam> onSave)
         {
             base.Initialize(onBack);
@@ -37,7 +42,11 @@ namespace UI.MenuPanels.Settings
             resetToDefaultButton.OnPressAction += OnResetValuesToDefault;
             resetButton.OnPressAction += ResetPanel;
             saveButton.OnPressAction += OnSave;
-            Init();
+            resetToDefaultButton.Initialize(Enums.GeneralText.SettingsButtonResetToDefault);
+            resetButton.Initialize(Enums.GeneralText.SettingsButtonReset);
+            saveButton.Initialize(Enums.GeneralText.SettingsButtonSave);
+            header.Initialize(Enums.GeneralText.SettingsHeader);
+            InitBaseLogic();
             BuildLookup();
             InitUI();
             CalcEntryPosRelatedToRoot();
@@ -45,17 +54,19 @@ namespace UI.MenuPanels.Settings
             LoadInputValues(Enums.SettingLoadingParam.Init);
         }
 
+        private void OnDestroy() => header.Destroy();
+
         protected override void SelectDefaultButton() => backButton.Select();
 
         protected override void ResetPanel() => LoadInputValues(Enums.SettingLoadingParam.Reset);
 
-        private void Init()
+        private void InitBaseLogic()
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
             
             foreach (UILogicSettingGroupPanel panel in panels)
             {
-                panel.Init(gameSettings);
+                panel.InitBaseLogic(gameSettings);
             }
         }
 
@@ -142,8 +153,8 @@ namespace UI.MenuPanels.Settings
         private void OnResetValuesToDefault() =>
             AllManagers.Instance.UIManager.OpenPopupConfirmation
             (
-                ResetToDefaultPopupHeader,
-                ResetToDefaultPopupMessage,
+                localizedContentCache.GetValue(Enums.PopupText.SettingsResetToDefaultHeader),
+                localizedContentCache.GetValue(Enums.PopupText.SettingsResetToDefaultMessage),
                 ResetValuesToDefault
             );
 
@@ -174,7 +185,7 @@ namespace UI.MenuPanels.Settings
         private void Save(bool openPopup)
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
-            List<Enums.SettingGroupStaticKey> settingGroupChangedValues = new List<Enums.SettingGroupStaticKey>();
+            List<Enums.SettingGroupName> settingGroupChangedValues = new List<Enums.SettingGroupName>();
 
             foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
             {
@@ -182,20 +193,20 @@ namespace UI.MenuPanels.Settings
                 if (!setting.ChangedThroughPopup) continue;
                 
                 gameSettings.GetSetting(entry.Key).SetValue(setting);
-                if (!settingGroupChangedValues.Contains(setting.SettingGroup))
+                if (!settingGroupChangedValues.Contains(setting.GroupName))
                 {
-                    settingGroupChangedValues.Add(setting.SettingGroup);
+                    settingGroupChangedValues.Add(setting.GroupName);
                     setting.ChangedThroughPopup = false;
                 }
             }
             
             Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
-            if (settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.BoardSize) ||
-                settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.TileDimensions))
+            if (settingGroupChangedValues.Contains(Enums.SettingGroupName.BoardSize) ||
+                settingGroupChangedValues.Contains(Enums.SettingGroupName.TileDimensions))
             {
                 reloadingParam = Enums.SettingsReloadingParam.Maze;
             }
-            else if (settingGroupChangedValues.Contains(Enums.SettingGroupStaticKey.TileColors))
+            else if (settingGroupChangedValues.Contains(Enums.SettingGroupName.TileColors))
             {
                 reloadingParam = Enums.SettingsReloadingParam.TileColors;
             }
@@ -206,8 +217,8 @@ namespace UI.MenuPanels.Settings
             {
                 AllManagers.Instance.UIManager.OpenPopupInfo
                 (
-                    SavedPopupHeader,
-                    SavedPopupMessage
+                    localizedContentCache.GetValue(Enums.PopupText.SettingsSavedHeader),
+                    localizedContentCache.GetValue(Enums.PopupText.SettingsSavedMessage)
                 );
             }
         }

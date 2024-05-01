@@ -87,7 +87,7 @@ public static class Enums
     
     public enum MainMenuPanelButtonTag
     {
-        MazeModification, BFS, AStar, Settings, Help
+        MazeModification, BFS, AStar, Settings
     }
     
     public enum Direction
@@ -115,21 +115,6 @@ public static class Enums
         Standard, Init, Reset
     }
     
-    #endregion
-    
-    public enum CameraMovementMode
-    {
-        Border, Key
-    }
-
-    public enum AlgorithmStageDelay
-    {
-        AfterNewNodeEnqueuing = 0,
-        AfterNodeChecking = 1,
-        AfterCursorPositionChange = 2,
-        AfterPathNodeSetting = 3
-    }
-
     public enum SettingName
     {
         BoardWidth,
@@ -149,11 +134,11 @@ public static class Enums
         AlgorithmStageDelayAfterNewNodeEnqueuing,
         AlgorithmStageDelayAfterNodeChecking,
         AlgorithmStageDelayAfterCursorPositionChange,
-        AlgorithmStageDelayAfterPathNode,
+        AlgorithmStageDelayAfterPathNodeSetting,
         PermittedDirections
     }
     
-    public enum SettingGroupStaticKey
+    public enum SettingGroupName
     {
         BoardSize,
         TileDimensions,
@@ -163,10 +148,25 @@ public static class Enums
         PermittedDirections
     }
 
-    public enum SettingGroupPanelStaticKey
+    public enum SettingGroupPanelName
     {
         Tiles,
         Algorithms
+    }
+    
+    #endregion
+    
+    public enum CameraMovementMode
+    {
+        Border, Key
+    }
+
+    public enum AlgorithmStageDelay
+    {
+        AfterNewNodeEnqueuing = 0,
+        AfterNodeChecking = 1,
+        AfterCursorPositionChange = 2,
+        AfterPathNodeSetting = 3
     }
     
     public enum PermittedDirection
@@ -179,5 +179,32 @@ public static class Enums
         DownRight,
         DownLeft,
         UpLeft
+    }
+
+    public enum PopupText
+    {
+        QuitGameHeader,
+        QuitGameMessage,
+        SettingsResetToDefaultHeader,
+        SettingsResetToDefaultMessage,
+        SettingsSavedHeader,
+        SettingsSavedMessage,
+        ConfirmationButtonYes,
+        ConfirmationButtonNo,
+        AlgorithmCannotEnterHeader,
+        AlgorithmCannotEnterMessage
+    }
+    
+    public enum GeneralText
+    {
+        ButtonBack,
+        HUDCurrentNodeLabel,
+        HUDAlgorithmStateLabel,
+        SettingsHeader,
+        SettingsButtonReset,
+        SettingsButtonResetToDefault,
+        SettingsButtonSave,
+        MainMenuHeader,
+        MainMenuButtonQuit
     }
 }

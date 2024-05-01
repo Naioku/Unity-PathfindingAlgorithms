@@ -1,18 +1,14 @@
-﻿using TMPro;
-using UnityEngine;
-
+﻿
 namespace UI.HUDPanels
 {
     public class HUDControllerAlgorithm : BaseHUDController<Enums.AlgorithmAction>
     {
-        [SerializeField] protected TextMeshProUGUI currentStateLabel;
-
-        public override void Show()
+        protected override void Initialize()
         {
-            base.Show();
-            UpdateCurrentStateLabel(Enums.AlgorithmState.Initial);
+            staticLabel.Initialize(Enums.GeneralText.HUDCurrentNodeLabel);
+            dynamicLabel.Initialize(Enums.AlgorithmState.Initial);
         }
 
-        public void UpdateCurrentStateLabel(Enums.AlgorithmState currentState) => currentStateLabel.text = currentState.ToString();
+        public void UpdateCurrentStateLabel(Enums.AlgorithmState state) => dynamicLabel.SetLocalizedTextKey(state);
     }
 }

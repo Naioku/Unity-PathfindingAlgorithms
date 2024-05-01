@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CustomInputSystem;
 using CustomInputSystem.ActionMaps;
 using UI.HUDPanels;
@@ -45,16 +44,17 @@ namespace StageMachineSystem
         
             hudController.Initialize
             (
-                new ButtonData{ Action = ExitStage, Label = $"Back ({inputOnBackData.Binding})" },
-                new Dictionary<Enums.TileType, ButtonData>
+                new ButtonData{ Action = ExitStage, Binding = inputOnBackData.Binding },
+                new ButtonDataTagged<Enums.TileType>[]
                 {
-                    { Enums.TileType.Default, new ButtonData { Action = StartSettingNodeDefault, Label = $"Default ({inputOnSetDefaultNodeData.Binding})" } },
-                    { Enums.TileType.Start, new ButtonData { Action = StartSettingNodeStart, Label = $"Start ({inputOnSetStartNodeData.Binding})" } },
-                    { Enums.TileType.Destination, new ButtonData { Action = StartSettingNodeDestination, Label = $"Destination ({inputOnSetDestinationNodeData.Binding})" } },
-                    { Enums.TileType.Blocked, new ButtonData { Action = StartSettingNodeBlocked, Label = $"Blocked ({inputOnSetBlockedNodeData.Binding})" } },
+                    new(){ Tag = Enums.TileType.Default, Action = StartSettingNodeDefault, Binding = inputOnSetDefaultNodeData.Binding },
+                    new(){ Tag = Enums.TileType.Start, Action = StartSettingNodeStart, Binding = inputOnSetStartNodeData.Binding },
+                    new(){ Tag = Enums.TileType.Destination, Action = StartSettingNodeDestination, Binding = inputOnSetDestinationNodeData.Binding },
+                    new(){ Tag = Enums.TileType.Blocked, Action = StartSettingNodeBlocked, Binding = inputOnSetBlockedNodeData.Binding }
                 }
             );
             hudController.Show();
+            CurrentTileTypeToSet = Enums.TileType.Default;
         }
 
         public override void Exit()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SpawningSystem;
 using UI.HUDPanels;
+using UI.Localization;
 using UI.PopupPanels;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,19 +24,24 @@ namespace UI
             { typeof(Color), Enums.UIPopupType.InputColor },
             // { typeof(float), Enums.UIPopupType.InputChoice }
         };
+        private GameObject lastStaticPanelGameObject;
+        private LocalizedContentCache localizedContentCache;
 
         public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
         public MenuController MenuController { get; private set; }
         public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
         public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
-
-        private GameObject lastStaticPanelGameObject;
         
         public void Awake()
         {
             uiSpawner.Awake();
             uiPopupSpawner.Awake();
             CreatePanels();
+            localizedContentCache = new LocalizedContentCache
+            (
+                Enums.PopupText.ConfirmationButtonYes,
+                Enums.PopupText.ConfirmationButtonNo
+            );
         }
 
         public void CreatePanels()
@@ -64,11 +70,17 @@ namespace UI
             }
 
             InputPanel<TReturn> inputPanel = uiPopupSpawner.CreateObject<InputPanel<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
-            inputPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, result =>
-            {
-                onClose.Invoke(result);
-                CloseCurrentPopupPanel();
-            });
+            inputPanel.Initialize
+            (
+                header,
+                CloseCurrentPopupPanel,
+                initialValue,
+                result =>
+                {
+                    onClose.Invoke(result);
+                    CloseCurrentPopupPanel();
+                }
+            );
             OpenPanel(inputPanel);
         }
         
@@ -86,22 +98,36 @@ namespace UI
             }
 
             InputPanelLimited<TReturn> inputPanel = uiPopupSpawner.CreateObject<InputPanelLimited<TReturn>>(inputPopupsLookup[typeof(TReturn)]);
-            inputPanel.Initialize(header, CloseCurrentPopupPanel, initialValue, minValue, maxValue, result =>
-            {
-                onClose.Invoke(result);
-                CloseCurrentPopupPanel();
-            });
+            inputPanel.Initialize
+            (
+                header,
+                CloseCurrentPopupPanel,
+                initialValue,
+                minValue, maxValue,
+                result =>
+                {
+                    onClose.Invoke(result);
+                    CloseCurrentPopupPanel();
+                }
+            );
             OpenPanel(inputPanel);
         }
         
         public void OpenPopupConfirmation(string header, string message, Action onConfirm)
         {
             ConfirmationPanel infoPanel = uiPopupSpawner.CreateObject<ConfirmationPanel>(Enums.UIPopupType.Confirmation);
-            infoPanel.Initialize(header, CloseCurrentPopupPanel, message, () =>
-            {
-                onConfirm.Invoke();
-                CloseCurrentPopupPanel();
-            });
+            infoPanel.Initialize
+            (
+                header,
+                CloseCurrentPopupPanel,
+                localizedContentCache,
+                message,
+                () =>
+                {
+                    onConfirm.Invoke();
+                    CloseCurrentPopupPanel();
+                }
+            );
             OpenPanel(infoPanel);
         }
 
