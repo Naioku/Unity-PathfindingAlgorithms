@@ -1,6 +1,6 @@
 ﻿using System;
-using TMPro;
 using UI.Buttons;
+using UI.Localization;
 using UnityEngine;
 
 namespace UI.MenuPanels.Settings.View
@@ -8,30 +8,22 @@ namespace UI.MenuPanels.Settings.View
     public class ViewSetting : MonoBehaviour
     {
         [Header("Programmer:")]
-        [SerializeField] private TextMeshProUGUI label;
-        [SerializeField] private Button button;
+        [SerializeField] private LocalizedTextMeshPro label;
+        [SerializeField] private ButtonSimple button;
 
-        private StaticTextManager staticTextManager;
         private RectTransform rectTransform;
-        private Enums.SettingName displayedNameStaticKey;
         private Action<EntryPosition> onButtonSelect;
         private EntryPosition entryPosition;
 
-        public Button Button => button;
+        public ButtonSimple Button => button;
         
-        private string DisplayedName => staticTextManager.GetValue(displayedNameStaticKey);
         
-        private void Awake()
-        {
-            staticTextManager = AllManagers.Instance.StaticTextManager;
-            rectTransform = transform.GetComponent<RectTransform>();
-        }
+        private void Awake() => rectTransform = transform.GetComponent<RectTransform>();
 
         public void Initialize(Enums.SettingName displayedName, Action onButtonPress, Action<EntryPosition> onButtonSelect)
         {
-            displayedNameStaticKey = displayedName;
-            name = DisplayedName;
-            label.text = DisplayedName;
+            name = displayedName.ToString();
+            label.Initialize(displayedName);
             button.OnPressAction += onButtonPress;
             this.onButtonSelect = onButtonSelect;
             button.OnSelectAction += OnButtonSelect;

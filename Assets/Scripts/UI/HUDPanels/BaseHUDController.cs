@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using UI.Buttons;
+using UI.Localization;
 using UnityEngine;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace UI.HUDPanels
 {
     public abstract class BaseHUDController<T> : UIStaticPanel where T : Enum
     {
-        [SerializeField] private Button backButton;
-        [SerializeField] private List<TaggedButton<T>> buttons;
+        [SerializeField] protected LocalizedTextMeshPro staticLabel;
+        [SerializeField] protected LocalizedTextMeshPro dynamicLabel;
+
+        [SerializeField] private ButtonLocalized backButton;
+        [SerializeField] private List<TaggedButtonLocalized<T>> buttons;
         
-        private Dictionary<T, TaggedButton<T>> buttonsLookup;
+        private Dictionary<T, TaggedButtonLocalized<T>> buttonsLookup;
 
         private void Awake() => BuildButtonsLookup();
         private void Start() => Hide();
         
-        public void Initialize(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
+        // Todo: Only once.
+        public void Initialize(ButtonData onBack, ButtonDataTagged<T>[] buttonsData)
         {
-            if (buttonsData.Count != buttonsLookup.Count)
+            if (buttonsData.Length != buttonsLookup.Count)
             {
                 Debug.LogError($"{name}: Actions count does not match the buttons count.");
                 return;
@@ -25,11 +31,13 @@ namespace UI.HUDPanels
 
             InitButtonsData(onBack, buttonsData);
             InitButtonsNavigation();
+            Initialize();
         }
 
+        // Todo: Delete.
         public void Deinitialize()
         {
-            foreach (TaggedButton<T> button in buttons)
+            foreach (TaggedButtonLocalized<T> button in buttons)
             {
                 button.ResetObj();
             }
@@ -38,26 +46,27 @@ namespace UI.HUDPanels
 
         public void SelectButton(T type) => buttonsLookup[type].Select();
 
+        protected abstract void Initialize();
         protected override void SelectDefaultButton() => SelectButton(0);
 
-        private void InitButtonsData(ButtonData onBack, Dictionary<T, ButtonData> buttonsData)
+        private void InitButtonsData(ButtonData onBack, ButtonDataTagged<T>[] buttonsData)
         {
             backButton.OnPressAction += onBack.Action;
-            backButton.Label = onBack.Label;
+            backButton.Initialize(Enums.GeneralText.ButtonBack, new KeyValuePair<string, IVariable>("0", onBack.Binding));
 
-            foreach (var data in buttonsData)
+            foreach (ButtonDataTagged<T> data in buttonsData)
             {
-                TaggedButton<T> button = buttonsLookup[data.Key];
+                TaggedButtonLocalized<T> button = buttonsLookup[data.Tag];
 
-                button.OnPressAction += buttonsData[button.Tag].Action;
-                button.Label = buttonsData[button.Tag].Label;
+                button.OnPressAction += data.Action;
+                button.Initialize(new KeyValuePair<string, IVariable>("0", data.Binding));
             }
         }
 
         private void InitButtonsNavigation()
         {
-            List<Button> buttons = new List<Button>();
-            foreach (TaggedButton<T> button in this.buttons)
+            List<ButtonLocalized> buttons = new List<ButtonLocalized>();
+            foreach (TaggedButtonLocalized<T> button in this.buttons)
             {
                 buttons.Add(button);
             }
@@ -77,8 +86,8 @@ namespace UI.HUDPanels
         
         private void BuildButtonsLookup()
         {
-            buttonsLookup = new Dictionary<T, TaggedButton<T>>();
-            foreach (TaggedButton<T> button in buttons)
+            buttonsLookup = new Dictionary<T, TaggedButtonLocalized<T>>();
+            foreach (TaggedButtonLocalized<T> button in buttons)
             {
                 buttonsLookup.Add(button.Tag, button);
             }

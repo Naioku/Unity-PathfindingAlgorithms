@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: SettingName Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: SettingName
+  m_TableCollectionNameGuidString: 2ae14d48e68f86e4ab84408cb40e82e0
+  m_Entries:
+  - m_Id: 553963913216
+    m_Key: BoardWidth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 679365214208
+    m_Key: BoardLength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80649982738432
+    m_Key: TileColorDefault
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80653845692416
+    m_Key: TileColorStart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80791150428160
+    m_Key: TileColorDestination
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80794598146048
+    m_Key: TileColorBlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82830018379776
+    m_Key: TileColorHighlightValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82844597780480
+    m_Key: MarkerColorReadyToCheck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82845860265984
+    m_Key: MarkerColorChecked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82846673960960
+    m_Key: MarkerColorPath
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82847517016064
+    m_Key: MarkerColorAlpha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82848242630656
+    m_Key: AlgorithmStageDelayAfterNewNodeEnqueuing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82848959856640
+    m_Key: AlgorithmStageDelayAfterNodeChecking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82849647722496
+    m_Key: AlgorithmStageDelayAfterCursorPositionChange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82850272673792
+    m_Key: AlgorithmStageDelayAfterPathNodeSetting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82851090563072
+    m_Key: PermittedDirections
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 320299312509616391
+  references:
+    version: 2
+    RefIds:
+    - rid: 320299312509616391
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1714126217164

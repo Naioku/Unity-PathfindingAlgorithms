@@ -21,7 +21,7 @@ namespace UI.MenuPanels.Settings.Logic
         {
             AllManagers.Instance.UIManager.OpenPopupInput
             (
-                $"{staticTextManager.GetValue(groupNameStaticKey)}: {staticTextManager.GetValue(Name)}",
+                $"{groupNameText.GetLocalizedString()}: {nameText.GetLocalizedString()}",
                 value,
                 OnClosePanel,
                 minValue,

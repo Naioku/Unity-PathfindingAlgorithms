@@ -10,20 +10,20 @@ namespace UI.MenuPanels.Settings.Logic
     [Serializable]
     public class UILogicSettingGroup
     {
-        [SerializeField] private Enums.SettingGroupStaticKey nameStaticKey;
+        [SerializeField] private Enums.SettingGroupName name;
         [SerializeField] private Enums.SettingName[] settingNames;
         
         public List<IUILogicSetting> Settings { get; } = new();
         public IUILogicSetting FirstSetting => Settings.First();
         public IUILogicSetting LastSetting => Settings.Last();
 
-        public void Init(GameSettings gameSettings)
+        public void InitBaseLogic(GameSettings gameSettings)
         {
             foreach (Enums.SettingName settingName in settingNames)
             {
                 ISetting setting = gameSettings.GetSetting(settingName);
                 IUILogicSetting uiLogicSetting = setting.UILogicSetting;
-                uiLogicSetting.Init(settingName, nameStaticKey);
+                uiLogicSetting.InitBaseLogic(settingName, name);
                 Settings.Add(uiLogicSetting);
             }
         }
@@ -31,7 +31,7 @@ namespace UI.MenuPanels.Settings.Logic
         public void InitUI(RectTransform uiParent, Action<EntryPosition> onSelect)
         {
             ViewSettingGroup viewSettingGroup = AllManagers.Instance.UIManager.UISpawner.CreateObject<ViewSettingGroup>(Enums.UISpawned.SettingGroupEntry, uiParent);
-            viewSettingGroup.Initialize(nameStaticKey);
+            viewSettingGroup.Initialize(name);
             foreach (IUILogicSetting setting in Settings)
             {
                 setting.InitUI(viewSettingGroup.UIParent);

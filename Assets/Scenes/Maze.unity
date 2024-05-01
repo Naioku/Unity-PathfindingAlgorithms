@@ -175,6 +175,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: 'managedReferences[320299312509616430]'
+      value: Unity.Localization UnityEngine.Localization.SmartFormat.PersistentVariables.FloatVariable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: managedReferences[320299312509616430].m_Value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: <StaticTextManager>k__BackingField.localizedString.m_LocalVariables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: <StaticTextManager>k__BackingField.localizedString.m_TableEntryReference.m_KeyId
+      value: 553963913216
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: <StaticTextManager>k__BackingField.localizedString.m_LocalVariables.Array.data[0].name
+      value: variable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: <StaticTextManager>k__BackingField.localizedString.m_TableReference.m_TableCollectionName
+      value: GUID:2ae14d48e68f86e4ab84408cb40e82e0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928309026534458479, guid: a4762be905108d44cb0fea13a56bebb1, type: 3}
+      propertyPath: <StaticTextManager>k__BackingField.localizedString.m_LocalVariables.Array.data[0].variable
+      value: 320299312509616430
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

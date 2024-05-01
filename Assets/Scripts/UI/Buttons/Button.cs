@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Buttons
 {
-    public class Button : Selectable, IPointerClickHandler, ISubmitHandler, ISelectableElement
+    public abstract class Button : Selectable, IPointerClickHandler, ISubmitHandler, ISelectableElement
     {
-        private const string BackgroundPath = "BACKGROUND";
-        private const string TextLabelPath = "TEXT";
+        [SerializeField] private Image background;
         
-        private Image background;
-        private TextMeshProUGUI textLabel;
         private Color backgroundNormalColor;
         
         public event Action OnSelectAction;
@@ -21,10 +17,7 @@ namespace UI.Buttons
         public event Action OnSubmitAction;
         public event Action OnPressAction;
         
-        public string Label
-        {
-            set => textLabel.text = value;
-        }
+        protected abstract Color LabelColor { set; }
 
         public Color Color
         {
@@ -43,7 +36,7 @@ namespace UI.Buttons
                 void SetLabelColor()
                 {
                     Color.RGBToHSV(value, out _, out _, out float v);
-                    textLabel.color = Color.HSVToRGB(0, 0, v < 0.5 ? 1 : 0);
+                    LabelColor = Color.HSVToRGB(0, 0, v < 0.5 ? 1 : 0);
                 }
             }
         }
@@ -92,8 +85,6 @@ namespace UI.Buttons
         protected override void Awake()
         {
             base.Awake();
-            background = transform.Find(BackgroundPath).GetComponent<Image>();
-            textLabel = transform.Find(TextLabelPath).GetComponent<TextMeshProUGUI>();
             backgroundNormalColor = background.color;
         }
 
@@ -129,21 +120,17 @@ namespace UI.Buttons
             OnSubmitAction?.Invoke();
         }
 
-        protected override void DoStateTransition(SelectionState state, bool instant)
-        {
-            // Color disabledColor = colors.disabledColor;
-            // ColorBlock newBlock = colors;
-            // newBlock.disabledColor = new Color();
-            // colors = newBlock;
-            base.DoStateTransition(state, instant);
-            
-            background.color = state == SelectionState.Disabled ? colors.disabledColor : backgroundNormalColor;
-        }
-
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
             OnSelectAction?.Invoke();
+        }
+
+        protected override void DoStateTransition(SelectionState state, bool instant)
+        {
+            base.DoStateTransition(state, instant);
+            
+            background.color = state == SelectionState.Disabled ? colors.disabledColor : backgroundNormalColor;
         }
 
         private void Press()

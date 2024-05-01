@@ -71,11 +71,11 @@ namespace StageMachineSystem.Algorithm
             }
         }
 
-        public void Initialize(Maze.Maze maze, Vector2Int startCoords, Vector2Int destinationCoords, Action onFinish)
+        public void Initialize(Maze.Maze maze, Action onFinish)
         {
             this.maze = maze;
-            this.startCoords = startCoords;
-            this.destinationCoords = destinationCoords;
+            startCoords = maze.UniqueTilesCoordsLookup[Enums.TileType.Start].Value;
+            destinationCoords = maze.UniqueTilesCoordsLookup[Enums.TileType.Destination].Value;
             this.onFinish = onFinish;
             Refresh();
         }

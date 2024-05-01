@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Settings;
 using UI.MenuPanels;
 using UI.MenuPanels.Settings;
 using UnityEngine;
@@ -11,7 +10,6 @@ namespace UI
     {
         [SerializeField] private MainPanel mainPanel;
         [SerializeField] private SettingsPanel settingsPanel;
-        // [SerializeField] private HelpPanel helpPanel;
 
         private BasePanel currentPanel;
         private readonly Stack<BasePanel> openedPanelsHistory = new();
@@ -48,11 +46,9 @@ namespace UI
                     { Enums.MainMenuPanelButtonTag.BFS, bfsAction },
                     { Enums.MainMenuPanelButtonTag.AStar, aStarAction },
                     { Enums.MainMenuPanelButtonTag.Settings, OpenSettingsPanel },
-                    { Enums.MainMenuPanelButtonTag.Help, OpenHelpPanel }
                 }
             );
             settingsPanel.Initialize(Back, resetToDefaultAction, saveSettingsAction);
-            // helpPanel.Initialize(initData);
             
             AddInput();
         }
@@ -87,12 +83,6 @@ namespace UI
         }
 
         private void OpenSettingsPanel() => OpenPanel(settingsPanel);
-
-        private void OpenHelpPanel()
-        {
-            // OpenPanel(helpPanel);
-            Debug.Log("Opening Help panel...");
-        }
 
         private void OpenPanel(BasePanel panel)
         {

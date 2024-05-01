@@ -1,4 +1,4 @@
 ﻿namespace UI.Buttons
 {
-    public class HUDMazeModificationButton : TaggedButton<Enums.TileType> {}
+    public class HUDMazeModificationButton : TaggedButtonLocalized<Enums.TileType> {}
 }

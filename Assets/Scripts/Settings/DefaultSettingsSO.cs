@@ -61,7 +61,7 @@ namespace Settings
                 InitSetting(algorithmStageDelayAfterNewNodeEnqueuing, Enums.SettingName.AlgorithmStageDelayAfterNewNodeEnqueuing);
                 InitSetting(algorithmStageDelayAfterNodeChecking, Enums.SettingName.AlgorithmStageDelayAfterNodeChecking);
                 InitSetting(algorithmStageDelayAfterCursorPositionChange, Enums.SettingName.AlgorithmStageDelayAfterCursorPositionChange);
-                InitSetting(algorithmStageDelayAfterPathNodeSetting, Enums.SettingName.AlgorithmStageDelayAfterPathNode);
+                InitSetting(algorithmStageDelayAfterPathNodeSetting, Enums.SettingName.AlgorithmStageDelayAfterPathNodeSetting);
                 InitSetting(permittedDirectionsSetting, Enums.SettingName.PermittedDirections);
 
                 return result;

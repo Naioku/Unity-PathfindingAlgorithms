@@ -75,7 +75,7 @@ namespace Settings
                 Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing => Enums.SettingName.AlgorithmStageDelayAfterNewNodeEnqueuing,
                 Enums.AlgorithmStageDelay.AfterNodeChecking => Enums.SettingName.AlgorithmStageDelayAfterNodeChecking,
                 Enums.AlgorithmStageDelay.AfterCursorPositionChange => Enums.SettingName.AlgorithmStageDelayAfterCursorPositionChange,
-                Enums.AlgorithmStageDelay.AfterPathNodeSetting => Enums.SettingName.AlgorithmStageDelayAfterPathNode,
+                Enums.AlgorithmStageDelay.AfterPathNodeSetting => Enums.SettingName.AlgorithmStageDelayAfterPathNodeSetting,
                 _ => throw new ArgumentOutOfRangeException(nameof(delay), delay, null)
             };
             

@@ -9,4 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Maze.unity
     guid: f58f179e18486bb45880ff48353bbcea
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: fbc30c00cfcc24a4fb53c2fd32e2f505, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 92a3af282d32e014a8567849c4a81570, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 128671f413f4ca84aad7492c744d8424, type: 2}
+  m_UseUCBPForAssetBundles: 0

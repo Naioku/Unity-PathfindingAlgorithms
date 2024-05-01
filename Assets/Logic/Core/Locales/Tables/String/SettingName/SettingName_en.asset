@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: SettingName_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 2ae14d48e68f86e4ab84408cb40e82e0, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 553963913216
+    m_Localized: Board width
+    m_Metadata:
+      m_Items: []
+  - m_Id: 679365214208
+    m_Localized: Board length
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80649982738432
+    m_Localized: Default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80653845692416
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80791150428160
+    m_Localized: Destination
+    m_Metadata:
+      m_Items: []
+  - m_Id: 80794598146048
+    m_Localized: Blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82830018379776
+    m_Localized: Cursor highlight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82844597780480
+    m_Localized: Ready to check
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82845860265984
+    m_Localized: Checked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82846673960960
+    m_Localized: Path
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82847517016064
+    m_Localized: Opacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82848242630656
+    m_Localized: After new node enqueuing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82848959856640
+    m_Localized: After node checking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82849647722496
+    m_Localized: After cursor position change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82850272673792
+    m_Localized: After path node setting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82851090563072
+    m_Localized: Permitted directions
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

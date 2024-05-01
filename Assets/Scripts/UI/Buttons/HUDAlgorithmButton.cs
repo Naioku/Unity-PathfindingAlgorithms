@@ -1,4 +1,4 @@
 ﻿namespace UI.Buttons
 {
-    public class HUDAlgorithmButton : TaggedButton<Enums.AlgorithmAction> {}
+    public class HUDAlgorithmButton : TaggedButtonLocalized<Enums.AlgorithmAction> {}
 }
