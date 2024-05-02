@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: pl
   m_SharedData: {fileID: 11400000, guid: 253b729676d1cf346b543c6024a91f8e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 4312270368528662610
   m_TableData:
   - m_Id: 276410040320
     m_Localized: "Menu G\u0142\xF3wne"
@@ -47,13 +48,18 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4963074048
-    m_Localized: Wstecz
+    m_Localized: 'Wstecz{0: ({0})|}'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4312270368528662610
   - m_Id: 3131007205376
     m_Localized: "Wyjd\u017A"
     m_Metadata:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4312270368528662610
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 0080d22701000000

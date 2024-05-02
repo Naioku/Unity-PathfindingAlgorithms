@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpawningSystem;
-using UI.HUDPanels;
 using UI.Localization;
 using UI.PopupPanels;
 using UnityEngine;
@@ -28,15 +27,11 @@ namespace UI
         private LocalizedContentCache localizedContentCache;
 
         public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
-        public MenuController MenuController { get; private set; }
-        public HUDControllerMazeModification HUDControllerMazeModification { get; private set; }
-        public HUDControllerAlgorithm HUDControllerAlgorithm { get; private set; }
         
         public void Awake()
         {
             uiSpawner.Awake();
             uiPopupSpawner.Awake();
-            CreatePanels();
             localizedContentCache = new LocalizedContentCache
             (
                 Enums.PopupText.ConfirmationButtonYes,
@@ -44,18 +39,11 @@ namespace UI
             );
         }
 
-        public void CreatePanels()
-        {
-            MenuController = uiSpawner.CreateObject<MenuController>(Enums.UISpawned.Menu);
-            HUDControllerMazeModification = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.UISpawned.HUDMazeModification);
-            HUDControllerAlgorithm = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.UISpawned.HUDAlgorithm);
-        }
-        
         public void OpenPopupInfo(string header, string message)
         {
             InfoPanel infoPanel = uiPopupSpawner.CreateObject<InfoPanel>(Enums.UIPopupType.Info);
-            infoPanel.Initialize(header, CloseCurrentPopupPanel, message);
-            OpenPanel(infoPanel);
+            infoPanel.Initialize(header, CloseCurrentPopup, message);
+            OpenPopup(infoPanel);
         }
 
         public void OpenPopupInput<TReturn>(
@@ -73,15 +61,15 @@ namespace UI
             inputPanel.Initialize
             (
                 header,
-                CloseCurrentPopupPanel,
+                CloseCurrentPopup,
                 initialValue,
                 result =>
                 {
                     onClose.Invoke(result);
-                    CloseCurrentPopupPanel();
+                    CloseCurrentPopup();
                 }
             );
-            OpenPanel(inputPanel);
+            OpenPopup(inputPanel);
         }
         
         public void OpenPopupInput<TReturn>(
@@ -101,16 +89,16 @@ namespace UI
             inputPanel.Initialize
             (
                 header,
-                CloseCurrentPopupPanel,
+                CloseCurrentPopup,
                 initialValue,
                 minValue, maxValue,
                 result =>
                 {
                     onClose.Invoke(result);
-                    CloseCurrentPopupPanel();
+                    CloseCurrentPopup();
                 }
             );
-            OpenPanel(inputPanel);
+            OpenPopup(inputPanel);
         }
         
         public void OpenPopupConfirmation(string header, string message, Action onConfirm)
@@ -119,19 +107,19 @@ namespace UI
             infoPanel.Initialize
             (
                 header,
-                CloseCurrentPopupPanel,
+                CloseCurrentPopup,
                 localizedContentCache,
                 message,
                 () =>
                 {
                     onConfirm.Invoke();
-                    CloseCurrentPopupPanel();
+                    CloseCurrentPopup();
                 }
             );
-            OpenPanel(infoPanel);
+            OpenPopup(infoPanel);
         }
 
-        private void OpenPanel(PopupPanel createdPanel)
+        private void OpenPopup(PopupPanel createdPanel)
         {
             AllManagers.Instance.InputManager.EnablePopupMode();
             currentPopupPanel = createdPanel;
@@ -139,7 +127,7 @@ namespace UI
             EventSystem.current.SetSelectedGameObject(currentPopupPanel.SelectableOnOpen);
         }
 
-        private void CloseCurrentPopupPanel()
+        private void CloseCurrentPopup()
         {
             Object.Destroy(currentPopupPanel.gameObject);
             AllManagers.Instance.InputManager.DisablePopupMode();

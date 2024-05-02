@@ -62,10 +62,7 @@ namespace CustomInputSystem
             savedState.Clear();
         }
 
-        private void UpdateCursorPosition()
-        {
-            CursorPosition = Mouse.current.position.ReadValue();
-        }
+        private void UpdateCursorPosition() => CursorPosition = Mouse.current.position.ReadValue();
 
         private void InitializeMaps()
         {

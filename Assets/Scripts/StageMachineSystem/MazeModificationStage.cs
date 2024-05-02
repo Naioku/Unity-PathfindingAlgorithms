@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CustomInputSystem;
 using CustomInputSystem.ActionMaps;
+using SpawningSystem;
 using UI.HUDPanels;
 using UnityEngine;
 
@@ -8,11 +9,18 @@ namespace StageMachineSystem
 {
     public class MazeModificationStage : BaseStage
     {
+        private readonly SpawnManager<Enums.UISpawned> uiSpawner = AllManagers.Instance.UIManager.UISpawner;
+        private readonly HUDControllerMazeModification hudController;
         private InputManager inputManager;
         private Maze.Maze maze;
-        private readonly HUDControllerMazeModification hudController;
+        private ActionMap.ActionData inputOnSetDefaultNodeData;
+        private ActionMap.ActionData inputOnSetStartNodeData;
+        private ActionMap.ActionData inputOnSetDestinationNodeData;
+        private ActionMap.ActionData inputOnSetBlockedNodeData;
         
         private Enums.TileType currentTileTypeToSet;
+        private Vector2Int? currentCoords;
+
         private Enums.TileType CurrentTileTypeToSet
         {
             get => currentTileTypeToSet;
@@ -23,25 +31,10 @@ namespace StageMachineSystem
             }
         }
 
-        private Vector2Int? currentCoords;
-        private ActionMap.ActionData inputOnSetDefaultNodeData;
-        private ActionMap.ActionData inputOnSetStartNodeData;
-        private ActionMap.ActionData inputOnSetDestinationNodeData;
-        private ActionMap.ActionData inputOnSetBlockedNodeData;
-
         public MazeModificationStage()
         {
-            hudController = AllManagers.Instance.UIManager.HUDControllerMazeModification;
-        }
-
-        public override void Enter()
-        {
-            base.Enter();
-            maze = sharedData.Maze;
             InitInput();
-            AddInput();
-            InitInteractions();
-        
+            hudController = uiSpawner.CreateObject<HUDControllerMazeModification>(Enums.UISpawned.HUDMazeModification);
             hudController.Initialize
             (
                 new ButtonData{ Action = ExitStage, Binding = inputOnBackData.Binding },
@@ -53,6 +46,14 @@ namespace StageMachineSystem
                     new(){ Tag = Enums.TileType.Blocked, Action = StartSettingNodeBlocked, Binding = inputOnSetBlockedNodeData.Binding }
                 }
             );
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+            maze = sharedData.Maze;
+            AddInput();
+            AddInteractions();
             hudController.Show();
             CurrentTileTypeToSet = Enums.TileType.Default;
         }
@@ -61,7 +62,6 @@ namespace StageMachineSystem
         {
             base.Exit();
             hudController.Hide();
-            hudController.Deinitialize();
             RemoveInteractions();
             RemoveInput();
             if (currentCoords != null)
@@ -133,7 +133,7 @@ namespace StageMachineSystem
 
         #region Interactions
 
-        private void InitInteractions()
+        private void AddInteractions()
         {
             maze.OnHoverTick += HandleHoverTick;
             maze.OnHoverExitInteraction += HandleHoverExitInteraction;

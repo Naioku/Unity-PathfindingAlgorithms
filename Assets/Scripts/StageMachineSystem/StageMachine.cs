@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UI;
 using UI.Localization;
 using UnityEngine;
 using UpdateSystem.CoroutineSystem;
@@ -45,7 +44,6 @@ namespace StageMachineSystem
             if (currentStage == null)
             {
                 coroutineCaller.StopCoroutine(ref tickCoroutineId);
-                tickCoroutineId = Guid.Empty;
             }
             else
             {

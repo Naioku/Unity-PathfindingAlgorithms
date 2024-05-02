@@ -3,6 +3,7 @@ using BreadthFirstSearch.Scripts;
 using CustomInputSystem;
 using InteractionSystem;
 using Settings;
+using SpawningSystem;
 using StageMachineSystem;
 using UI;
 using UI.Localization;
@@ -15,18 +16,22 @@ public class GameManager
     [SerializeField] private CameraController cameraController;
     [SerializeField] private InteractionController interactionController;
 
+    private SpawnManager<Enums.UISpawned> uiSpawner;
     private Maze.Maze maze;
     private MenuController menuController;
     private InputManager inputManager;
     private StageMachine stageMachine;
+    private MazeModificationStage mazeModificationStage;
+    private AlgorithmStage algorithmStage;
     private LocalizedContentCache localizedContentCache;
 
     public GameSettings GameSettings => gameSettings;
 
     public void Awake()
     {
+        uiSpawner = AllManagers.Instance.UIManager.UISpawner;
         AllManagers.Instance.SavingManager.LoadSettings(gameSettings);
-        menuController = AllManagers.Instance.UIManager.MenuController;
+        menuController = uiSpawner.CreateObject<MenuController>(Enums.UISpawned.Menu);
         menuController.Initialize
         (
             StartMazeModification,
@@ -38,6 +43,8 @@ public class GameManager
         );
         inputManager = AllManagers.Instance.InputManager;
         localizedContentCache = new LocalizedContentCache(Enums.PopupText.QuitGameHeader, Enums.PopupText.QuitGameMessage);
+        mazeModificationStage = new MazeModificationStage();
+        algorithmStage = new AlgorithmStage();
     }
 
     public void Destroy()
@@ -76,8 +83,13 @@ public class GameManager
         menuController.Close();
     }
 
-    private void StartMazeModification() => EnterStage(new MazeModificationStage());
-    private void StartBFS() => EnterStage(new AlgorithmStage(new BFS()));
+    private void StartMazeModification() => EnterStage(mazeModificationStage);
+    private void StartBFS()
+    {
+        algorithmStage.ChangeAlgorithm(new BFS());
+        EnterStage(algorithmStage);
+    }
+
     private void StartAStar() => Debug.Log("AStar not implemented yet.");
     private void ResetSettingsToDefault()
     {

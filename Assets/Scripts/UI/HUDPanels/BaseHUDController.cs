@@ -20,7 +20,6 @@ namespace UI.HUDPanels
         private void Awake() => BuildButtonsLookup();
         private void Start() => Hide();
         
-        // Todo: Only once.
         public void Initialize(ButtonData onBack, ButtonDataTagged<T>[] buttonsData)
         {
             if (buttonsData.Length != buttonsLookup.Count)
@@ -32,16 +31,6 @@ namespace UI.HUDPanels
             InitButtonsData(onBack, buttonsData);
             InitButtonsNavigation();
             Initialize();
-        }
-
-        // Todo: Delete.
-        public void Deinitialize()
-        {
-            foreach (TaggedButtonLocalized<T> button in buttons)
-            {
-                button.ResetObj();
-            }
-            backButton.ResetObj();
         }
 
         public void SelectButton(T type) => buttonsLookup[type].Select();

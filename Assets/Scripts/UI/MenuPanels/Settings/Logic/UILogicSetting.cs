@@ -23,7 +23,6 @@ namespace UI.MenuPanels.Settings.Logic
 
         public T Value => value;
 
-        // Todo: Consider moving ChangedThroughPopup into the SetValueInternal().
         public virtual void SetValue(ISetting setting, Enums.SettingLoadingParam param)
         {
             switch (param)

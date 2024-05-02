@@ -16,24 +16,33 @@ MonoBehaviour:
     m_Code: pl
   m_SharedData: {fileID: 11400000, guid: cb1001cc9668a24488757ccd10ac908a, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 4312270368528662602
   m_TableData:
   - m_Id: 13884358656
-    m_Localized: Pauza
+    m_Localized: 'Pauza{0: ({0})|}'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4312270368528662602
   - m_Id: 5604802560
-    m_Localized: "Odtw\xF3rz"
+    m_Localized: "Odtw\xF3rz{0: ({0})|}"
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4312270368528662602
   - m_Id: 15906013184
-    m_Localized: Krok do przodu
+    m_Localized: 'Krok do przodu{0: ({0})|}'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4312270368528662602
   - m_Id: 18057691136
-    m_Localized: Zatrzymaj
+    m_Localized: 'Zatrzymaj{0: ({0})|}'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4312270368528662602
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4312270368528662602
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 0080923b030000000080124e01000000008012b4030000000080523404000000

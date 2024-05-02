@@ -1,5 +1,6 @@
 ﻿using CustomInputSystem;
 using CustomInputSystem.ActionMaps;
+using SpawningSystem;
 using StageMachineSystem.Algorithm;
 using UI.HUDPanels;
 
@@ -7,32 +8,21 @@ namespace StageMachineSystem
 {
     public class AlgorithmStage : BaseStage
     {
-        private readonly Algorithm.Algorithm algorithm;
+        private readonly SpawnManager<Enums.UISpawned> uiSpawner = AllManagers.Instance.UIManager.UISpawner;
         private readonly HUDControllerAlgorithm hudController;
-        private AlgorithmStateBase algorithmState;
         private InputManager inputManager;
         private ActionMap.ActionData inputOnPlayData;
         private ActionMap.ActionData inputOnPauseData;
         private ActionMap.ActionData inputOnStepData;
         private ActionMap.ActionData inputOnStopData;
+        
+        private Algorithm.Algorithm algorithm;
+        private AlgorithmStateBase algorithmState;
 
-        public AlgorithmStage(Algorithm.Algorithm algorithm)
+        public AlgorithmStage()
         {
-            this.algorithm = algorithm;
-            hudController = AllManagers.Instance.UIManager.HUDControllerAlgorithm;
-        }
-
-        public override void Enter()
-        {
-            base.Enter();
             InitInput();
-            AddInput();
-            algorithm.Initialize
-            (
-                sharedData.Maze,
-                () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm))
-            );
-            
+            hudController = uiSpawner.CreateObject<HUDControllerAlgorithm>(Enums.UISpawned.HUDAlgorithm);
             hudController.Initialize
             (
                 new ButtonData{ Action = ExitStage, Binding = inputOnBackData.Binding },
@@ -44,7 +34,24 @@ namespace StageMachineSystem
                     new(){ Tag = Enums.AlgorithmAction.Stop, Action = Stop, Binding = inputOnStopData.Binding }
                 }
             );
+        }
+        
+        public void ChangeAlgorithm(Algorithm.Algorithm algorithm)
+        {
+            algorithmState?.Stop();
+            this.algorithm = algorithm;
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+            AddInput();
             hudController.Show();
+            algorithm.Initialize
+            (
+                sharedData.Maze,
+                () => SwitchAlgorithmState(new AlgorithmStateFinished(algorithm))
+            );
             SwitchAlgorithmState(new AlgorithmStateInitial(algorithm));
         }
 
@@ -52,9 +59,7 @@ namespace StageMachineSystem
         {
             base.Exit();
             hudController.Hide();
-            hudController.Deinitialize();
             RemoveInput();
-            algorithmState.Stop();
         }
 
         private void SwitchAlgorithmState(AlgorithmStateBase newState)
