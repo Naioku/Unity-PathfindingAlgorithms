@@ -489,9 +489,9 @@ MonoBehaviour:
   vertical: 1
   movementType: 2
   elasticity: 0.1
-  inertia: 1
+  inertia: 0
   decelerationRate: 0.135
-  scrollSensitivity: 7
+  scrollSensitivity: 1500
   viewport: {fileID: 6977521154459133424}
   horizontalScrollbar: {fileID: 0}
   verticalScrollbar: {fileID: 6158622670684918622}
