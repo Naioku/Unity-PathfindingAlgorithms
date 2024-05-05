@@ -5,6 +5,7 @@ using UI.Buttons;
 using UI.Localization;
 using UI.MenuPanels.Settings.Logic;
 using UnityEngine;
+using Utilities;
 
 namespace UI.MenuPanels.Settings
 {
@@ -89,8 +90,8 @@ namespace UI.MenuPanels.Settings
             }
             
             // Hack for Unity's odd UI working... It has to be called twice.
-            Utility.Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
-            Utility.Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
+            Utility.RefreshLayoutGroupsImmediate(scrollRect.Content);
         }
         
         private void OnSelectEntry(EntryPosition position)

@@ -55,6 +55,15 @@ namespace CustomInputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraZoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""a50414a7-f9e3-46e1-8cd5-efe399871e28"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -88,6 +97,17 @@ namespace CustomInputSystem
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cc3c145-879f-4a91-afcb-2bf6801a38a1"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CameraZoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -565,6 +585,7 @@ namespace CustomInputSystem
             m_Global_ClickInteraction = m_Global.FindAction("ClickInteraction", throwIfNotFound: true);
             m_Global_CameraMovement = m_Global.FindAction("CameraMovement", throwIfNotFound: true);
             m_Global_Back = m_Global.FindAction("Back", throwIfNotFound: true);
+            m_Global_CameraZoom = m_Global.FindAction("CameraZoom", throwIfNotFound: true);
             // MazeModification
             m_MazeModification = asset.FindActionMap("MazeModification", throwIfNotFound: true);
             m_MazeModification_SetDefaultNode = m_MazeModification.FindAction("SetDefaultNode", throwIfNotFound: true);
@@ -655,6 +676,7 @@ namespace CustomInputSystem
         private readonly InputAction m_Global_ClickInteraction;
         private readonly InputAction m_Global_CameraMovement;
         private readonly InputAction m_Global_Back;
+        private readonly InputAction m_Global_CameraZoom;
         public struct GlobalActions
         {
             private @Controls m_Wrapper;
@@ -662,6 +684,7 @@ namespace CustomInputSystem
             public InputAction @ClickInteraction => m_Wrapper.m_Global_ClickInteraction;
             public InputAction @CameraMovement => m_Wrapper.m_Global_CameraMovement;
             public InputAction @Back => m_Wrapper.m_Global_Back;
+            public InputAction @CameraZoom => m_Wrapper.m_Global_CameraZoom;
             public InputActionMap Get() { return m_Wrapper.m_Global; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -680,6 +703,9 @@ namespace CustomInputSystem
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
+                @CameraZoom.started += instance.OnCameraZoom;
+                @CameraZoom.performed += instance.OnCameraZoom;
+                @CameraZoom.canceled += instance.OnCameraZoom;
             }
 
             private void UnregisterCallbacks(IGlobalActions instance)
@@ -693,6 +719,9 @@ namespace CustomInputSystem
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
+                @CameraZoom.started -= instance.OnCameraZoom;
+                @CameraZoom.performed -= instance.OnCameraZoom;
+                @CameraZoom.canceled -= instance.OnCameraZoom;
             }
 
             public void RemoveCallbacks(IGlobalActions instance)
@@ -1020,6 +1049,7 @@ namespace CustomInputSystem
             void OnClickInteraction(InputAction.CallbackContext context);
             void OnCameraMovement(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
+            void OnCameraZoom(InputAction.CallbackContext context);
         }
         public interface IMazeModificationActions
         {

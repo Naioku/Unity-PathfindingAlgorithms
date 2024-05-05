@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3928309026534458478}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3928309026534458479
 MonoBehaviour:
@@ -46,20 +47,14 @@ MonoBehaviour:
   <GameManager>k__BackingField:
     gameSettings:
       defaultSettingsSO: {fileID: 11400000, guid: bbd5c429a046590498b1852f99a1287a, type: 2}
-    cameraController:
-      speed: 20
-      keyModeMovementSpeed: 0.05
-      screenBorderThickness: 10
-      screenXMaxMargin: 0
-      screenXMinMargin: 0
-      screenZMaxMargin: -8
-      screenZMinMargin: 4
+    cameraController: {fileID: 0}
     interactionController:
       interactionRange: 99
   <UtilsSpawner>k__BackingField:
     spawnableItems:
     - {fileID: 11400000, guid: 8e614657912d6e24580b5356ea0b88cd, type: 2}
     - {fileID: 11400000, guid: a573cd4ccf93b5b4c9374a5946269469, type: 2}
+    - {fileID: 11400000, guid: 4e60a3fbc94b9954aa79cab34b825547, type: 2}
   <UIManager>k__BackingField:
     uiSpawner:
       spawnableItems:

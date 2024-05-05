@@ -54,7 +54,6 @@ public class AllManagers : MonoBehaviour
     {
         InputManager.Destroy();
         CoroutineManager.Destroy();
-        GameManager.Destroy();
     }
 
     private void Update() => UpdateManager.Update();

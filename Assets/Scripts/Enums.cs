@@ -53,7 +53,7 @@ public static class Enums
 
     public enum SpawnedUtils
     {
-        Tile, Maze
+        Tile, Maze, Camera
     }
     
     public enum UISpawned

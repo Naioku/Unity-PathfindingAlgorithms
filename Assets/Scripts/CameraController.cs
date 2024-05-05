@@ -3,62 +3,110 @@ using System.Collections;
 using CustomInputSystem;
 using Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UpdateSystem.CoroutineSystem;
+using Utilities;
 
-[Serializable]
-public class CameraController
+public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float speed = 20;
+    [SerializeField] private Camera cameraObject;
+    
+    [SerializeField] private float borderModeMovementSpeed = 20;
     [SerializeField] private float keyModeMovementSpeed = 0.05f;
     [SerializeField] private float screenBorderThickness = 10;
     [SerializeField] private float screenXMaxMargin;
     [SerializeField] private float screenXMinMargin;
     [SerializeField] private float screenZMaxMargin;
     [SerializeField] private float screenZMinMargin;
-    private Vector2 screenXLimits;
-    private Vector2 screenZLimits;
+    [SerializeField] private float zoomTrailLength;
+    [SerializeField, Range(0, 1)] private float zoomTargetNormalizedPosition = 0.5f;
+    [SerializeField] private float zoomStep = 0.1f;
+    [FormerlySerializedAs("zoomUpdateTime")] [SerializeField] private float zoomSpeed = 0.2f;
+    [SerializeField] private Color trailColor = Color.magenta;
 
-    private Camera mainCamera;
-    private Vector2 keyModeMovementCursorLockPosition;
+    private GameSettings settings;
     private CoroutineManager.CoroutineCaller coroutineCaller;
+
+    private Tuple<float, float> screenXLimits;
+    private Tuple<float, float> screenZLimits;
+    private Vector2 keyModeMovementCursorLockPosition;
     private Enums.CameraMovementMode movementMode;
     private Guid movementCoroutineId;
+    private Guid zoomingCoroutineId;
+    private Vector3 minZoomLocalPosition;
+    private Vector3 maxZoomLocalPosition;
+    private float zoomNormalizedPosition;
 
-    public void Initialize(Camera camera)
+    private void Awake()
     {
         coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-        InputManager inputManager = AllManagers.Instance.InputManager;
-        mainCamera = camera;
+        settings = AllManagers.Instance.GameManager.GameSettings;
 
-        inputManager.GlobalMap.OnCameraMovementData.Performed += StartKeyModeMovement;
-        inputManager.GlobalMap.OnCameraMovementData.Canceled += StopKeyModeMovement;
+        AddInput();
+        UpdateScreenLimits();
+        UpdateTrail();
+        SetInitPosition();
     }
 
-    public void Destroy()
+    public void OnDestroy()
+    {
+        RemoveInput();
+        StopMovement();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = trailColor;
+        Gizmos.DrawLine(transform.TransformPoint(minZoomLocalPosition), transform.TransformPoint(maxZoomLocalPosition));
+    }
+
+    private void OnValidate()
+    {
+        UpdateTrail();
+        UpdateZoom(true);
+    }
+
+    private void AddInput()
+    {
+        InputManager inputManager = AllManagers.Instance.InputManager;
+        inputManager.GlobalMap.OnCameraMovementData.Performed += StartKeyModeMovement;
+        inputManager.GlobalMap.OnCameraMovementData.Canceled += StopKeyModeMovement;
+        inputManager.GlobalMap.OnCameraZoomData.Performed += UpdateZoomTarget;
+    }
+
+    private void RemoveInput()
     {
         InputManager inputManager = AllManagers.Instance.InputManager;
         inputManager.GlobalMap.OnCameraMovementData.Performed -= StartKeyModeMovement;
         inputManager.GlobalMap.OnCameraMovementData.Canceled -= StopKeyModeMovement;
-        StopMovement();
+        inputManager.GlobalMap.OnCameraZoomData.Performed -= UpdateZoomTarget;
     }
 
-    public void StartMovement()
+    private void UpdateTrail()
     {
-        movementCoroutineId = coroutineCaller.StartCoroutine(PerformMovement());
+        float zoomTrailHalfLength = zoomTrailLength / 2;
+        minZoomLocalPosition = new Vector3(0, 0, -zoomTrailHalfLength);
+        maxZoomLocalPosition = new Vector3(0, 0, zoomTrailHalfLength);
     }
-
-    public void StopMovement()
+    
+    public void SetInitPosition()
     {
-        coroutineCaller.StopCoroutine(ref movementCoroutineId);
+        float initialX = (screenXLimits.Item1 + screenXLimits.Item2) / 2;
+        float initialZ = (screenZLimits.Item1 + screenZLimits.Item2) / 2;
+        transform.position = new Vector3(initialX, transform.position.y, initialZ);
+        zoomNormalizedPosition = zoomTargetNormalizedPosition;
     }
 
-    public void UpdateScreenLimits(GameSettings settings)
+    public void StartMovement() => movementCoroutineId = coroutineCaller.StartCoroutine(Perform2DMovement());
+    public void StopMovement() => coroutineCaller.StopCoroutine(ref movementCoroutineId);
+
+    public void UpdateScreenLimits()
     {
         float boardRealWidth = settings.BoardWidth * settings.TileLength;
         float boardRealLength = settings.BoardLength * settings.TileLength;
 
-        screenXLimits = new Vector2(0 - screenXMinMargin, boardRealWidth + screenXMaxMargin);
-        screenZLimits = new Vector2(0 - screenZMinMargin, boardRealLength + screenZMaxMargin);
+        screenXLimits = new Tuple<float, float>(0 - screenXMinMargin, boardRealWidth + screenXMaxMargin);
+        screenZLimits = new Tuple<float, float>(0 - screenZMinMargin, boardRealLength + screenZMaxMargin);
     }
 
     private void StartKeyModeMovement()
@@ -72,36 +120,76 @@ public class CameraController
         keyModeMovementCursorLockPosition = Vector2.zero;
         movementMode = Enums.CameraMovementMode.Border;
     }
+    
+    private void UpdateZoomTarget(float zoomInput)
+    {
+        zoomTargetNormalizedPosition = Mathf.Clamp01(zoomTargetNormalizedPosition + zoomInput * zoomStep);
+        UpdateZoom();
+    }
 
-    private IEnumerator PerformMovement()
+    private IEnumerator Perform2DMovement()
     {
         while (true)
         {
             if (!Application.isFocused) yield return null;
 
             Vector3 movementVector = Vector3.zero;
-                
+
             switch (movementMode)
             {
                 case Enums.CameraMovementMode.Border:
                     movementVector = CalculateMovementVectorBorderMode();
                     break;
-                    
+
                 case Enums.CameraMovementMode.Key:
                     movementVector = CalculateMovementVectorKeyMode();
                     break;
             }
-                
-            Vector3 position = mainCamera.transform.position;
+
+            Vector3 position = transform.position;
             position += movementVector;
-            position.x = Mathf.Clamp(position.x, screenXLimits.x, screenXLimits.y);
-            position.z = Mathf.Clamp(position.z, screenZLimits.x, screenZLimits.y);
-            mainCamera.transform.position = position;
+            position.x = Mathf.Clamp(position.x, screenXLimits.Item1, screenXLimits.Item2);
+            position.z = Mathf.Clamp(position.z, screenZLimits.Item1, screenZLimits.Item2);
+            transform.position = position;
             
             yield return null;
         }
     }
+    
+    private void UpdateZoom(bool immediately = false)
+    {
+        coroutineCaller?.StopCoroutine(ref zoomingCoroutineId);
+        
+        if (immediately)
+        {
+            zoomNormalizedPosition = zoomTargetNormalizedPosition;
+            cameraObject.transform.localPosition = Vector3.Lerp(minZoomLocalPosition, maxZoomLocalPosition, zoomNormalizedPosition);
+        }
+        else
+        {
+            zoomingCoroutineId = coroutineCaller.StartCoroutine(ZoomingCoroutine(zoomNormalizedPosition, zoomTargetNormalizedPosition));
+        }
+    }
 
+    private IEnumerator ZoomingCoroutine(float from, float to)
+    {
+        float deltaTime = 0;
+        while (true)
+        {
+            deltaTime += Time.deltaTime * zoomSpeed;
+            zoomNormalizedPosition = Utility.EaseOutCubic(from, to, deltaTime);
+            
+            if (Mathf.Approximately(zoomNormalizedPosition, zoomTargetNormalizedPosition))
+            {
+                zoomNormalizedPosition = zoomTargetNormalizedPosition;
+                break;
+            }
+            
+            cameraObject.transform.localPosition = Vector3.Lerp(minZoomLocalPosition, maxZoomLocalPosition, zoomNormalizedPosition);
+            yield return null;
+        }
+    }
+    
     private Vector3 CalculateMovementVectorBorderMode()
     {
         Vector3 cursorMovement = Vector3.zero;
@@ -125,7 +213,7 @@ public class CameraController
             cursorMovement.x -= 1;
         }
             
-        return speed * Time.deltaTime * cursorMovement.normalized;
+        return borderModeMovementSpeed * Time.deltaTime * cursorMovement.normalized;
     }
 
     private Vector3 CalculateMovementVectorKeyMode()

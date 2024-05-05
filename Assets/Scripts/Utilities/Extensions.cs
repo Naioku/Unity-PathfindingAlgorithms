@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility
+namespace Utilities
 {
     public static class Extensions
     {

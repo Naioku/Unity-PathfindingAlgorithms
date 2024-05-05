@@ -27,25 +27,45 @@ namespace SpawningSystem
                 entityItemsLookup.Add(spawnableItem.Name, spawnableItem);
             }
         }
+        
+        /// <summary>
+        /// Instantiates an object locally.
+        /// </summary>
+        /// <param name="name">Object's name.</param>
+        /// <param name="type">Prefab's name.</param>
+        /// <returns>Instantiated GameObject.</returns>
+        public GameObject CreateObject(TKey name, TType type = default)
+        {
+            return Object.Instantiate(entityItemsLookup[name].GetPrefab(type));
+        }
+        
+        /// <inheritdoc cref="CreateObject(TKey, TType)"/>
+        /// <typeparam name="TReturn">Specifies returned component instead of GameObject.</typeparam>
+        /// <returns>Specified component</returns>
+        public TReturn CreateObject<TReturn>(TKey name, TType type = default) where TReturn : Component
+        {
+            return CreateObject(name, type).GetComponent<TReturn>();
+        }
 
         /// <summary>
         /// Instantiates an object locally.
         /// </summary>
         /// <param name="name">Object's name.</param>
         /// <param name="position">Initial position.</param>
+        /// <param name="rotation">Initial rotation.</param>
         /// <param name="type">Prefab's name.</param>
         /// <returns>Instantiated GameObject.</returns>
-        public GameObject CreateObject(TKey name, Vector3 position = default, TType type = default)
+        public GameObject CreateObject(TKey name, Vector3 position, Quaternion rotation, TType type = default)
         {
-            return Object.Instantiate(entityItemsLookup[name].GetPrefab(type), position, Quaternion.identity);
+            return Object.Instantiate(entityItemsLookup[name].GetPrefab(type), position, rotation);
         }
         
-        /// <inheritdoc cref="CreateObject(TKey, Vector3, TType)"/>
+        /// <inheritdoc cref="CreateObject(TKey, Vector3, Quaternion, TType)"/>
         /// <typeparam name="TReturn">Specifies returned component instead of GameObject.</typeparam>
         /// <returns>Specified component</returns>
-        public TReturn CreateObject<TReturn>(TKey name, Vector3 position = default, TType type = default) where TReturn : Component
+        public TReturn CreateObject<TReturn>(TKey name, Vector3 position, Quaternion rotation, TType type = default) where TReturn : Component
         {
-            return CreateObject(name, position, type).GetComponent<TReturn>();
+            return CreateObject(name, position, rotation, type).GetComponent<TReturn>();
         }
         
         /// <inheritdoc cref="CreateObject(TKey, Vector3, TType)"/>

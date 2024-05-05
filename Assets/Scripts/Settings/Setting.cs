@@ -1,4 +1,5 @@
 ﻿using UI.MenuPanels.Settings.Logic;
+using Utilities;
 
 namespace Settings
 {
@@ -10,8 +11,8 @@ namespace Settings
         
         public object SerializableValue
         {
-            get => typeof(T).IsSerializable ? value : Utility.Utility.ConvertToSerializableValue(value);
-            set => this.value = typeof(T).IsSerializable ? (T)value : Utility.Utility.ConvertFromSerializableValue<T>(value);
+            get => typeof(T).IsSerializable ? value : Utility.ConvertToSerializableValue(value);
+            set => this.value = typeof(T).IsSerializable ? (T)value : Utility.ConvertFromSerializableValue<T>(value);
         }
         
         public virtual IUILogicSetting UILogicSetting => new UILogicSetting<T>();

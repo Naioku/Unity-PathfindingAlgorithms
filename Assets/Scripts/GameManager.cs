@@ -47,16 +47,10 @@ public class GameManager
         algorithmStage = new AlgorithmStage();
     }
 
-    public void Destroy()
-    {
-        cameraController.Destroy();
-    }
-    
     public void StartGame()
     {
         inputManager.GlobalMap.Enable();
-        cameraController.Initialize(Camera.main);
-        cameraController.UpdateScreenLimits(gameSettings);
+        cameraController = AllManagers.Instance.UtilsSpawner.CreateObject<CameraController>(Enums.SpawnedUtils.Camera);
         interactionController.Initialize(Camera.main);
         maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
         stageMachine = new StageMachine(maze);
@@ -103,7 +97,8 @@ public class GameManager
         {
             case Enums.SettingsReloadingParam.Maze:
                 ReloadMaze();
-                cameraController.UpdateScreenLimits(gameSettings);
+                cameraController.UpdateScreenLimits();
+                cameraController.SetInitPosition();
                 break;
             
             case Enums.SettingsReloadingParam.TileColors:
@@ -116,10 +111,12 @@ public class GameManager
     
     private void Quit()
     {
-        AllManagers.Instance.UIManager.OpenPopupConfirmation(
+        AllManagers.Instance.UIManager.OpenPopupConfirmation
+        (
             localizedContentCache.GetValue(Enums.PopupText.QuitGameHeader),
             localizedContentCache.GetValue(Enums.PopupText.QuitGameMessage),
-            QuitInternal);
+            QuitInternal
+        );
     }
 
     private void QuitInternal()

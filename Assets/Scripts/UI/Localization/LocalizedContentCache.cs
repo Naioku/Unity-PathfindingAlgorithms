@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine.Localization;
-using Utility;
+using Utilities;
 
 namespace UI.Localization
 {

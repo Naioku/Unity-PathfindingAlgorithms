@@ -1,4 +1,4 @@
-﻿namespace Utility
+﻿namespace Utilities
 {
     public interface ISerializableValue<T>
     {

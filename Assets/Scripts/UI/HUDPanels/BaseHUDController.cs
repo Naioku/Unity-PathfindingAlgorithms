@@ -4,6 +4,7 @@ using UI.Buttons;
 using UI.Localization;
 using UnityEngine;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
+using Utilities;
 
 namespace UI.HUDPanels
 {
@@ -67,8 +68,8 @@ namespace UI.HUDPanels
             {
                 buttons[i].SetNavigation(new SelectableNavigation
                 {
-                    OnUp = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
-                    OnDown = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
+                    OnUp = Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    OnDown = Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
                 });
             }
         }

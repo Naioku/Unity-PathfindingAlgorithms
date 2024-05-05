@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Utility
+namespace Utilities
 {
     [Serializable]
     public struct SerializableColor : ISerializableValue<Color>

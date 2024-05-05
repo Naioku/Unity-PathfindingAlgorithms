@@ -3,6 +3,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities;
 
 namespace UI.PopupPanels
 {
@@ -147,7 +148,7 @@ namespace UI.PopupPanels
             }
             
             outputTexture.Apply();
-            hexInputField.SetTextWithoutNotify(Utility.Utility.ColorToHexString(currentColor, false));
+            hexInputField.SetTextWithoutNotify(Utility.ColorToHexString(currentColor, false));
         }
         
         private static bool HexStringToColor(string input, out Color result)

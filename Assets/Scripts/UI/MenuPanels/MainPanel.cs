@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UI.Buttons;
 using UI.Localization;
 using UnityEngine;
+using Utilities;
 
 namespace UI.MenuPanels
 {
@@ -50,8 +51,8 @@ namespace UI.MenuPanels
             {
                 buttons[i].SetNavigation(new SelectableNavigation
                 {
-                    OnUp = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
-                    OnDown = Utility.Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
+                    OnUp = Utility.CalculateNextSelectableElement(i, Enums.Direction.Backward, buttonsCount, buttons),
+                    OnDown = Utility.CalculateNextSelectableElement(i, Enums.Direction.Forward, buttonsCount, buttons)
                 });
             }
         }

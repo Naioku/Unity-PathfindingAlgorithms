@@ -5,6 +5,7 @@ using UI.Localization;
 using UI.MenuPanels.Settings.View;
 using UnityEngine;
 using UnityEngine.Localization;
+using Utilities;
 
 namespace UI.MenuPanels.Settings.Logic
 {
@@ -98,7 +99,7 @@ namespace UI.MenuPanels.Settings.Logic
 
                 case Color colorValue:
                     ViewSetting.Button.Color = colorValue;
-                    ViewSetting.Button.Label = Utility.Utility.ColorToHexString(colorValue, true);
+                    ViewSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
                     break;
             }
         }
