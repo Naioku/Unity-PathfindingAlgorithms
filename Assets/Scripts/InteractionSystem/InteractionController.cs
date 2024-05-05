@@ -44,6 +44,7 @@ namespace InteractionSystem
         public void StopInteracting()
         {
             coroutineCaller.StopCoroutine(ref performInteractionId);
+            currentInteraction = null;
         }
 
         private void AddInput()
