@@ -42,17 +42,12 @@ public class CameraController : MonoBehaviour
         coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
         settings = AllManagers.Instance.GameManager.GameSettings;
 
-        AddInput();
         UpdateScreenLimits();
         UpdateTrail();
         SetInitPosition();
     }
 
-    public void OnDestroy()
-    {
-        RemoveInput();
-        StopMovement();
-    }
+    public void OnDestroy() => StopMovement();
 
     private void OnDrawGizmos()
     {
@@ -81,13 +76,6 @@ public class CameraController : MonoBehaviour
         inputManager.GlobalMap.OnCameraMovementData.Canceled -= StopKeyModeMovement;
         inputManager.GlobalMap.OnCameraZoomData.Performed -= UpdateZoomTarget;
     }
-
-    private void UpdateTrail()
-    {
-        float zoomTrailHalfLength = zoomTrailLength / 2;
-        minZoomLocalPosition = new Vector3(0, 0, -zoomTrailHalfLength);
-        maxZoomLocalPosition = new Vector3(0, 0, zoomTrailHalfLength);
-    }
     
     public void SetInitPosition()
     {
@@ -97,8 +85,18 @@ public class CameraController : MonoBehaviour
         zoomNormalizedPosition = zoomTargetNormalizedPosition;
     }
 
-    public void StartMovement() => movementCoroutineId = coroutineCaller.StartCoroutine(Perform2DMovement());
-    public void StopMovement() => coroutineCaller.StopCoroutine(ref movementCoroutineId);
+    public void StartMovement()
+    {
+        AddInput();
+        movementCoroutineId = coroutineCaller.StartCoroutine(Perform2DMovement());
+    }
+
+    public void StopMovement()
+    {
+        RemoveInput();
+        coroutineCaller.StopCoroutine(ref movementCoroutineId);
+        movementMode = default;
+    }
 
     public void UpdateScreenLimits()
     {
@@ -107,6 +105,13 @@ public class CameraController : MonoBehaviour
 
         screenXLimits = new Tuple<float, float>(0 - screenXMinMargin, boardRealWidth + screenXMaxMargin);
         screenZLimits = new Tuple<float, float>(0 - screenZMinMargin, boardRealLength + screenZMaxMargin);
+    }
+    
+    private void UpdateTrail()
+    {
+        float zoomTrailHalfLength = zoomTrailLength / 2;
+        minZoomLocalPosition = new Vector3(0, 0, -zoomTrailHalfLength);
+        maxZoomLocalPosition = new Vector3(0, 0, zoomTrailHalfLength);
     }
 
     private void StartKeyModeMovement()
