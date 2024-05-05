@@ -67,6 +67,7 @@ namespace StageMachineSystem
             if (currentCoords != null)
             {
                 maze.DeselectTile(currentCoords.Value);
+                currentCoords = null;
             }
         }
         
