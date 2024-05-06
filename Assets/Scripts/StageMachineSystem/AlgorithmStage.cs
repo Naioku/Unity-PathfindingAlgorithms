@@ -60,6 +60,7 @@ namespace StageMachineSystem
             base.Exit();
             hudController.Hide();
             RemoveInput();
+            algorithmState.Stop();
         }
 
         private void SwitchAlgorithmState(AlgorithmStateBase newState)
