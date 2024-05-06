@@ -27,6 +27,7 @@ namespace UI
         private LocalizedContentCache localizedContentCache;
 
         public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
+        public bool IsHoveringUI => EventSystem.current.IsPointerOverGameObject();
         
         public void Awake()
         {

@@ -68,9 +68,19 @@ namespace InteractionSystem
         {
             while (true)
             {
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                var currentlyCheckedInteraction =
-                    !Physics.Raycast(ray, out currentHitInfo, interactionRange) ? null : currentHitInfo.transform.parent.GetComponent<IInteractable>();
+                IInteractable currentlyCheckedInteraction;
+                if (AllManagers.Instance.UIManager.IsHoveringUI)
+                {
+                    yield return null;
+                    currentlyCheckedInteraction = null;
+                }
+                else
+                {
+                    Ray ray = mainCamera.ScreenPointToRay(AllManagers.Instance.InputManager.CursorPosition);
+                    currentlyCheckedInteraction =
+                        !Physics.Raycast(ray, out currentHitInfo, interactionRange) ?
+                            null : currentHitInfo.transform.parent.GetComponent<IInteractable>();
+                }
             
                 if (currentlyCheckedInteraction != currentInteraction)
                 {
