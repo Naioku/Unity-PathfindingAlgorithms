@@ -11,6 +11,8 @@ namespace UI.MenuPanels.Settings.Logic
 {
     public class UILogicSetting<T> : IUILogicSetting
     {
+        private LocalizedTextManager localizedTextManager;
+        
         protected T value;
         protected LocalizedString nameText;
         protected LocalizedString groupNameText;
@@ -44,7 +46,7 @@ namespace UI.MenuPanels.Settings.Logic
         {
             Name = name;
             GroupName = groupName;
-            LocalizedTextManager localizedTextManager = AllManagers.Instance.LocalizedTextManager;
+            localizedTextManager = AllManagers.Instance.LocalizedTextManager;
             nameText = localizedTextManager.GetLocalizedString(name);
             groupNameText = localizedTextManager.GetLocalizedString(groupName);
         }
@@ -100,6 +102,10 @@ namespace UI.MenuPanels.Settings.Logic
                 case Color colorValue:
                     ViewSetting.Button.Color = colorValue;
                     ViewSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
+                    break;
+                
+                default:
+                    ViewSetting.Button.Label = "...";
                     break;
             }
         }

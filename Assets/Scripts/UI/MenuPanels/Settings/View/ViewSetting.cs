@@ -7,7 +7,6 @@ namespace UI.MenuPanels.Settings.View
 {
     public class ViewSetting : MonoBehaviour
     {
-        [Header("Programmer:")]
         [SerializeField] private LocalizedTextMeshPro label;
         [SerializeField] private ButtonSimple button;
 
@@ -16,7 +15,6 @@ namespace UI.MenuPanels.Settings.View
         private EntryPosition entryPosition;
 
         public ButtonSimple Button => button;
-        
         
         private void Awake() => rectTransform = transform.GetComponent<RectTransform>();
 

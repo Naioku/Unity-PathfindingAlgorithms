@@ -18,14 +18,17 @@ namespace UI.PopupPanels
         private Action onClose;
         public virtual GameObject SelectableOnOpen => null;
 
-        protected virtual void Awake()
+        protected virtual void Awake() => AddInput();
+        protected virtual void OnDestroy() => RemoveInput();
+
+        protected void AddInput()
         {
             InputManager inputManager = AllManagers.Instance.InputManager;
             inputManager.PopupMap.OnConfirmData.Canceled += Confirm;
             inputManager.PopupMap.OnCloseData.Canceled += Close;
         }
 
-        protected virtual void OnDestroy()
+        protected void RemoveInput()
         {
             InputManager inputManager = AllManagers.Instance.InputManager;
             inputManager.PopupMap.OnConfirmData.Canceled -= Confirm;

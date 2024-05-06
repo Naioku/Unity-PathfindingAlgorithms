@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b594a6aca94eae8713583e55f5b0a8, type: 3}
+  m_Name: InputDirections
+  m_EditorClassIdentifier: 
+  uiName: 4
+  prefab: {fileID: 1581510332525018709, guid: b0e8b269d04fe5c42be7df6bcf6165c3, type: 3}

@@ -10,39 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: SettingGroupName Shared Data
+  m_Name: PermittedDirection Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: SettingGroupName
-  m_TableCollectionNameGuidString: 76642878d0a573a43b5efed481236973
+  m_TableCollectionName: PermittedDirection
+  m_TableCollectionNameGuidString: d76c987119d66044c8cfe6c92a6f1480
   m_Entries:
-  - m_Id: 15520137216
-    m_Key: BoardSize
+  - m_Id: 5067931648
+    m_Key: Up
     m_Metadata:
       m_Items: []
-  - m_Id: 92309454848
-    m_Key: TileColors
+  - m_Id: 8909914112
+    m_Key: Down
     m_Metadata:
       m_Items: []
-  - m_Id: 102166069248
-    m_Key: MarkerColors
+  - m_Id: 10898014208
+    m_Key: Left
     m_Metadata:
       m_Items: []
-  - m_Id: 113503272960
-    m_Key: AlgorithmStageDelays
-    m_Metadata:
-      m_Items: []
-  - m_Id: 125956161536
-    m_Key: Miscellaneous
+  - m_Id: 12990971904
+    m_Key: Right
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 320299312509616479
+    rid: 4312270453843951715
   references:
     version: 2
     RefIds:
-    - rid: 320299312509616479
+    - rid: 4312270453843951715
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1714148277999
+        m_CustomEpoch: 1715015829552

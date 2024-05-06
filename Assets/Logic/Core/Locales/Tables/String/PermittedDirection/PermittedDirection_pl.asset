@@ -10,32 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: SettingGroupName_pl
+  m_Name: PermittedDirection_pl
   m_EditorClassIdentifier: 
   m_LocaleId:
     m_Code: pl
-  m_SharedData: {fileID: 11400000, guid: 76642878d0a573a43b5efed481236973, type: 2}
+  m_SharedData: {fileID: 11400000, guid: d76c987119d66044c8cfe6c92a6f1480, type: 2}
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 15520137216
-    m_Localized: Rozmiar planszy
+  - m_Id: 5067931648
+    m_Localized: "G\xF3ra"
     m_Metadata:
       m_Items: []
-  - m_Id: 92309454848
-    m_Localized: "Kolory w\u0119z\u0142a"
+  - m_Id: 8909914112
+    m_Localized: "D\xF3\u0142"
     m_Metadata:
       m_Items: []
-  - m_Id: 102166069248
-    m_Localized: Kolory markera
+  - m_Id: 10898014208
+    m_Localized: Lewo
     m_Metadata:
       m_Items: []
-  - m_Id: 113503272960
-    m_Localized: "Czas mi\u0119dzy etapami algorytmu"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 125956161536
-    m_Localized: "R\xF3\u017Cne"
+  - m_Id: 12990971904
+    m_Localized: Prawo
     m_Metadata:
       m_Items: []
   references:

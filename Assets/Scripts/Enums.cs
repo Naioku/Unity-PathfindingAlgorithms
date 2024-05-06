@@ -63,12 +63,13 @@ public static class Enums
         HUDAlgorithm,
         SettingGroupPanel,
         SettingGroupEntry,
-        SettingEntry
+        SettingEntry,
+        DirectionEntry
     }
     
     public enum UIPopupType
     {
-        Info, InputFloat, InputInt, InputColor, InputChoice, Confirmation
+        Info, InputFloat, InputInt, InputColor, InputDirections, Confirmation
     }
 
     #endregion
@@ -145,7 +146,7 @@ public static class Enums
         TileColors,
         MarkerColors,
         AlgorithmStageDelays,
-        PermittedDirections
+        Miscellaneous
     }
 
     public enum SettingGroupPanelName
