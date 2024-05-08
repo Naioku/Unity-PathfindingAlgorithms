@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 5548324276397042305}
   - component: {fileID: 7696345841363873098}
   - component: {fileID: 3972058292472248312}
-  - component: {fileID: 2025683366459612630}
   m_Layer: 5
-  m_Name: DirectionEntry
+  m_Name: Entry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,20 +76,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2025683366459612630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3500532128714108657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8c474fff74f467d968e07b97af2b4c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 2121604822465544870}
-  selectedColor: {r: 0.98039216, g: 0.88235295, b: 0.6901961, a: 1}
 --- !u!1001 &6221248669453266098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,17 +173,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
---- !u!114 &2121604822465544870 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -3808034362026185196, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}
-  m_PrefabInstance: {fileID: 6221248669453266098}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c66a561cbd465ca0c7df343a2895dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &3306576164010381782 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8914032362526801252, guid: 51d84286598c08047a3bd632d006c4b3, type: 3}

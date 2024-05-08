@@ -8,6 +8,7 @@ using StageMachineSystem;
 using UI;
 using UI.Localization;
 using UnityEngine;
+using Utilities;
 
 [Serializable]
 public class GameManager
@@ -93,22 +94,35 @@ public class GameManager
 
     private void UpdateGameSettings(Enums.SettingsReloadingParam reloadParam)
     {
-        switch (reloadParam)
+        if (Utility.ContainsBit(reloadParam, Enums.SettingsReloadingParam.Maze))
         {
-            case Enums.SettingsReloadingParam.Maze:
-                ReloadMaze();
-                cameraController.UpdateScreenLimits();
-                cameraController.SetInitPosition();
-                break;
-            
-            case Enums.SettingsReloadingParam.TileColors:
-                ReloadTileColors();
-                break;
+            ReloadMaze();
+            cameraController.UpdateScreenLimits();
+            cameraController.SetInitPosition();
+        }
+        else if (Utility.ContainsBit(reloadParam, Enums.SettingsReloadingParam.TileColors))
+        {
+            ReloadTileColors();
+        }
+        
+        if (Utility.ContainsBit(reloadParam, Enums.SettingsReloadingParam.Language))
+        {
+            ReloadLanguage();
         }
         
         AllManagers.Instance.SavingManager.SaveSettings();
     }
-    
+
+    private void ReloadMaze()
+    {
+        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
+        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
+        stageMachine.Maze = maze;
+    }
+
+    private void ReloadTileColors() => maze.RefreshTiles();
+    private void ReloadLanguage() => AllManagers.Instance.LocalizedTextManager.ReloadLanguage();
+
     private void Quit()
     {
         AllManagers.Instance.UIManager.OpenPopupConfirmation
@@ -127,13 +141,4 @@ public class GameManager
         Application.Quit();
 #endif
     }
-
-    private void ReloadMaze()
-    {
-        AllManagers.Instance.UtilsSpawner.DestroyObject(maze.gameObject);
-        maze = AllManagers.Instance.UtilsSpawner.CreateObject<Maze.Maze>(Enums.SpawnedUtils.Maze);
-        stageMachine.Maze = maze;
-    }
-
-    private void ReloadTileColors() => maze.RefreshTiles();
 }

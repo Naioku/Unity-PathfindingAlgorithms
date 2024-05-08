@@ -37,6 +37,10 @@ namespace Settings
         [SerializeField, SettingRange(0, 10)] private SettingDefaultNumeric<float> algorithmStageDelayAfterCursorPositionChange;
         [SerializeField, SettingRange(0, 10)] private SettingDefaultNumeric<float> algorithmStageDelayAfterPathNodeSetting;
         [SerializeField] private SettingDefault<Enums.PermittedDirection[]> permittedDirectionsSetting;
+        
+        [Header("General")]
+        [SerializeField] private SettingDefault<Enums.Language> language;
+
 
         public Dictionary<Enums.SettingName, ISetting> Settings
         {
@@ -63,6 +67,7 @@ namespace Settings
                 InitSetting(algorithmStageDelayAfterCursorPositionChange, Enums.SettingName.AlgorithmStageDelayAfterCursorPositionChange);
                 InitSetting(algorithmStageDelayAfterPathNodeSetting, Enums.SettingName.AlgorithmStageDelayAfterPathNodeSetting);
                 InitSetting(permittedDirectionsSetting, Enums.SettingName.PermittedDirections);
+                InitSetting(language, Enums.SettingName.Language);
 
                 return result;
 

@@ -137,5 +137,11 @@ namespace Utilities
             max -= min;
             return max * (arg * arg * arg) + min;
         }
+
+        public static bool ContainsBit<T>(T container, T value) where T : Enum
+        {
+            int intValue = value.GetValue<int>();
+            return (container.GetValue<int>() & intValue) == intValue;
+        }
     }
 }

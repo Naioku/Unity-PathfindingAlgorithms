@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 781bcecd675348a58effd8d90a6bb37d, type: 3}
-  m_Name: DirectionEntry
+  m_Name: EntryPermittedDirection
   m_EditorClassIdentifier: 
   uiName: 6
-  prefab: {fileID: 3500532128714108657, guid: 2240bbd59ef55304f90260369ae54188, type: 3}
+  prefab: {fileID: 2090406320436920495, guid: 5324569fa8653e9449fa732c113ca6b1, type: 3}

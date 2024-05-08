@@ -23,6 +23,13 @@ namespace UI.MenuPanels.Settings
 
         private LocalizedContentCache localizedContentCache;
         private readonly Dictionary<Enums.SettingName, IUILogicSetting> settingEntries = new();
+        private readonly Dictionary<Enums.SettingGroupName, Enums.SettingsReloadingParam> reloadParamsLookup = new()
+        {
+            { Enums.SettingGroupName.BoardSize, Enums.SettingsReloadingParam.Maze },
+            { Enums.SettingGroupName.TileDimensions, Enums.SettingsReloadingParam.Maze },
+            { Enums.SettingGroupName.TileColors, Enums.SettingsReloadingParam.TileColors },
+            { Enums.SettingGroupName.Miscellaneous, Enums.SettingsReloadingParam.Language }
+        };
 
         private Action onResetToDefault;
         private Action<Enums.SettingsReloadingParam> onSave;
@@ -186,31 +193,36 @@ namespace UI.MenuPanels.Settings
         private void Save(bool openPopup)
         {
             GameSettings gameSettings = AllManagers.Instance.GameManager.GameSettings;
-            List<Enums.SettingGroupName> settingGroupChangedValues = new List<Enums.SettingGroupName>();
-
+            // List<Enums.SettingGroupName> settingGroupChangedValues = new List<Enums.SettingGroupName>();
+            Enums.SettingsReloadingParam reloadingParam = default;
             foreach (KeyValuePair<Enums.SettingName, IUILogicSetting> entry in settingEntries)
             {
                 IUILogicSetting setting = entry.Value;
                 if (!setting.ChangedThroughPopup) continue;
                 
                 gameSettings.GetSetting(entry.Key).SetValue(setting);
-                if (!settingGroupChangedValues.Contains(setting.GroupName))
+                if (reloadParamsLookup.TryGetValue(setting.GroupName, out Enums.SettingsReloadingParam parameter))
                 {
-                    settingGroupChangedValues.Add(setting.GroupName);
+                    reloadingParam |= parameter;
                     setting.ChangedThroughPopup = false;
                 }
             }
             
-            Enums.SettingsReloadingParam reloadingParam = Enums.SettingsReloadingParam.None;
-            if (settingGroupChangedValues.Contains(Enums.SettingGroupName.BoardSize) ||
-                settingGroupChangedValues.Contains(Enums.SettingGroupName.TileDimensions))
-            {
-                reloadingParam = Enums.SettingsReloadingParam.Maze;
-            }
-            else if (settingGroupChangedValues.Contains(Enums.SettingGroupName.TileColors))
-            {
-                reloadingParam = Enums.SettingsReloadingParam.TileColors;
-            }
+            // if (settingGroupChangedValues.Contains(Enums.SettingGroupName.BoardSize) ||
+            //     settingGroupChangedValues.Contains(Enums.SettingGroupName.TileDimensions))
+            // {
+            //     reloadingParam |= Enums.SettingsReloadingParam.Maze;
+            // }
+            //
+            // if (settingGroupChangedValues.Contains(Enums.SettingGroupName.TileColors))
+            // {
+            //     reloadingParam |= Enums.SettingsReloadingParam.TileColors;
+            // }
+            //
+            // if (settingGroupChangedValues.Contains(Enums.SettingGroupName.Miscellaneous))
+            // {
+            //     reloadingParam |= Enums.SettingsReloadingParam.Language;
+            // }
             
             onSave.Invoke(reloadingParam);
 

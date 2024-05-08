@@ -12,6 +12,7 @@ namespace UI.MenuPanels.Settings.Logic
     public class UILogicSetting<T> : IUILogicSetting
     {
         private LocalizedTextManager localizedTextManager;
+        private LocalizedString valueText;
         
         protected T value;
         protected LocalizedString nameText;
@@ -42,13 +43,18 @@ namespace UI.MenuPanels.Settings.Logic
             SetValueInternal(((Setting<T>)setting).Value);
         }
 
-        public void InitBaseLogic(Enums.SettingName name, Enums.SettingGroupName groupName)
+        public virtual void InitBaseLogic(Enums.SettingName name, Enums.SettingGroupName groupName)
         {
             Name = name;
             GroupName = groupName;
             localizedTextManager = AllManagers.Instance.LocalizedTextManager;
             nameText = localizedTextManager.GetLocalizedString(name);
             groupNameText = localizedTextManager.GetLocalizedString(groupName);
+            if (value is Enum valueEnum)
+            {
+                valueText = localizedTextManager.GetLocalizedString(valueEnum);
+                valueText.StringChanged += RefreshEnumButtonLabel;
+            }
         }
 
         public void InitUI(RectTransform uiParent)
@@ -104,10 +110,16 @@ namespace UI.MenuPanels.Settings.Logic
                     ViewSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
                     break;
                 
+                case Enum enumValue:
+                    localizedTextManager.ChangeReference(valueText, enumValue);
+                    break;
+                
                 default:
                     ViewSetting.Button.Label = "...";
                     break;
             }
         }
+
+        private void RefreshEnumButtonLabel(string text) => ViewSetting.Button.Label = text;
     }
 }

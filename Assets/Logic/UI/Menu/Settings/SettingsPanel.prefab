@@ -1483,18 +1483,18 @@ MonoBehaviour:
   panels:
   - name: 0
     groups:
-    - name: 1
+    - name: 0
       settingNames: 0000000001000000
-    - name: 3
+    - name: 2
       settingNames: 0400000005000000060000000700000008000000
-    - name: 4
+    - name: 3
       settingNames: 0a0000000b0000000c0000000d000000
   - name: 1
     groups:
-    - name: 5
+    - name: 4
       settingNames: 0e0000000f0000001000000011000000
-    - name: 6
-      settingNames: 12000000
+    - name: 5
+      settingNames: 1200000013000000
 --- !u!114 &3110001562547360585 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6641295382564748386, guid: 159a2d6370473974588ec1a21cde96d1, type: 3}

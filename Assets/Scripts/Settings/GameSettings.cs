@@ -39,6 +39,7 @@ namespace Settings
         public float TileHeight => GetSetting<float>(Enums.SettingName.TileDimensionHeight);
         public float TileHighlight => GetSetting<float>(Enums.SettingName.TileColorHighlightValue);
         public float MarkerAlpha => GetSetting<float>(Enums.SettingName.MarkerColorAlpha);
+        public Enums.Language Language => GetSetting<Enums.Language>(Enums.SettingName.Language);
         
         public Color GetTileColor(Enums.TileType tileType)
         {

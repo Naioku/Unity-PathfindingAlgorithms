@@ -1,23 +1,23 @@
-using System;
+﻿using System;
 using UI.Buttons;
 using UI.Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.PopupPanels
+namespace UI.PopupPanels.EntryPanels
 {
-    public class DirectionEntry : MonoBehaviour
+    public class Entry<T> : MonoBehaviour where T : Enum
     {
         [SerializeField] private ButtonSimple button;
-        [SerializeField] private Color selectedColor;
         
+        private Color selectedColor;
         private Image background;
-        private Action<DirectionEntry> onPressAction;
+        private Action<Entry<T>> onPressAction;
         private Color normalColor;
         private bool selected;
         
-        public Enums.PermittedDirection Direction { get; private set; }
-
+        public T Value { get; private set; }
+    
         public bool Selected
         {
             set
@@ -26,21 +26,24 @@ namespace UI.PopupPanels
                 background.color = selected ? selectedColor : normalColor;
             }
         }
+    
+        private void Awake()
+        {
+            background = GetComponent<Image>();
+            selectedColor = button.ColorBlock.selectedColor;
+        }
 
-        private void Awake() => background = GetComponent<Image>();
-
-        public void Initialize(Enums.PermittedDirection direction, Action<DirectionEntry> onPressAction)
+        public void Initialize(T direction, Action<Entry<T>> onPressAction)
         {
             LocalizedTextManager localizedTextManager = AllManagers.Instance.LocalizedTextManager;
             
-            Direction = direction;
+            Value = direction;
             this.onPressAction = onPressAction;
-            button.Label = localizedTextManager.GetLocalizedString(Direction).GetLocalizedString();
+            button.Label = localizedTextManager.GetLocalizedString(Value).GetLocalizedString();
             button.OnPressAction += HandleOnPress;
             normalColor = background.color;
-
         }
-
+    
         private void HandleOnPress() => onPressAction.Invoke(this);
     }
 }

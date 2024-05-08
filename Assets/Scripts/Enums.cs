@@ -64,12 +64,13 @@ public static class Enums
         SettingGroupPanel,
         SettingGroupEntry,
         SettingEntry,
-        DirectionEntry
+        EntryPermittedDirections,
+        EntryLanguages
     }
     
     public enum UIPopupType
     {
-        Info, InputFloat, InputInt, InputColor, InputDirections, Confirmation
+        Info, InputFloat, InputInt, InputColor, InputPermittedDirections, InputLanguages, Confirmation
     }
 
     #endregion
@@ -106,9 +107,13 @@ public static class Enums
 
     #region Settings
 
+    [Flags]
     public enum SettingsReloadingParam
     {
-        None, Maze, TileColors
+        None = 0,
+        Maze = 1 << 0,
+        TileColors = 1 << 1,
+        Language = 1 << 2
     }
 
     public enum SettingLoadingParam
@@ -136,7 +141,8 @@ public static class Enums
         AlgorithmStageDelayAfterNodeChecking,
         AlgorithmStageDelayAfterCursorPositionChange,
         AlgorithmStageDelayAfterPathNodeSetting,
-        PermittedDirections
+        PermittedDirections,
+        Language
     }
     
     public enum SettingGroupName
@@ -153,6 +159,13 @@ public static class Enums
     {
         Maze,
         Algorithms
+    }
+    
+    public enum Language
+    {
+        Auto,
+        English,
+        Polish
     }
     
     #endregion

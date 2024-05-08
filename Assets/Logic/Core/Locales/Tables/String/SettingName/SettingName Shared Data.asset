@@ -79,6 +79,10 @@ MonoBehaviour:
     m_Key: PermittedDirections
     m_Metadata:
       m_Items: []
+  - m_Id: 3967219903135744
+    m_Key: Language
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

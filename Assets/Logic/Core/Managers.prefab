@@ -65,6 +65,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 45df25e16f51b694fa80cdc070f3beb3, type: 2}
       - {fileID: 11400000, guid: ae88ed43a19a526448ae991ce1198040, type: 2}
       - {fileID: 11400000, guid: 5ba7dcecccfb8bc41b98698ef7a5a235, type: 2}
+      - {fileID: 11400000, guid: ab60a841b5dac6442a2f9496743c315b, type: 2}
     uiPopupSpawner:
       spawnableItems:
       - {fileID: 11400000, guid: 74f873b6bda46b94cbbb6c7bb5ae76f5, type: 2}
@@ -73,3 +74,4 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 4d195f455d168ef498ef505365f6baf2, type: 2}
       - {fileID: 11400000, guid: abcb7ff9e811c464f8bda14dea97dce6, type: 2}
       - {fileID: 11400000, guid: 000f8a430183acb469080edbba026335, type: 2}
+      - {fileID: 11400000, guid: 62bdc27ac4170024b93791622d6df78f, type: 2}

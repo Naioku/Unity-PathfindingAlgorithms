@@ -21,8 +21,8 @@ namespace UI
             { typeof(int), Enums.UIPopupType.InputInt },
             { typeof(float), Enums.UIPopupType.InputFloat },
             { typeof(Color), Enums.UIPopupType.InputColor },
-            { typeof(Enums.PermittedDirection[]), Enums.UIPopupType.InputDirections },
-            // { typeof(float), Enums.UIPopupType.InputChoice }
+            { typeof(Enums.PermittedDirection[]), Enums.UIPopupType.InputPermittedDirections },
+            { typeof(Enums.Language), Enums.UIPopupType.InputLanguages }
         };
         private GameObject lastStaticPanelGameObject;
         private LocalizedContentCache localizedContentCache;

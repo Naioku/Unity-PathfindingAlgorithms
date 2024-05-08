@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using UI.PopupPanels.EntryPanels;
 using UnityEngine;
 
 namespace UI.PopupPanels
 {
-    public class DirectionPanel : InputPanel<Enums.PermittedDirection[]>
+    public class PermittedDirectionsPanel : InputPanel<Enums.PermittedDirection[]>
     {
         [SerializeField] private RectTransform content;
         
         private List<Enums.PermittedDirection> directions;
         private bool inChangingState;
-        private DirectionEntry entryToMove;
+        private Entry<Enums.PermittedDirection> entryToMove;
         
         public override GameObject SelectableOnOpen { get; }
         
@@ -19,14 +20,14 @@ namespace UI.PopupPanels
             directions = initialValue.ToList();
             foreach (Enums.PermittedDirection direction in directions)
             {
-                DirectionEntry directionEntry = AllManagers.Instance.UIManager.UISpawner.CreateObject<DirectionEntry>(Enums.UISpawned.DirectionEntry, content);
-                directionEntry.Initialize(direction, HandleOnPress);
+                Entry<Enums.PermittedDirection> entry = AllManagers.Instance.UIManager.UISpawner.CreateObject<Entry<Enums.PermittedDirection>>(Enums.UISpawned.EntryPermittedDirections, content);
+                entry.Initialize(direction, HandleOnPress);
             }
         }
 
         protected override void Confirm() => onConfirm.Invoke(directions.ToArray());
 
-        private void HandleOnPress(DirectionEntry entry)
+        private void HandleOnPress(Entry<Enums.PermittedDirection> entry)
         {
             inChangingState = !inChangingState;
             if (inChangingState)
@@ -41,9 +42,9 @@ namespace UI.PopupPanels
             {
                 if (entry != entryToMove)
                 {
-                    int newIndex = directions.IndexOf(entry.Direction);
-                    directions.Remove(entryToMove.Direction);
-                    directions.Insert(newIndex, entryToMove.Direction);
+                    int newIndex = directions.IndexOf(entry.Value);
+                    directions.Remove(entryToMove.Value);
+                    directions.Insert(newIndex, entryToMove.Value);
                     entryToMove.transform.SetSiblingIndex(newIndex);
                 }
                 

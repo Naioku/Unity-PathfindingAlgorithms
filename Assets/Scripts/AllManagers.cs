@@ -43,6 +43,7 @@ public class AllManagers : MonoBehaviour
         InputManager.Awake();
         UIManager.Awake();
         GameManager.Awake();
+        LocalizedTextManager.Awake();
     }
 
     private void Start()

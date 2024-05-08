@@ -7,19 +7,45 @@ namespace UI.Localization
 {
     public class LocalizedTextManager
     {
-        private readonly Dictionary<Languages, string> localeIdsLookup = new()
+        private readonly Dictionary<Enums.Language, string> localeIdsLookup = new()
         {
-            { Languages.English, "en" },
-            { Languages.Polish, "pl" }
+            { Enums.Language.English, "en" },
+            { Enums.Language.Polish, "pl" }
         };
         
-        public Languages CurrentLanguage
+        public Enums.Language CurrentLanguage
         {
             set
             {
                 LocalizationSettings localizationSettings = LocalizationSettings.Instance;
-                localizationSettings.SetSelectedLocale(localizationSettings.GetAvailableLocales().GetLocale(localeIdsLookup[value]));
+                Locale locale = null;
+                
+                if (value == Enums.Language.Auto)
+                {
+                    foreach (var selector in localizationSettings.GetStartupLocaleSelectors())
+                    {
+                        locale = selector.GetStartupLocale(localizationSettings.GetAvailableLocales());
+                        if (locale != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    locale = localizationSettings.GetAvailableLocales().GetLocale(localeIdsLookup[value]);
+                }
+                
+                localizationSettings.SetSelectedLocale(locale);
             }
+        }
+
+        public void Awake()
+        {
+            Enums.Language language = AllManagers.Instance.GameManager.GameSettings.Language;
+            if (language == Enums.Language.Auto) return;
+            
+            CurrentLanguage = language;
         }
 
         public LocalizedString GetLocalizedString<T>(T name) where T : Enum =>
@@ -28,10 +54,6 @@ namespace UI.Localization
         public void ChangeReference<T>(LocalizedString localizedString, T localizedTextKey) where T : Enum =>
             localizedString.SetReference(localizedTextKey.GetType().Name, localizedTextKey.ToString());
 
-        public enum Languages
-        {
-            English,
-            Polish
-        }
+        public void ReloadLanguage() => CurrentLanguage = AllManagers.Instance.GameManager.GameSettings.Language;
     }
 }

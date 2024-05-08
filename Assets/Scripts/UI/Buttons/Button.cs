@@ -41,6 +41,8 @@ namespace UI.Buttons
             }
         }
 
+        public ColorBlock ColorBlock => colors;
+
         public void SetNavigation(Enums.ButtonsNaviDirection direction, Selectable selectable)
         {
             Navigation navigation = this.navigation;

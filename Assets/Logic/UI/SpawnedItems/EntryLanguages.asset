@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48b594a6aca94eae8713583e55f5b0a8, type: 3}
-  m_Name: ConfirmationPopup
+  m_Script: {fileID: 11500000, guid: 781bcecd675348a58effd8d90a6bb37d, type: 3}
+  m_Name: EntryLanguages
   m_EditorClassIdentifier: 
-  uiName: 6
-  prefab: {fileID: 1581510332525018709, guid: 225a59dbf1e08bc49bde11d58a10cea6, type: 3}
+  uiName: 7
+  prefab: {fileID: 2090406320436920495, guid: aa5ae84a28460884ab8b2517732b3558, type: 3}
