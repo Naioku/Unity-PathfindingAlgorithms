@@ -9,8 +9,7 @@ namespace UI.Buttons
     public abstract class Button : Selectable, IPointerClickHandler, ISubmitHandler, ISelectableElement
     {
         [SerializeField] private Image background;
-        
-        private Color backgroundNormalColor;
+        [SerializeField] private Color backgroundNormalColor;
         
         public event Action OnSelectAction;
         public event Action OnClickAction;
@@ -82,12 +81,6 @@ namespace UI.Buttons
                 selectOnRight = navigation.OnRight,
                 mode = Navigation.Mode.Explicit
             };
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            backgroundNormalColor = background.color;
         }
 
         public void ResetObj()
