@@ -60,8 +60,8 @@ namespace Settings
             Enums.SettingName settingName = markerType switch
             {
                 Enums.MarkerType.None => Enums.SettingName.MarkerColorNone,
-                Enums.MarkerType.Checked => Enums.SettingName.MarkerColorChecked,
-                Enums.MarkerType.ReadyToCheck => Enums.SettingName.MarkerColorReadyToCheck,
+                Enums.MarkerType.Closed => Enums.SettingName.MarkerColorClosed,
+                Enums.MarkerType.Opened => Enums.SettingName.MarkerColorOpened,
                 Enums.MarkerType.Path => Enums.SettingName.MarkerColorPath,
                 _ => throw new ArgumentOutOfRangeException(nameof(markerType), markerType, null)
             };

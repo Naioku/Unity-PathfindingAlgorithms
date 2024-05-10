@@ -15,8 +15,8 @@ public static class Enums
     public enum MarkerType
     {
         None = 0,
-        ReadyToCheck = 1,
-        Checked = 2,
+        Opened = 1,
+        Closed = 2,
         Path = 3
     }
     
@@ -133,8 +133,8 @@ public static class Enums
         TileColorBlocked,
         TileColorHighlightValue,
         MarkerColorNone,
-        MarkerColorReadyToCheck,
-        MarkerColorChecked,
+        MarkerColorOpened,
+        MarkerColorClosed,
         MarkerColorPath,
         MarkerColorAlpha,
         AlgorithmStageDelayAfterNewNodeEnqueuing,

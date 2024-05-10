@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using StageMachineSystem.Algorithm;
 using UnityEngine;
 
@@ -6,42 +6,41 @@ namespace BreadthFirstSearch.Scripts
 {
     public class BFS : Algorithm
     {
-        protected override IEnumerator ProcessCoroutine()
-        {
-            while (!CheckNode())
-            {
-                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNodeChecking);
-                yield return EnqueueNeighbors();
+        private Node currentNode;
+        protected readonly Queue<Node> openNodes = new();
+        
+        protected override NodeBase StartNode => new Node(startCoords, null);
 
-                if (!ReloadNode())
-                {
-                    Debug.Log("Path cannot be found!");
-                    Stop();
-                }
-                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
-            }
-         
-            yield return DrawPath();
-            Debug.Log("Done!");
-            Stop();
-            onFinish?.Invoke();
+        protected override NodeBase CurrentNode
+        {
+            get => currentNode;
+            set => currentNode = (Node)value;
         }
 
-        private IEnumerator EnqueueNeighbors()
+        public override void Refresh()
         {
-            foreach (var direction in directions)
-            {
-                CursorPosition = currentNode.Coords + direction;
-                Vector2Int position = CursorPosition.Value;
+            base.Refresh();
+            openNodes.Clear();
+        }
 
-                if (!maze.CheckTileType(position, Enums.TileType.Default, Enums.TileType.Destination)) continue;
-                if (!maze.CheckMarkerType(position, Enums.MarkerType.None)) continue;
-                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
-                
-                maze.SetMarkerType(position, Enums.MarkerType.ReadyToCheck);
-                nodesToCheck.Enqueue(new Node(position, currentNode));
-                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing);
-            }
+        protected override void OpenNode(Vector2Int coords) => openNodes.Enqueue(new Node(coords, currentNode));
+        
+        protected override bool ReloadNode()
+        {
+            if (openNodes.Count == 0) return false;
+            
+            CurrentNode = openNodes.Dequeue();
+            CursorPosition = CurrentNode.Coords;
+            return true;
+        }
+
+        protected class Node : NodeBase
+        {
+            private readonly Node previousNode;
+
+            public override NodeBase PreviousNode => previousNode;
+
+            public Node(Vector2Int coords, Node previousNode) : base(coords) => this.previousNode = previousNode;
         }
     }
 }

@@ -58,8 +58,8 @@ namespace Settings
                 InitSetting(tileColorBlocked, Enums.SettingName.TileColorBlocked);
                 InitSetting(tileColorHighlightValue, Enums.SettingName.TileColorHighlightValue);
                 InitSetting(markerColorNone, Enums.SettingName.MarkerColorNone);
-                InitSetting(markerColorReadyToCheck, Enums.SettingName.MarkerColorReadyToCheck);
-                InitSetting(markerColorChecked, Enums.SettingName.MarkerColorChecked);
+                InitSetting(markerColorReadyToCheck, Enums.SettingName.MarkerColorOpened);
+                InitSetting(markerColorChecked, Enums.SettingName.MarkerColorClosed);
                 InitSetting(markerColorPath, Enums.SettingName.MarkerColorPath);
                 InitSetting(tileColorAlpha, Enums.SettingName.MarkerColorAlpha);
                 InitSetting(algorithmStageDelayAfterNewNodeEnqueuing, Enums.SettingName.AlgorithmStageDelayAfterNewNodeEnqueuing);

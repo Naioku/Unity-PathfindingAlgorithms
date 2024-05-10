@@ -683,10 +683,6 @@ PrefabInstance:
       propertyPath: buttonTag
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: -6847438568699579784, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 337282466311938506, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
       propertyPath: m_text
       value: A*
@@ -782,22 +778,6 @@ PrefabInstance:
     - target: {fileID: 8914032362526801252, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157959201377300709, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
-      propertyPath: m_Color.a
-      value: 0.5019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157959201377300709, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
-      propertyPath: m_Color.b
-      value: 0.20784314
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157959201377300709, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
-      propertyPath: m_Color.g
-      value: 0.20784314
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157959201377300709, guid: f84d2a292724d5b45a9b2ea8dccb5cf6, type: 3}
-      propertyPath: m_Color.r
-      value: 0.20784314
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

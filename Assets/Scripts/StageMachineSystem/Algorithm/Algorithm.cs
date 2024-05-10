@@ -12,25 +12,27 @@ namespace StageMachineSystem.Algorithm
     {
         #region StaticValues
 
+        protected Vector2Int startCoords;
+        protected Vector2Int destinationCoords;
         private readonly CoroutineManager.CoroutineCaller coroutineCaller = AllManagers.Instance.CoroutineManager.GenerateCoroutineCaller();
-        protected readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameSettings.GetPermittedDirections();
+        private readonly Vector2Int[] directions = AllManagers.Instance.GameManager.GameSettings.GetPermittedDirections();
         private readonly GameManager gameManager = AllManagers.Instance.GameManager;
-        protected Maze.Maze maze;
-        private Vector2Int startCoords;
-        private Vector2Int destinationCoords;
+        private Maze.Maze maze;
+        private Action onFinish;
 
         #endregion
 
         #region VariableValues
-
-        protected readonly Queue<Node> nodesToCheck = new();
-        protected Node currentNode;
+        
         private Vector2Int? cursorPosition;
         private Guid processCoroutineId;
         private bool stopAtNextWaitCheckpoint;
         private bool performingStep;
 
         #endregion
+        
+        protected abstract NodeBase StartNode { get; }
+        protected abstract NodeBase CurrentNode { get; set; }
         
         protected Vector2Int? CursorPosition
         {
@@ -51,9 +53,7 @@ namespace StageMachineSystem.Algorithm
             }
         }
 
-        protected Action onFinish;
-        
-        protected IWait GetWaitObject(Enums.AlgorithmStageDelay algorithmStageDelay)
+        private IWait GetWaitObject(Enums.AlgorithmStageDelay algorithmStageDelay)
         {
             if (performingStep)
             {
@@ -84,7 +84,7 @@ namespace StageMachineSystem.Algorithm
         {
             stopAtNextWaitCheckpoint = false;
             processCoroutineId = coroutineCaller.StartCoroutine(ProcessCoroutine());
-            currentNode = new Node(startCoords, null);
+            CurrentNode = StartNode;
             CursorPosition = startCoords;
         }
 
@@ -112,12 +112,11 @@ namespace StageMachineSystem.Algorithm
             stopAtNextWaitCheckpoint = true;
         }
 
-        public void Refresh()
+        public virtual void Refresh()
         {
-            currentNode = null;
+            CurrentNode = null;
             CursorPosition = null;
             maze.RefreshMarkers();
-            nodesToCheck.Clear();
         }
 
         public void Stop()
@@ -125,41 +124,72 @@ namespace StageMachineSystem.Algorithm
             coroutineCaller.StopCoroutine(ref processCoroutineId);
         }
 
-        protected abstract IEnumerator ProcessCoroutine();
+        private IEnumerator ProcessCoroutine()
+        {
+            while (!CloseNode())
+            {
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNodeChecking);
+                yield return OpenNeighborNodes();
+                
+                if (!ReloadNode())
+                {
+                    Debug.Log("Path cannot be found!");
+                    Stop();
+                }
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
+            }
+         
+            yield return DrawPath();
+            Debug.Log("Done!");
+            Stop();
+            onFinish?.Invoke();
+        }
         
         /// <summary>
         /// Checking current node.
         /// </summary>
         /// <returns>True if current node is the destination node.</returns>
-        protected bool CheckNode()
+        private bool CloseNode()
         {
-            maze.SetMarkerType(currentNode.Coords, Enums.MarkerType.Checked);
-            return currentNode.Coords == destinationCoords;
+            maze.SetMarkerType(CurrentNode.Coords, Enums.MarkerType.Closed);
+            return CurrentNode.Coords == destinationCoords;
         }
+        
+        private IEnumerator OpenNeighborNodes()
+        {
+            foreach (var direction in directions)
+            {
+                CursorPosition = CurrentNode.Coords + direction;
+                Vector2Int position = CursorPosition.Value;
+                
+                if (!maze.CheckTileType(position, Enums.TileType.Default, Enums.TileType.Destination)) continue;
+                if (!maze.CheckMarkerType(position, Enums.MarkerType.None)) continue;
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterCursorPositionChange);
+
+                OpenNode(position);
+                maze.SetMarkerType(position, Enums.MarkerType.Opened);
+                yield return GetWaitObject(Enums.AlgorithmStageDelay.AfterNewNodeEnqueuing);
+            }
+        }
+
+        protected abstract void OpenNode(Vector2Int coords);
 
         /// <summary>
         /// Reloads current node.
         /// </summary>
         /// <returns>False if there is no node left to check.</returns>
-        protected bool ReloadNode()
+        protected abstract bool ReloadNode();
+
+        private IEnumerator DrawPath()
         {
-            if (nodesToCheck.Count == 0) return false;
-            
-            currentNode = nodesToCheck.Dequeue();
-            CursorPosition = currentNode.Coords;
-            return true;
-        }
-        
-        protected IEnumerator DrawPath()
-        {
-            var path = new Stack<Node>();
-            while (!maze.CheckTileType(currentNode.Coords, Enums.TileType.Start))
+            var path = new Stack<NodeBase>();
+            while (!maze.CheckTileType(CurrentNode.Coords, Enums.TileType.Start))
             {
-                path.Push(currentNode);
-                currentNode = currentNode.PreviousNode;
+                path.Push(CurrentNode);
+                CurrentNode = CurrentNode.PreviousNode;
             }
             
-            path.Push(currentNode);
+            path.Push(CurrentNode);
         
             while (path.Count > 0)
             {
@@ -168,15 +198,14 @@ namespace StageMachineSystem.Algorithm
             }
         }
         
-        protected class Node
+        protected abstract class NodeBase
         {
-            public Vector2Int Coords { get; private set; }
-            public Node PreviousNode { get; private set; }
+            public Vector2Int Coords { get; }
+            public abstract NodeBase PreviousNode { get; }
 
-            public Node(Vector2Int coords, Node previousNode)
+            protected NodeBase(Vector2Int coords)
             {
                 Coords = coords;
-                PreviousNode = previousNode;
             }
         }
     }

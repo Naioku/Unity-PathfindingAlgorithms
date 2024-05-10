@@ -44,11 +44,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 82844597780480
-    m_Key: MarkerColorReadyToCheck
+    m_Key: MarkerColorOpened
     m_Metadata:
       m_Items: []
   - m_Id: 82845860265984
-    m_Key: MarkerColorChecked
+    m_Key: MarkerColorClosed
     m_Metadata:
       m_Items: []
   - m_Id: 82846673960960

@@ -85,7 +85,12 @@ public class GameManager
         EnterStage(algorithmStage);
     }
 
-    private void StartAStar() => Debug.Log("AStar not implemented yet.");
+    private void StartAStar()
+    {
+        algorithmStage.ChangeAlgorithm(new AStar());
+        EnterStage(algorithmStage);
+    }
+
     private void ResetSettingsToDefault()
     {
         gameSettings.LoadDefault();

@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1361889033020078008}
   background: {fileID: 9157959201377300709}
+  backgroundNormalColor: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
   localizedLabel:
     label: {fileID: 337282466311938506}
   buttonTag: 0

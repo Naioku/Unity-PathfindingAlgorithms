@@ -47,11 +47,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 82844597780480
-    m_Localized: Gotowy do sprawdzenia
+    m_Localized: Otwarty
     m_Metadata:
       m_Items: []
   - m_Id: 82845860265984
-    m_Localized: Sprawdzony
+    m_Localized: "Zamkni\u0119ty"
     m_Metadata:
       m_Items: []
   - m_Id: 82846673960960
