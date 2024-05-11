@@ -40,6 +40,7 @@ namespace StageMachineSystem
         {
             algorithmState?.Stop();
             this.algorithm = algorithm;
+            hudController.Header = this.algorithm.AlgorithmName;
         }
 
         public override void Enter()

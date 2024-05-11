@@ -15,6 +15,8 @@ namespace UI.Localization
         private LocalizedString localizedString;
         private LocalizedTextManager localizedTextManager;
 
+        public bool Initialized => localizedString != null;
+
         public Color Color
         {
             set => label.color = value;

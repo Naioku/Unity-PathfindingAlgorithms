@@ -6,6 +6,7 @@ namespace UI.HUDPanels
     {
         protected override void Initialize()
         {
+            header.Initialize(Enums.MainMenuPanelButtonTag.MazeModification);
             staticLabel.Initialize(Enums.GeneralText.HUDAlgorithmStateLabel);
             dynamicLabel.Initialize(Enums.TileType.Default);
         }

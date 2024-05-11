@@ -8,7 +8,8 @@ namespace BreadthFirstSearch.Scripts
     {
         private Node currentNode;
         protected readonly Queue<Node> openNodes = new();
-        
+
+        public override Enums.MainMenuPanelButtonTag AlgorithmName => Enums.MainMenuPanelButtonTag.BFS;
         protected override NodeBase StartNode => new Node(startCoords, null);
 
         protected override NodeBase CurrentNode

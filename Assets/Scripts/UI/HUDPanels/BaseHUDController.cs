@@ -10,6 +10,7 @@ namespace UI.HUDPanels
 {
     public abstract class BaseHUDController<T> : UIStaticPanel where T : Enum
     {
+        [SerializeField] protected LocalizedTextMeshPro header;
         [SerializeField] protected LocalizedTextMeshPro staticLabel;
         [SerializeField] protected LocalizedTextMeshPro dynamicLabel;
 

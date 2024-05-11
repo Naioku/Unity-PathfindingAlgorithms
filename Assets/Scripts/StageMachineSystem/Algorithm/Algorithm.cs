@@ -30,7 +30,8 @@ namespace StageMachineSystem.Algorithm
         private bool performingStep;
 
         #endregion
-        
+
+        public abstract Enums.MainMenuPanelButtonTag AlgorithmName { get; }
         protected abstract NodeBase StartNode { get; }
         protected abstract NodeBase CurrentNode { get; set; }
         

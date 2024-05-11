@@ -16,6 +16,7 @@ namespace BreadthFirstSearch.Scripts
             set => currentNode = (Node)value;
         }
 
+        public override Enums.MainMenuPanelButtonTag AlgorithmName => Enums.MainMenuPanelButtonTag.AStar;
         protected override NodeBase StartNode => new Node(startCoords, null, destinationCoords);
 
         public override void Refresh()
