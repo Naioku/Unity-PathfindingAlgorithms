@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI.Buttons
 {
-    public class ButtonSimple : Button
+    public class ButtonTextSimple : Button
     {
         [SerializeField] private TextMeshProUGUI label;
         

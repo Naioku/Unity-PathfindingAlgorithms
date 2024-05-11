@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using Settings;
 using UnityEngine;
 
 namespace UI.PopupPanels.EntryPanels
 {
-    public class LanguagePanel : InputPanel<Enums.Language>
+    public class LanguagePanel : InputPanel<Language>
     {
         [SerializeField] private RectTransform content;
         
         private List<Enums.Language> entriesValues;
-        private Entry<Enums.Language> currentEntry;
+        private EntryLanguage currentEntry;
         
         public override GameObject SelectableOnOpen { get; }
         
-        protected override void SetInitialValue(Enums.Language initialValue)
+        protected override void SetInitialValue(Language initialValue)
         {
-            foreach (Enums.Language language in Enum.GetValues(initialValue.GetType()))
+            foreach (Enums.Language language in Enum.GetValues(initialValue.Enum.GetType()))
             {
-                Entry<Enums.Language> entry = AllManagers.Instance.UIManager.UISpawner.CreateObject<Entry<Enums.Language>>(Enums.UISpawned.EntryLanguages, content);
-                entry.Initialize(language, SetCurrentEntry);
+                EntryLanguage entry = AllManagers.Instance.UIManager.UISpawner.CreateObject<EntryLanguage>(Enums.UISpawned.EntryLanguages, content);
+                entry.Initialize(new Language(language), SetCurrentEntry);
                 if (Equals(entry.Value, initialValue))
                 {
                     SetCurrentEntry(entry);
@@ -28,13 +29,15 @@ namespace UI.PopupPanels.EntryPanels
 
         protected override void Confirm() => onConfirm.Invoke(currentEntry.Value);
 
-        private void SetCurrentEntry(Entry<Enums.Language> entry)
+        private void SetCurrentEntry(Entry<Language, Enums.Language> entry)
         {
+            // Todo: Is this if statement necessary?
             if (currentEntry != null)
             {
                 currentEntry.Selected = false;
             }
-            currentEntry = entry;
+            
+            currentEntry = (EntryLanguage)entry;
             entry.Selected = true;
         }
     }

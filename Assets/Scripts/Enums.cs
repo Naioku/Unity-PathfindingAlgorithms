@@ -102,6 +102,12 @@ public static class Enums
     {
         Up, Down, Left, Right
     }
+    
+    public enum Icon
+    {
+        VisibilityOn,
+        VisibilityOff
+    }
 
     #endregion
 

@@ -1,4 +1,6 @@
-﻿namespace UI.PopupPanels.EntryPanels
+﻿using Settings;
+
+namespace UI.PopupPanels.EntryPanels
 {
-    public class EntryLanguage : Entry<Enums.Language>{}
+    public class EntryLanguage : Entry<Language, Enums.Language>{}
 }

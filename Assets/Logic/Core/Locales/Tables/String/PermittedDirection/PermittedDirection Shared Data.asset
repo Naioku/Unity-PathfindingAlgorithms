@@ -31,6 +31,22 @@ MonoBehaviour:
     m_Key: Right
     m_Metadata:
       m_Items: []
+  - m_Id: 1471224819220480
+    m_Key: UpRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471227683930112
+    m_Key: DownRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471230695440384
+    m_Key: DownLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471233010696192
+    m_Key: UpLeft
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

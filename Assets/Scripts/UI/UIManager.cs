@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Settings;
 using SpawningSystem;
 using UI.Localization;
 using UI.PopupPanels;
@@ -14,21 +15,25 @@ namespace UI
     {
         [SerializeField] private SpawnManager<Enums.UISpawned> uiSpawner;
         [SerializeField] private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
+        [SerializeField] private IconData[] iconData;
         
-        private PopupPanel currentPopupPanel;
         private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new()
         {
             { typeof(int), Enums.UIPopupType.InputInt },
             { typeof(float), Enums.UIPopupType.InputFloat },
             { typeof(Color), Enums.UIPopupType.InputColor },
-            { typeof(Enums.PermittedDirection[]), Enums.UIPopupType.InputPermittedDirections },
-            { typeof(Enums.Language), Enums.UIPopupType.InputLanguages }
+            { typeof(PermittedDirection[]), Enums.UIPopupType.InputPermittedDirections },
+            { typeof(Language), Enums.UIPopupType.InputLanguages }
         };
+        
+        private Dictionary<Enums.Icon, Sprite> iconsLookup = new();
+        private PopupPanel currentPopupPanel;
         private GameObject lastStaticPanelGameObject;
         private LocalizedContentCache localizedContentCache;
 
         public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
         public bool IsHoveringUI => EventSystem.current.IsPointerOverGameObject();
+        public Sprite GetIcon(Enums.Icon value) => iconsLookup[value];
         
         public void Awake()
         {
@@ -39,6 +44,15 @@ namespace UI
                 Enums.PopupText.ConfirmationButtonYes,
                 Enums.PopupText.ConfirmationButtonNo
             );
+            BuildLookup();
+        }
+
+        private void BuildLookup()
+        {
+            foreach (IconData data in iconData)
+            {
+                iconsLookup.Add(data.Name, data.Sprite);
+            }
         }
 
         public void OpenPopupInfo(string header, string message)
@@ -134,6 +148,13 @@ namespace UI
             Object.Destroy(currentPopupPanel.gameObject);
             AllManagers.Instance.InputManager.DisablePopupMode();
             EventSystem.current.SetSelectedGameObject(lastStaticPanelGameObject);
+        }
+        
+        [Serializable]
+        private struct IconData
+        {
+            public Enums.Icon Name;
+            public Sprite Sprite;
         }
     }
 }

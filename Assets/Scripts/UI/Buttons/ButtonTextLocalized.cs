@@ -6,7 +6,7 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace UI.Buttons
 {
-    public class ButtonLocalized : Button
+    public class ButtonTextLocalized : Button
     {
         [SerializeField] private LocalizedTextMeshPro localizedLabel;
         

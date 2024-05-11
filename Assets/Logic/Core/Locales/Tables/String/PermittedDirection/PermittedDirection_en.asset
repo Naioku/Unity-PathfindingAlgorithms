@@ -34,6 +34,22 @@ MonoBehaviour:
     m_Localized: Right
     m_Metadata:
       m_Items: []
+  - m_Id: 1471224819220480
+    m_Localized: Up-Right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471227683930112
+    m_Localized: Down-Right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471230695440384
+    m_Localized: Down-Left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471233010696192
+    m_Localized: Up-Left
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

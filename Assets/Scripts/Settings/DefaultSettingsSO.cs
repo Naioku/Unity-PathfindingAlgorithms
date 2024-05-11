@@ -36,11 +36,10 @@ namespace Settings
         [SerializeField, SettingRange(0, 10)] private SettingDefaultNumeric<float> algorithmStageDelayAfterNodeChecking;
         [SerializeField, SettingRange(0, 10)] private SettingDefaultNumeric<float> algorithmStageDelayAfterCursorPositionChange;
         [SerializeField, SettingRange(0, 10)] private SettingDefaultNumeric<float> algorithmStageDelayAfterPathNodeSetting;
-        [SerializeField] private SettingDefault<Enums.PermittedDirection[]> permittedDirectionsSetting;
+        [SerializeField] private SettingDefault<PermittedDirection[]> permittedDirectionsSetting;
         
         [Header("General")]
-        [SerializeField] private SettingDefault<Enums.Language> language;
-
+        [SerializeField] private SettingDefault<Language> language;
 
         public Dictionary<Enums.SettingName, ISetting> Settings
         {

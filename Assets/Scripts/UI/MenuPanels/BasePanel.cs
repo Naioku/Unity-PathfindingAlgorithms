@@ -6,7 +6,7 @@ namespace UI.MenuPanels
 {
     public abstract class BasePanel : UIStaticPanel
     {
-        [SerializeField] protected ButtonLocalized backButton;
+        [SerializeField] protected ButtonTextLocalized backButton;
 
         private Action onBack;
         

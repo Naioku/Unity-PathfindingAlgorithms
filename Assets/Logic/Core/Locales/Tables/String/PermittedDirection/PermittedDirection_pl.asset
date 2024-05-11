@@ -34,6 +34,22 @@ MonoBehaviour:
     m_Localized: Prawo
     m_Metadata:
       m_Items: []
+  - m_Id: 1471224819220480
+    m_Localized: "G\xF3ra-Prawo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471227683930112
+    m_Localized: "D\xF3\u0142-Prawo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471230695440384
+    m_Localized: "D\xF3\u0142-Lewo"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1471233010696192
+    m_Localized: "G\xF3ra-Lewo"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

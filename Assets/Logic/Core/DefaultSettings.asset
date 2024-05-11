@@ -69,4 +69,23 @@ MonoBehaviour:
     maxValue: 10
     minValue: 0
   permittedDirectionsSetting:
-    value: 00000000030000000100000002000000
+    value:
+    - direction: 0
+      Enabled: 1
+    - direction: 1
+      Enabled: 1
+    - direction: 2
+      Enabled: 1
+    - direction: 3
+      Enabled: 1
+    - direction: 4
+      Enabled: 1
+    - direction: 5
+      Enabled: 1
+    - direction: 6
+      Enabled: 1
+    - direction: 7
+      Enabled: 1
+  language:
+    value:
+      language: 0

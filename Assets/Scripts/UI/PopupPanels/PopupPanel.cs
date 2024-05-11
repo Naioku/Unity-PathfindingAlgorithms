@@ -11,8 +11,8 @@ namespace UI.PopupPanels
         private const string ConfirmationButtonText = "OK";
         private const string ClosingButtonText = "X";
         
-        [SerializeField] protected ButtonSimple confirmationButton;
-        [SerializeField] protected ButtonSimple closeButton;
+        [SerializeField] protected ButtonTextSimple confirmationButton;
+        [SerializeField] protected ButtonTextSimple closeButton;
         [SerializeField] private TextMeshProUGUI headerLabel;
 
         private Action onClose;

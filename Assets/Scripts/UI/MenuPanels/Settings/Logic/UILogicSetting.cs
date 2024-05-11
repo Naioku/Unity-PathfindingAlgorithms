@@ -3,6 +3,7 @@ using System.Globalization;
 using Settings;
 using UI.Localization;
 using UI.MenuPanels.Settings.View;
+using UI.PopupPanels.EntryPanels;
 using UnityEngine;
 using UnityEngine.Localization;
 using Utilities;
@@ -50,9 +51,9 @@ namespace UI.MenuPanels.Settings.Logic
             localizedTextManager = AllManagers.Instance.LocalizedTextManager;
             nameText = localizedTextManager.GetLocalizedString(name);
             groupNameText = localizedTextManager.GetLocalizedString(groupName);
-            if (value is Enum valueEnum)
+            if (value is IEntrySetting<Enums.Language> valueEnum)
             {
-                valueText = localizedTextManager.GetLocalizedString(valueEnum);
+                valueText = localizedTextManager.GetLocalizedString(valueEnum.Enum);
                 valueText.StringChanged += RefreshEnumButtonLabel;
             }
         }
@@ -110,8 +111,8 @@ namespace UI.MenuPanels.Settings.Logic
                     ViewSetting.Button.Label = Utility.ColorToHexString(colorValue, true);
                     break;
                 
-                case Enum enumValue:
-                    localizedTextManager.ChangeReference(valueText, enumValue);
+                case IEntrySetting<Enums.Language> enumValue:
+                    localizedTextManager.ChangeReference(valueText, enumValue.Enum);
                     break;
                 
                 default:

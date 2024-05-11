@@ -6,18 +6,25 @@ using UnityEngine.UI;
 
 namespace UI.PopupPanels.EntryPanels
 {
-    public class Entry<T> : MonoBehaviour where T : Enum
+    public class Entry<T1, T2> : MonoBehaviour where T1 : IEntrySetting<T2> where T2 : Enum
     {
-        [SerializeField] private ButtonSimple button;
+        [SerializeField] private ButtonTextSimple selectingButton;
         
         private Color selectedColor;
         private Image background;
-        private Action<Entry<T>> onPressAction;
+        private Action<Entry<T1, T2>> onPressAction;
         private Color normalColor;
         private bool selected;
         
-        public T Value { get; private set; }
-    
+        protected T1 value;
+
+
+        public T1 Value
+        {
+            get => value;
+            private set => this.value = value;
+        }
+
         public bool Selected
         {
             set
@@ -30,17 +37,17 @@ namespace UI.PopupPanels.EntryPanels
         private void Awake()
         {
             background = GetComponent<Image>();
-            selectedColor = button.ColorBlock.selectedColor;
+            selectedColor = selectingButton.ColorBlock.selectedColor;
         }
 
-        public void Initialize(T direction, Action<Entry<T>> onPressAction)
+        public virtual void Initialize(T1 value, Action<Entry<T1, T2>> onPressAction)
         {
             LocalizedTextManager localizedTextManager = AllManagers.Instance.LocalizedTextManager;
             
-            Value = direction;
+            Value = value;
             this.onPressAction = onPressAction;
-            button.Label = localizedTextManager.GetLocalizedString(Value).GetLocalizedString();
-            button.OnPressAction += HandleOnPress;
+            selectingButton.Label = localizedTextManager.GetLocalizedString(Value.Enum).GetLocalizedString();
+            selectingButton.OnPressAction += HandleOnPress;
             normalColor = background.color;
         }
     

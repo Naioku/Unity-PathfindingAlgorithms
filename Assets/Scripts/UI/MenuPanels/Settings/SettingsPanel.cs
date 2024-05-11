@@ -14,9 +14,9 @@ namespace UI.MenuPanels.Settings
         [SerializeField] private float scrollingDisplacementMargin = 30;
         
         [SerializeField] private LocalizedTextMeshPro header;
-        [SerializeField] private ButtonLocalized resetButton;
-        [SerializeField] private ButtonLocalized resetToDefaultButton;
-        [SerializeField] private ButtonLocalized saveButton;
+        [SerializeField] private ButtonTextLocalized resetButton;
+        [SerializeField] private ButtonTextLocalized resetToDefaultButton;
+        [SerializeField] private ButtonTextLocalized saveButton;
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform panelsUIParent;
         [SerializeField] private UILogicSettingGroupPanel[] panels;

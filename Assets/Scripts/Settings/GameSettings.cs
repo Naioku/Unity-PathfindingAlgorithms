@@ -13,14 +13,14 @@ namespace Settings
     
         private readonly Dictionary<Enums.PermittedDirection, Vector2Int> permittedDirectionsLookup = new()
         {
-            {Enums.PermittedDirection.Up, Vector2Int.up}, 
-            {Enums.PermittedDirection.Down, Vector2Int.down}, 
-            {Enums.PermittedDirection.Left, Vector2Int.left}, 
-            {Enums.PermittedDirection.Right, Vector2Int.right}, 
-            {Enums.PermittedDirection.UpRight, new Vector2Int(1, 1)}, 
-            {Enums.PermittedDirection.DownRight, new Vector2Int(1, -1)}, 
-            {Enums.PermittedDirection.DownLeft, new Vector2Int(-1, -1)}, 
-            {Enums.PermittedDirection.UpLeft, new Vector2Int(-1, 1)}
+            { Enums.PermittedDirection.Up, Vector2Int.up }, 
+            { Enums.PermittedDirection.Down, Vector2Int.down }, 
+            { Enums.PermittedDirection.Left, Vector2Int.left }, 
+            { Enums.PermittedDirection.Right, Vector2Int.right }, 
+            { Enums.PermittedDirection.UpRight, new Vector2Int(1, 1) }, 
+            { Enums.PermittedDirection.DownRight, new Vector2Int(1, -1) }, 
+            { Enums.PermittedDirection.DownLeft, new Vector2Int(-1, -1) }, 
+            { Enums.PermittedDirection.UpLeft, new Vector2Int(-1, 1) }
         };
         
         public ISetting GetSetting(Enums.SettingName name)
@@ -39,8 +39,8 @@ namespace Settings
         public float TileHeight => GetSetting<float>(Enums.SettingName.TileDimensionHeight);
         public float TileHighlight => GetSetting<float>(Enums.SettingName.TileColorHighlightValue);
         public float MarkerAlpha => GetSetting<float>(Enums.SettingName.MarkerColorAlpha);
-        public Enums.Language Language => GetSetting<Enums.Language>(Enums.SettingName.Language);
-        
+        public Enums.Language Language => GetSetting<Language>(Enums.SettingName.Language).Enum;
+
         public Color GetTileColor(Enums.TileType tileType)
         {
             Enums.SettingName settingName = tileType switch
@@ -85,12 +85,19 @@ namespace Settings
 
         public Vector2Int[] GetPermittedDirections()
         {
-            Enums.PermittedDirection[] permittedDirections = GetSetting<Enums.PermittedDirection[]>(Enums.SettingName.PermittedDirections);
+            PermittedDirection[] permittedDirections = GetSetting<PermittedDirection[]>(Enums.SettingName.PermittedDirections);
             int length = permittedDirections.Length;
             var result = new Vector2Int[length];
+            int j = 0;
             for (int i = 0; i < length; i++)
             {
-                result[i] = permittedDirectionsLookup[permittedDirections[i]];
+                PermittedDirection direction = permittedDirections[i];
+                
+                if (direction.Enabled)
+                {
+                    result[j] = permittedDirectionsLookup[direction.direction];
+                    j++;
+                }
             }
     
             return result;

@@ -76,11 +76,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1338396588338024656, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 500
+      value: 730
       objectReference: {fileID: 0}
     - target: {fileID: 1415701569894788220, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
       propertyPath: m_Name
-      value: InputPanelDirectons
+      value: InputPanelPermittedDirections
       objectReference: {fileID: 0}
     - target: {fileID: 3583480853973211165, guid: fa9088210c4d1864cad186fa085c770c, type: 3}
       propertyPath: m_RootOrder

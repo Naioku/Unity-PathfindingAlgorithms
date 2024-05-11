@@ -1,34 +1,44 @@
 using System.Collections.Generic;
-using System.Linq;
-using UI.PopupPanels.EntryPanels;
+using Settings;
 using UnityEngine;
 
-namespace UI.PopupPanels
+namespace UI.PopupPanels.EntryPanels
 {
-    public class PermittedDirectionsPanel : InputPanel<Enums.PermittedDirection[]>
+    public class PermittedDirectionsPanel : InputPanel<PermittedDirection[]>
     {
         [SerializeField] private RectTransform content;
         
-        private List<Enums.PermittedDirection> directions;
+        private readonly List<EntryPermittedDirection> directionEntries = new();
         private bool inChangingState;
-        private Entry<Enums.PermittedDirection> entryToMove;
+        private EntryPermittedDirection entryToMove;
         
         public override GameObject SelectableOnOpen { get; }
         
-        protected override void SetInitialValue(Enums.PermittedDirection[] initialValue)
+        protected override void SetInitialValue(PermittedDirection[] initialValue)
         {
-            directions = initialValue.ToList();
-            foreach (Enums.PermittedDirection direction in directions)
+            foreach (PermittedDirection direction in initialValue)
             {
-                Entry<Enums.PermittedDirection> entry = AllManagers.Instance.UIManager.UISpawner.CreateObject<Entry<Enums.PermittedDirection>>(Enums.UISpawned.EntryPermittedDirections, content);
+                EntryPermittedDirection entry = AllManagers.Instance.UIManager.UISpawner.CreateObject<EntryPermittedDirection>(Enums.UISpawned.EntryPermittedDirections, content);
                 entry.Initialize(direction, HandleOnPress);
+                directionEntries.Add(entry);
             }
         }
 
-        protected override void Confirm() => onConfirm.Invoke(directions.ToArray());
-
-        private void HandleOnPress(Entry<Enums.PermittedDirection> entry)
+        protected override void Confirm()
         {
+            PermittedDirection[] directions = new PermittedDirection[directionEntries.Count];
+            for (var i = 0; i < directionEntries.Count; i++)
+            {
+                directions[i] = directionEntries[i].Value;
+            }
+
+            onConfirm.Invoke(directions);
+        }
+
+        private void HandleOnPress(Entry<PermittedDirection, Enums.PermittedDirection> entry)
+        {
+            EntryPermittedDirection entryPermittedDirection = (EntryPermittedDirection)entry;
+            
             inChangingState = !inChangingState;
             if (inChangingState)
             {
@@ -36,15 +46,15 @@ namespace UI.PopupPanels
                 confirmationButton.interactable = false;
                 closeButton.interactable = false;
                 entry.Selected = true;
-                entryToMove = entry;
+                entryToMove = entryPermittedDirection;
             }
             else
             {
                 if (entry != entryToMove)
                 {
-                    int newIndex = directions.IndexOf(entry.Value);
-                    directions.Remove(entryToMove.Value);
-                    directions.Insert(newIndex, entryToMove.Value);
+                    int newIndex = directionEntries.IndexOf(entryPermittedDirection);
+                    directionEntries.Remove(entryToMove);
+                    directionEntries.Insert(newIndex, entryToMove);
                     entryToMove.transform.SetSiblingIndex(newIndex);
                 }
                 

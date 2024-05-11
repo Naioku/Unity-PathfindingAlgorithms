@@ -5,7 +5,7 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace UI.Buttons
 {
-    public class TaggedButtonLocalized<T> : ButtonLocalized where T : Enum
+    public class TaggedButtonLocalized<T> : ButtonTextLocalized where T : Enum
     {
         [SerializeField] private T buttonTag;
         

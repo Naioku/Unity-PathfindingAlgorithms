@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3500532128714108657, guid: 2240bbd59ef55304f90260369ae54188, type: 3}
       propertyPath: m_Name
-      value: EntryLanguage
+      value: EntryLanguages
       objectReference: {fileID: 0}
     - target: {fileID: 5548324276397042305, guid: 2240bbd59ef55304f90260369ae54188, type: 3}
       propertyPath: m_Pivot.x
@@ -117,8 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21510bf51b444048a2a4fb9011b4c749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 3523937300412624120}
-  selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  selectingButton: {fileID: 3523937300412624120}
 --- !u!114 &3523937300412624120 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2121604822465544870, guid: 2240bbd59ef55304f90260369ae54188, type: 3}

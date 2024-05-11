@@ -39,7 +39,7 @@ namespace UI.MenuPanels
 
         private void SetupButtonsNavigation()
         {
-            List<ButtonLocalized> buttons = new List<ButtonLocalized>();
+            List<ButtonTextLocalized> buttons = new List<ButtonTextLocalized>();
             foreach (MainMenuPanelButton menuButton in this.buttons)
             {
                 buttons.Add(menuButton);

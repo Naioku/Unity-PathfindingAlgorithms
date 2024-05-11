@@ -13,7 +13,7 @@ namespace UI.HUDPanels
         [SerializeField] protected LocalizedTextMeshPro staticLabel;
         [SerializeField] protected LocalizedTextMeshPro dynamicLabel;
 
-        [SerializeField] private ButtonLocalized backButton;
+        [SerializeField] private ButtonTextLocalized backButton;
         [SerializeField] private List<TaggedButtonLocalized<T>> buttons;
         
         private Dictionary<T, TaggedButtonLocalized<T>> buttonsLookup;
@@ -55,7 +55,7 @@ namespace UI.HUDPanels
 
         private void InitButtonsNavigation()
         {
-            List<ButtonLocalized> buttons = new List<ButtonLocalized>();
+            List<ButtonTextLocalized> buttons = new List<ButtonTextLocalized>();
             foreach (TaggedButtonLocalized<T> button in this.buttons)
             {
                 buttons.Add(button);
