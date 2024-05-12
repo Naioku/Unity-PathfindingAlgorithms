@@ -2,7 +2,7 @@
 using StageMachineSystem.Algorithm;
 using UnityEngine;
 
-namespace BreadthFirstSearch.Scripts
+namespace Algorithms
 {
     public class DFS : Algorithm
     {

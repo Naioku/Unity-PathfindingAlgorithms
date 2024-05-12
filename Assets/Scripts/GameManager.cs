@@ -1,5 +1,5 @@
 ﻿using System;
-using BreadthFirstSearch.Scripts;
+using Algorithms;
 using CustomInputSystem;
 using InteractionSystem;
 using Settings;

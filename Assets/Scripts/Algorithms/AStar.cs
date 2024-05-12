@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StageMachineSystem.Algorithm;
 using UnityEngine;
 
-namespace BreadthFirstSearch.Scripts
+namespace Algorithms
 {
     public class AStar : Algorithm
     {
@@ -25,6 +25,8 @@ namespace BreadthFirstSearch.Scripts
             openNodes.Clear();
         }
 
+        protected override void OpenNode(Vector2Int coords) => openNodes.Add(new Node(coords, currentNode, destinationCoords));
+
         protected override bool ReloadNode()
         {
             if (openNodes.Count == 0) return false;
@@ -35,8 +37,6 @@ namespace BreadthFirstSearch.Scripts
             CursorPosition = CurrentNode.Coords;
             return true;
         }
-
-        protected override void OpenNode(Vector2Int coords) => openNodes.Add(new Node(coords, currentNode, destinationCoords));
 
         protected class Node : NodeBase, IComparable<Node>
         {
