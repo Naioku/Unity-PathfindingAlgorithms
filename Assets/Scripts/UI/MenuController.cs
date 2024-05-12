@@ -18,12 +18,21 @@ namespace UI
         public void Initialize(
             Action mazeModificationAction,
             Action bfsAction,
+            Action dfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
             Action<Enums.SettingsReloadingParam> saveSettingsAction,
             Action onExit)
         {
-            InitializePanels(mazeModificationAction, bfsAction, aStarAction, resetToDefaultAction, saveSettingsAction);
+            InitializePanels
+            (
+                mazeModificationAction,
+                bfsAction,
+                dfsAction,
+                aStarAction,
+                resetToDefaultAction,
+                saveSettingsAction
+            );
             this.onExit = onExit;
             mainPanel.gameObject.SetActive(false);
             settingsPanel.gameObject.SetActive(false);
@@ -33,6 +42,7 @@ namespace UI
         private void InitializePanels(
             Action mazeModificationAction,
             Action bfsAction,
+            Action dfsAction,
             Action aStarAction,
             Action resetToDefaultAction,
             Action<Enums.SettingsReloadingParam> saveSettingsAction)
@@ -44,6 +54,7 @@ namespace UI
                 {
                     { Enums.MainMenuPanelButtonTag.MazeModification, mazeModificationAction },
                     { Enums.MainMenuPanelButtonTag.BFS, bfsAction },
+                    { Enums.MainMenuPanelButtonTag.DFS, dfsAction },
                     { Enums.MainMenuPanelButtonTag.AStar, aStarAction },
                     { Enums.MainMenuPanelButtonTag.Settings, OpenSettingsPanel },
                 }

@@ -37,6 +37,7 @@ public class GameManager
         (
             StartMazeModification,
             StartBFS,
+            StartDFS,
             StartAStar,
             ResetSettingsToDefault,
             UpdateGameSettings,
@@ -82,6 +83,12 @@ public class GameManager
     private void StartBFS()
     {
         algorithmStage.ChangeAlgorithm(new BFS());
+        EnterStage(algorithmStage);
+    }
+    
+    private void StartDFS()
+    {
+        algorithmStage.ChangeAlgorithm(new DFS());
         EnterStage(algorithmStage);
     }
 

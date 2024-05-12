@@ -89,7 +89,7 @@ public static class Enums
     
     public enum MainMenuPanelButtonTag
     {
-        MazeModification, BFS, AStar, Settings
+        MazeModification, BFS, DFS, Dijkstra, AStar, Settings
     }
     
     public enum Direction

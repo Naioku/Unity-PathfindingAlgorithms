@@ -23,15 +23,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12852559872
-    m_Localized: BFS
+    m_Localized: Breadth FIrst Search
     m_Metadata:
       m_Items: []
   - m_Id: 15771795456
-    m_Localized: A Star
+    m_Localized: A*
     m_Metadata:
       m_Items: []
   - m_Id: 18535841792
     m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5473205247705088
+    m_Localized: Depth First Search
     m_Metadata:
       m_Items: []
   references:
