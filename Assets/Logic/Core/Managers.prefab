@@ -76,7 +76,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 000f8a430183acb469080edbba026335, type: 2}
       - {fileID: 11400000, guid: 62bdc27ac4170024b93791622d6df78f, type: 2}
     iconData:
-    - Name: 1
+    - Name: 0
       Sprite: {fileID: -1198865650, guid: 3dc5dcda7cf030a4a80f369499ffa65d, type: 3}
-    - Name: 2
+    - Name: 1
       Sprite: {fileID: 884208914, guid: be4ec5b7825a7a74a988683a13af5fb6, type: 3}
