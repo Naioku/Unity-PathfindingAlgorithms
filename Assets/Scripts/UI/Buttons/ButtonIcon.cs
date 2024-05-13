@@ -9,7 +9,7 @@ namespace UI.Buttons
 
         public Enums.Icon IconName
         {
-            set => icon.sprite = AllManagers.Instance.UIManager.GetIcon(value);
+            set => icon.sprite = AllManagers.Instance.UIManager.GetSprite(value);
         }
 
         protected override Color LabelColor

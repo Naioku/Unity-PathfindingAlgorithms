@@ -66,6 +66,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: ae88ed43a19a526448ae991ce1198040, type: 2}
       - {fileID: 11400000, guid: 5ba7dcecccfb8bc41b98698ef7a5a235, type: 2}
       - {fileID: 11400000, guid: ab60a841b5dac6442a2f9496743c315b, type: 2}
+      - {fileID: 11400000, guid: dd7fc42747975294daf75332b8ad019d, type: 2}
     uiPopupSpawner:
       spawnableItems:
       - {fileID: 11400000, guid: 74f873b6bda46b94cbbb6c7bb5ae76f5, type: 2}
@@ -75,8 +76,15 @@ MonoBehaviour:
       - {fileID: 11400000, guid: abcb7ff9e811c464f8bda14dea97dce6, type: 2}
       - {fileID: 11400000, guid: 000f8a430183acb469080edbba026335, type: 2}
       - {fileID: 11400000, guid: 62bdc27ac4170024b93791622d6df78f, type: 2}
-    iconData:
-    - Name: 0
-      Sprite: {fileID: -1198865650, guid: 3dc5dcda7cf030a4a80f369499ffa65d, type: 3}
-    - Name: 1
-      Sprite: {fileID: 884208914, guid: be4ec5b7825a7a74a988683a13af5fb6, type: 3}
+    spriteCollection:
+      data:
+      - Name: 0
+        Icon: {fileID: -1198865650, guid: 3dc5dcda7cf030a4a80f369499ffa65d, type: 3}
+      - Name: 1
+        Icon: {fileID: 884208914, guid: be4ec5b7825a7a74a988683a13af5fb6, type: 3}
+      - Name: 3
+        Icon: {fileID: -643336030, guid: 3991e018c0cb2ae428f8aa7f1181d6b1, type: 3}
+    textureCollection:
+      data:
+      - Name: 2
+        Icon: {fileID: 2800000, guid: 0ea42f6b9021f6c43a6d168ccaa5ff22, type: 3}

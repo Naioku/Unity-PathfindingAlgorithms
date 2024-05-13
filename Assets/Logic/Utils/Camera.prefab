@@ -150,3 +150,4 @@ MonoBehaviour:
   zoomStep: 0.1
   zoomSpeed: 1
   trailColor: {r: 1, g: 0, b: 1, a: 1}
+  cursor: {fileID: 2800000, guid: b88494fd7f620f74a9938b70e5b51ff5, type: 3}

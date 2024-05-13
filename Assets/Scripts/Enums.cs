@@ -65,7 +65,8 @@ public static class Enums
         SettingGroupEntry,
         SettingEntry,
         EntryPermittedDirections,
-        EntryLanguages
+        EntryLanguages,
+        DynamicImage
     }
     
     public enum UIPopupType
@@ -106,7 +107,9 @@ public static class Enums
     public enum Icon
     {
         VisibilityOn,
-        VisibilityOff
+        VisibilityOff,
+        CameraKeyMovementCursor,
+        CameraKeyMovementReference
     }
 
     #endregion

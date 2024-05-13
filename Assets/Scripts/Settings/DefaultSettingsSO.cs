@@ -99,7 +99,6 @@ namespace Settings
             ISetting Setting { get; }
         }
 
-#if UNITY_EDITOR
         [AttributeUsage(AttributeTargets.Field)]
         private class SettingRangeAttribute : PropertyAttribute
         {
@@ -113,6 +112,7 @@ namespace Settings
             }
         }
         
+#if UNITY_EDITOR
         [CustomPropertyDrawer(typeof (SettingRangeAttribute))]
         private class SettingRangeDrawer : PropertyDrawer
         {

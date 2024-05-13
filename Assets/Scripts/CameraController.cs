@@ -2,6 +2,7 @@
 using System.Collections;
 using CustomInputSystem;
 using Settings;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UpdateSystem.CoroutineSystem;
@@ -21,7 +22,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float zoomTrailLength;
     [SerializeField, Range(0, 1)] private float zoomTargetNormalizedPosition = 0.5f;
     [SerializeField] private float zoomStep = 0.1f;
-    [FormerlySerializedAs("zoomUpdateTime")] [SerializeField] private float zoomSpeed = 0.2f;
+    [SerializeField] private float zoomSpeed = 0.2f;
     [SerializeField] private Color trailColor = Color.magenta;
 
     private GameSettings settings;
@@ -30,6 +31,7 @@ public class CameraController : MonoBehaviour
     private Tuple<float, float> screenXLimits;
     private Tuple<float, float> screenZLimits;
     private Vector2 keyModeMovementCursorLockPosition;
+    private DynamicImage keyMovementReference;
     private Enums.CameraMovementMode movementMode;
     private Guid movementCoroutineId;
     private Guid zoomingCoroutineId;
@@ -113,17 +115,22 @@ public class CameraController : MonoBehaviour
         minZoomLocalPosition = new Vector3(0, 0, -zoomTrailHalfLength);
         maxZoomLocalPosition = new Vector3(0, 0, zoomTrailHalfLength);
     }
-
+    
     private void StartKeyModeMovement()
     {
         keyModeMovementCursorLockPosition = AllManagers.Instance.InputManager.CursorPosition;
+        keyMovementReference = AllManagers.Instance.UIManager.UISpawner.CreateObject<DynamicImage>(Enums.UISpawned.DynamicImage);
+        keyMovementReference.Initialize(Enums.Icon.CameraKeyMovementReference, keyModeMovementCursorLockPosition);
         movementMode = Enums.CameraMovementMode.Key;
+        Cursor.SetCursor(AllManagers.Instance.UIManager.GetTexture(Enums.Icon.CameraKeyMovementCursor), Vector2.zero, CursorMode.Auto);
     }
 
     private void StopKeyModeMovement()
     {
         keyModeMovementCursorLockPosition = Vector2.zero;
+        AllManagers.Instance.UIManager.UISpawner.DestroyObject(keyMovementReference.gameObject);
         movementMode = Enums.CameraMovementMode.Border;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
     
     private void UpdateZoomTarget(float zoomInput)

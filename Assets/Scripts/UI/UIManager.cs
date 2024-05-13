@@ -15,7 +15,8 @@ namespace UI
     {
         [SerializeField] private SpawnManager<Enums.UISpawned> uiSpawner;
         [SerializeField] private SpawnManager<Enums.UIPopupType> uiPopupSpawner;
-        [SerializeField] private IconData[] iconData;
+        [SerializeField] private IconCollection<Sprite> spriteCollection;
+        [SerializeField] private IconCollection<Texture2D> textureCollection;
         
         private readonly Dictionary<Type, Enums.UIPopupType> inputPopupsLookup = new()
         {
@@ -26,14 +27,14 @@ namespace UI
             { typeof(Language), Enums.UIPopupType.InputLanguages }
         };
         
-        private Dictionary<Enums.Icon, Sprite> iconsLookup = new();
         private PopupPanel currentPopupPanel;
         private GameObject lastStaticPanelGameObject;
         private LocalizedContentCache localizedContentCache;
 
         public SpawnManager<Enums.UISpawned> UISpawner => uiSpawner;
         public bool IsHoveringUI => EventSystem.current.IsPointerOverGameObject();
-        public Sprite GetIcon(Enums.Icon value) => iconsLookup[value];
+        public Sprite GetSprite(Enums.Icon value) => spriteCollection.Get(value);
+        public Texture2D GetTexture(Enums.Icon value) => textureCollection.Get(value);
         
         public void Awake()
         {
@@ -44,15 +45,8 @@ namespace UI
                 Enums.PopupText.ConfirmationButtonYes,
                 Enums.PopupText.ConfirmationButtonNo
             );
-            BuildLookup();
-        }
-
-        private void BuildLookup()
-        {
-            foreach (IconData data in iconData)
-            {
-                iconsLookup.Add(data.Name, data.Sprite);
-            }
+            spriteCollection.Initialize();
+            textureCollection.Initialize();
         }
 
         public void OpenPopupInfo(string header, string message)
@@ -150,11 +144,30 @@ namespace UI
             EventSystem.current.SetSelectedGameObject(lastStaticPanelGameObject);
         }
         
+        
         [Serializable]
-        private struct IconData
+        private class IconCollection<T>
         {
-            public Enums.Icon Name;
-            public Sprite Sprite;
+            [SerializeField] private IconData[] data;
+
+            private Dictionary<Enums.Icon, T> lookup = new();
+
+            public void Initialize()
+            {
+                foreach (IconData iconData in data)
+                {
+                    lookup.Add(iconData.Name, iconData.Icon);
+                }
+            }
+
+            public T Get(Enums.Icon name) => lookup[name];
+            
+            [Serializable]
+            private struct IconData
+            {
+                public Enums.Icon Name;
+                public T Icon;
+            }
         }
     }
 }
