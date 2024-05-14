@@ -38,7 +38,6 @@ namespace StageMachineSystem
         
         public void ChangeAlgorithm(Algorithm.Algorithm algorithm)
         {
-            algorithmState?.Stop();
             this.algorithm = algorithm;
             hudController.Header = this.algorithm.AlgorithmName;
         }
@@ -62,6 +61,7 @@ namespace StageMachineSystem
             hudController.Hide();
             RemoveInput();
             algorithmState.Stop();
+            algorithmState = null;
         }
 
         private void SwitchAlgorithmState(AlgorithmStateBase newState)

@@ -60,8 +60,6 @@ namespace Algorithms
                 this.previousNode = previousNode;
                 int costToDestination = Mathf.Abs(coords.x - destinationCoords.x) + Mathf.Abs(coords.y - destinationCoords.y);
                 score = costToDestination + costFromStart;
-                
-                Debug.Log($"Coords: {Coords} CostFromStart: {costFromStart} Score: {score}");
             }
 
             public int CompareTo(Node other)
