@@ -51,6 +51,10 @@ MonoBehaviour:
     m_Key: MainMenuButtonQuit
     m_Metadata:
       m_Items: []
+  - m_Id: 9803407254355968
+    m_Key: Version
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -47,6 +47,7 @@ public class GameManager
         localizedContentCache = new LocalizedContentCache(Enums.PopupText.QuitGameHeader, Enums.PopupText.QuitGameMessage);
         mazeModificationStage = new MazeModificationStage();
         algorithmStage = new AlgorithmStage();
+        AllManagers.Instance.UIManager.UISpawner.CreateObject<VersionInfoPanel>(Enums.UISpawned.VersionInfo);
     }
 
     public void StartGame()

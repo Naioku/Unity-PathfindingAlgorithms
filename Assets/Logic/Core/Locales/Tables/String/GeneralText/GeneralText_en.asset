@@ -56,10 +56,15 @@ MonoBehaviour:
     m_Localized: Quit
     m_Metadata:
       m_Items: []
+  - m_Id: 9803407254355968
+    m_Localized: 'Version: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 4312270368528662609
   references:
     version: 2
     RefIds:
     - rid: 4312270368528662609
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 0080d22701000000
+        m_Entries: 0080d227010000000000fc9e25d42200

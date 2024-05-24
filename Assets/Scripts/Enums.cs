@@ -66,7 +66,8 @@ public static class Enums
         SettingEntry,
         EntryPermittedDirections,
         EntryLanguages,
-        DynamicImage
+        DynamicImage,
+        VersionInfo
     }
     
     public enum UIPopupType
@@ -228,6 +229,7 @@ public static class Enums
         SettingsButtonResetToDefault,
         SettingsButtonSave,
         MainMenuHeader,
-        MainMenuButtonQuit
+        MainMenuButtonQuit,
+        Version
     }
 }
